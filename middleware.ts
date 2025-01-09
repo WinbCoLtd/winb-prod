@@ -1,9 +1,11 @@
-import { match } from '@formatjs/intl-localematcher'
-import Negotiator from 'negotiator'
- 
-const headers = { 'accept-language': 'en-US,en;q=0.5' }
-const languages = new Negotiator({ headers }).languages()
-const locales = ['en-US', 'nl-NL', 'nl']
-const defaultLocale = 'en-US'
- 
-match(languages, locales, defaultLocale) // -> 'en-US'
+// middleware.ts
+import createMiddleware from 'next-intl/middleware';
+
+export default createMiddleware({
+  locales: ['ja', 'en'],
+  defaultLocale: 'ja'
+});
+
+export const config = {
+  matcher: ['/((?!api|static|.*\\..*|_next).*)'] // Exclude static files, _next, and files with extensions
+};

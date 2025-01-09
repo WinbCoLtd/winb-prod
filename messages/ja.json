@@ -1,4 +1,19 @@
 {
-    "Welcome":  "いらっしゃいませ",
-    "About": "について"
+    "NavbarLinks": {
+        "home": "ホーム",
+        "homeTitle": "ホームページ",
+        "about": "アバウト",
+        "AboutTitle": "アバウトページ",
+        "profile": "プロフィール",
+        "profileTitle": "プロフィールページ"
+    },
+    "HomePage": {
+        "title": "ランディングページ"
+    },
+    "AboutPage": {
+        "title": "アバウト"
+    },
+    "ProfilePage": {
+        "title": "プロフィール"
+    }
 }

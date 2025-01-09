@@ -1,4 +1,19 @@
 {
-    "Welcome":  "welcome",
-    "About": "About"
+    "NavbarLinks": {
+        "home": "Home",
+        "homeTitle": "Home Page",
+        "about": "About",
+        "AboutTitle": "About Page",
+        "profile": "Profile",
+        "profileTitle": "Profile Page"
+    },
+    "HomePage": {
+        "title": "Landing Page"
+    },
+    "AboutPage": {
+        "title": "About"
+    },
+    "ProfilePage": {
+        "title": "Profile"
+    }
 }
