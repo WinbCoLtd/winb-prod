@@ -17,3 +17,57 @@ model dummy {
   id Int @id @default(autoincrement())
   name String 
 }
+
+model Admin {
+  id         Int      @id @default(autoincrement())
+  nameEn     String
+  nameJa     String
+  username   String   @unique
+  password   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+}
+
+model Vehicle {
+  id             Int              @id @default(autoincrement())
+  title          String
+  description    String
+  price          Float            
+  model          String
+  maker          String
+  vehicleType    String           @default("car")
+  otherFeatures  String?
+  fuel           String
+  drive          String
+  condition      String
+  color          String
+  manufactureYear DateTime
+  mileage        Float            
+  isAvailable    Boolean          @default(true)
+  isPublished    Boolean          @default(false)
+  maxPassengers  Int
+  grossMass      Int
+  imageCount     Int
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now())
+  VehicleImages  VehicleImages[]  
+  Translations    VehicleTranslation[]
+}
+
+model VehicleImages {
+  id         Int       @id @default(autoincrement())
+  vehicleId  Int
+  url        String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now())
+  Vehicle    Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade) 
+}
+
+model VehicleTranslation {
+  id         Int       @id @default(autoincrement())
+  vehicleId  Int
+  language   String
+  field      String
+  value      String
+  Vehicle    Vehicle @relation(fields: [vehicleId], references: [id]) 
+}
