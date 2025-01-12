@@ -1,15 +1,15 @@
 'use client';
 
 import { useState } from "react";
-import Navbar from "@/components/Navbar";
-import { useTranslations } from "next-intl";
+//import Navbar from "@/components/Navbar";
+//import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link"; 
 import HerosSection from "@/components/home/HerosSection";
 
 export default function Home() {
   const [showCategory, setShowCategory] = useState<string | null>('cars');
-  const t = useTranslations("HomePage");
+//  const t = useTranslations("HomePage");
 
   const cars = [
     { id: 1, name: "Toyota Corolla", condition: "New", price: "$20,000", imageUrl: "/vehicledummy.png" },
@@ -222,7 +222,7 @@ export default function Home() {
             />
             <h4 className="text-[20px] font-semibold">Transparent Deals</h4>
             <p className="text-[16px] font-medium text-justify mt-4 sm:mt-6 md:mt-8">
-              We offer clear and honest pricing with no hidden fees, so you know exactly what you're getting.
+              We offer clear and honest pricing with no hidden fees, so you know exactly what you&aposre getting.
             </p>
           </div>
 
@@ -281,10 +281,10 @@ export default function Home() {
         />
         <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-center px-4 text-white bg-black bg-opacity-60">
           <h2 className="text-[32px] md:text-[40px] font-bold text-left">
-            Need Assistance? We're Here to Help!
+            Need Assistance? We&aposre Here to Help!
           </h2>
           <p className="mt-4 text-[18px] md:text-[24px] font-semibold text-center md:text-justify">
-            Have questions about our services or need more information? Our team is here to help. If you'd like to learn more about WIN-B or have any specific questions, feel free to contact us. Your satisfaction is our number one priority.
+            Have questions about our services or need more information? Our team is here to help. If you&aposd like to learn more about WIN-B or have any specific questions, feel free to contact us. Your satisfaction is our number one priority.
           </p>
           <div className="mt-6 text-center">
             <Link href="/contact">

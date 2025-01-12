@@ -11,7 +11,7 @@ function Car() {
   };
 
   
-    
+    console.log(showCarDetails)
   return (
     <button
     onClick={toggleCarDetails} // Toggle car details visibility
