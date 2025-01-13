@@ -36,17 +36,18 @@ model Vehicle {
   model          String
   maker          String
   vehicleType    String           @default("car")
-  otherFeatures  String?
   fuel           String
   drive          String
   condition      String
   color          String
+  grade          String
+  chassieNumber  String
+  Shaken         String
   manufactureYear DateTime
   mileage        Float            
   isAvailable    Boolean          @default(true)
   isPublished    Boolean          @default(false)
   maxPassengers  Int
-  grossMass      Int
   imageCount     Int
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @default(now())
