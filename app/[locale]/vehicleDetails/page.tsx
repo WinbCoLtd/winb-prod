@@ -14,43 +14,6 @@
 //   FaStar         // For Features
 // } from 'react-icons/fa'; // Import icons from FontAwesome
 
-
-// const vehicles = [
-//   {
-//     id: 1,
-//     name: "Vehicle#1",
-//     description: "A reliable and fuel-efficient sedan perfect for daily commuting. Well-maintained with a clean interior and exterior.",
-//     imageUrl: "/cardvehicle.png",
-//     fuelType: "Petrol",
-//     driveType: "AWD",
-//     condition: "New",
-   
-//   },
-//   {
-//     id: 2,
-//     name: "Vehicle#2",
-//     description: "A spacious SUV with advanced safety features. Great for family trips and off-road adventures.",
-//     imageUrl: "/cardvehicle.png",
-//     fuelType: "Diesel",
-//     driveType: "FWD",
-//     condition: "Used",
-
-//   },
-//   {
-//     id: 3,
-//     name: "Vehicle#3",
-//     description: "A luxury sports car with a sleek design and high performance for driving enthusiasts.",
-//     imageUrl: "/cardvehicle.png",
-//     fuelType: "Electric",
-//     driveType: "AWD",
-//     condition: "Used",
-   
-//   },
-//   // Add more vehicles as needed
-// ];
-
-
-
 // function Details() {
 //   return (
 //     <div className="relative w-full flex flex-col  max-w-[1166px] mx-auto">
@@ -199,35 +162,6 @@ import {
   FaStar
 } from 'react-icons/fa';
 
-const vehicles = [
-  {
-    id: 1,
-    name: "Vehicle#1",
-    description: "A reliable and fuel-efficient sedan perfect for daily commuting. Well-maintained with a clean interior and exterior.",
-    imageUrl: "/cardvehicle.png",
-    fuelType: "Petrol",
-    driveType: "AWD",
-    condition: "New",
-  },
-  {
-    id: 2,
-    name: "Vehicle#2",
-    description: "A spacious SUV with advanced safety features. Great for family trips and off-road adventures.",
-    imageUrl: "/cardvehicle.png",
-    fuelType: "Diesel",
-    driveType: "FWD",
-    condition: "Used",
-  },
-  {
-    id: 3,
-    name: "Vehicle#3",
-    description: "A luxury sports car with a sleek design and high performance for driving enthusiasts.",
-    imageUrl: "/cardvehicle.png",
-    fuelType: "Electric",
-    driveType: "AWD",
-    condition: "Used",
-  },
-];
 
 function Details() {
   return (
