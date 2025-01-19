@@ -48,7 +48,6 @@ function Deal() {
   return (
     <div className="relative w-full flex flex-col mx-auto bg-[#D9D9D9] mt-[66px] px-6 sm:pl-[77px] pt-[40px] sm:pt-[86px] pb-[40px]">
       <div className="flex flex-col-reverse lg:flex-row sm:flex-row items-center sm:justify-between gap-6 ">
-        {/* Image Section */}
         <div className="w-full sm:w-1/2 flex justify-center">
           <Image
             src="/vehicledummy.png"
@@ -59,7 +58,6 @@ function Deal() {
           />
         </div>
 
-        {/* Text Section */}
         <div className="flex flex-col justify-center text-center sm:text-left sm:w-1/2">
           <h3 className="lg:text-[40px] sm:text-[30px] xs:text-[25px] xxs:text-[20px] font-semibold text-black">
             Get the Best Deal for Your Vehicle Today

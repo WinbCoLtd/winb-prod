@@ -35,12 +35,11 @@
       condition: "Used",
      
     },
-    // Add more vehicles as needed
+
   ];
    return (
   
 <div className="w-full md:w-[787px] ml-0 md:ml-[30px] ">
-  {/* Search Input */}
   <div className="w-full md:w-[337px] h-[43px] mx-auto md:ml-[436px] p-4 flex items-center rounded-[50px] border-2 ">
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -61,14 +60,13 @@
     />
   </div>
 
-  {/* Card Section */}
   <div>
     {vehicles.map((vehicle) => (
       <div
         key={vehicle.id}
         className="w-full h-auto md:h-[275px] mt-4 p-4 md:pl-[38px] bg-white shadow-lg flex flex-col md:flex-row items-center md:items-start border border-winb-ashborder rounded-[15px]"
       >
-        {/* Left Side - Image */}
+
         <div className="w-full md:w-[306px] h-[230px]">
           <img
             src={vehicle.imageUrl}
@@ -77,7 +75,6 @@
           />
         </div>
 
-        {/* Right Side - Descriptions */}
         <div className="w-full md:w-2/3 md:pl-4 mt-4 md:mt-0">
           <div>
             <h2 className="text-lg md:text-[24px] font-bold text-black">{vehicle.name}</h2>
@@ -86,7 +83,6 @@
             {vehicle.description}
           </p>
 
-          {/* First Row: Icons and Titles */}
           <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4 text-sm text-gray-600 font-semibold">
             <div className="flex items-center">
               <img src="/vehicleDetails/fuel-icon.png" alt="Fuel" className="w-4 h-4 mr-2" />
@@ -102,7 +98,6 @@
             </div>
           </div>
 
-          {/* Second Row: Answers */}
           <div className="mt-2 grid grid-cols-2 gap-4 md:grid-cols-4 text-sm text-gray-600 font-semibold">
             <div className="flex items-center">
               <span>{vehicle.fuelType}</span>
@@ -115,7 +110,6 @@
             </div>
           </div>
 
-          {/* More Details Button */}
           <div className="mt-4 flex justify-end">
             <button
               onClick={() => alert(`Showing more details for ${vehicle.name}`)}
