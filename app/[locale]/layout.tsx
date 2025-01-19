@@ -42,7 +42,8 @@ export default async function RootLayout({
         {children}
         </div>
         </NextIntlClientProvider>
-        <div><Footer/></div>
+        <Footer/>
+        
 
       </body>
     </html>
