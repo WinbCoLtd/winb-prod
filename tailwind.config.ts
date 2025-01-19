@@ -28,7 +28,8 @@ export default {
         "winb-border":"#9dadd7",
         "winb-blue-border":"#8fa1d1",
         "winb-ashborder":"#b2b2b2",
-        "winb-ashcolor":"#fafafa"
+        "winb-ashcolor":"#fafafa",
+        "winb-formblue":"#7e68b9"
         
       },
       width: {
