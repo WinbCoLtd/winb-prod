@@ -49,6 +49,7 @@ model Vehicle {
   isPublished    Boolean          @default(false)
   maxPassengers  Int
   imageCount     Int
+  previewUrl     String
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @default(now())
   VehicleImages  VehicleImages[]  
