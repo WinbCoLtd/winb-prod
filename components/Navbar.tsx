@@ -17,8 +17,16 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="p-4 bg-gray-100 flex justify-between items-center"> {/* Added styling */}
-      <Link href="/" locale={locale} className="font-bold text-xl">My App</Link> {/* Added a title/link */}
+    <nav className="p-4 bg-gray-100 flex justify-between items-center bg-transparent text-xl text-white"> {/* Added styling */}
+      <Link href="/" locale={locale} className="font-extrabold text-3xl">WINB</Link>
+      
+      <nav className="flex items-center justify-center gap-4 ">
+        <Link href={'/'} className=" hover:underline">ホーム</Link>
+        <Link href={'/about'} className=" hover:underline">会社概要</Link>
+        <Link href={'/allVehicles'} className=" hover:underline">車両一覧</Link>
+        <Link href={'/contact'} className=" hover:underline">お問い合わせ</Link>
+      </nav>
+       
       <div>
         <button
           onClick={() => handleLocaleChange(locale === "en" ? "ja" : "en")}
