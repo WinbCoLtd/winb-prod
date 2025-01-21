@@ -2,6 +2,13 @@
 
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules'; 
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
 
 const MoreDetails = () => {
   const { id } = useParams(); 
@@ -74,11 +81,26 @@ const MoreDetails = () => {
             />
           </div>
   
-          <div className="mt-[51px] grid grid-cols-2 sm:grid-cols-2 xxs:grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="mt-[51px] grid  gap-4">
+            <Swiper
+              modules={[Navigation, Pagination]}
+              navigation
+              pagination={{ clickable: true }}
+              spaceBetween={20}
+              slidesPerView={1}
+              breakpoints={{
+                640: { slidesPerView: 2 },
+                768: { slidesPerView: 3 },
+                1024: { slidesPerView: 4 },
+              }}
+              className="w-full"
+            >
+
             {Array(4)
               .fill(vehicle.imageUrl)
               .map((src, index) => (
-                <div key={index} className="w-full lg:h-[110px] bg-gray-300 rounded-lg overflow-hidden">
+                <SwiperSlide key={index}>
+                <div className="w-full lg:h-[110px] bg-gray-300 rounded-lg overflow-hidden">
                   <Image
                     src={src}
                     alt={`Small View ${index + 1}`}
@@ -87,10 +109,12 @@ const MoreDetails = () => {
                     className="w-full h-full object-cover"
                   />
                 </div>
+                </SwiperSlide>
               ))}
+               </Swiper>
           </div>
         </div>
-  
+
         <div className="mt-6 md:mt-0 md:ml-8 flex flex-col justify-start w-full md:w-[500px]">
           <h2 className="lg:text-[24px] sm:text-[11px] xxs:text[20px] text-black font-bold mb-4">
             {vehicle.name} 
@@ -155,6 +179,23 @@ const MoreDetails = () => {
 };
 
 export default MoreDetails;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

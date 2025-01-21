@@ -21,7 +21,9 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.4.0",
-    "sharp": "^0.33.5"
+    "react-responsive-carousel": "^3.2.23",
+    "sharp": "^0.33.5",
+    "swiper": "^11.2.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
