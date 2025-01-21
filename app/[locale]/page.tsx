@@ -34,23 +34,9 @@ export default function Home() {
   };
 
   return (
-    <main className="max-w-winb-max-1366 mx-auto flex flex-col items-center justify-center">
+    <main className=" mx-auto flex flex-col items-center justify-center">
       <HerosSection/>
       <div className="relative bg-black">
-        <div className="absolute top-0 left-0 w-full flex justify-center items-center z-20 px-4 py-6">
-          <h1 className="text-white text-[64px] sm:text-[48px] md:text-[64px] lg:text-[80px] font-extrabold animate-fadeIn text-center">
-            Your Trusted Vehicle Marketplace
-          </h1>
-        </div>
-
-        <Image
-          src="/home/homepic.png"
-          alt="Vehicle Marketplace"
-          layout="responsive"
-          width={1166}
-          height={847}
-          className="opacity-50"
-        />
 
 
         <div className="absolute top-[50%] left-0 w-full px-4 flex justify-center items-center">
