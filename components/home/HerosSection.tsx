@@ -4,6 +4,7 @@ import Navbar from "../Navbar";
 import axios from "axios";
 import { ChevronDown, MapPin } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type searchType = {
   makers: any[];
@@ -20,6 +21,7 @@ function HerosSection() {
   const [currentSelectedModel, setCurrentSelectedModel] = useState<string>("");
   const [toggle, setIsToggled] = useState(false);
   const [locationAlt, setLocationAlt] = useState(false);
+  const router = useRouter()
 
   const displayPriceRangers = () => {
     setIsToggled(!toggle);
@@ -49,8 +51,9 @@ function HerosSection() {
   };
 
   const redirectToSearchResultPage = () => {
-    const path = `/search?maker=${currentSelectedMaker}&model=${currentSelectedModel}&minPrice=${currentSelectedPrice.min}&maxPrice=${currentSelectedPrice.max}`;
+    const path = `/vehicleList?maker=${currentSelectedMaker}&model=${currentSelectedModel}&minPrice=${currentSelectedPrice.min}&maxPrice=${currentSelectedPrice.max}`;
     console.log("Redirecting to:", path);
+    router.push(path)
     // Use router.push(path) if you're using Next.js routing
   };
 
