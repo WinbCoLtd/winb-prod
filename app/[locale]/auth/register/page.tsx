@@ -39,22 +39,13 @@ const Register = () => {
         />
         <h2 className="mb-6 text-2xl font-bold text-gray-800">Register</h2>
         <form  className="flex flex-col">
+          
           <div className="mb-4 text-left">
-            <label className="block mb-2 font-semibold text-gray-700">Name:</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border rounded-lg focus:ring-2  focus:outline-none"
-            />
-          </div>
-          <div className="mb-4 text-left">
-            <label className="block mb-2 font-semibold text-gray-700">Email:</label>
+            <label className="block mb-2 font-semibold text-gray-700">Username:</label>
             <input
               type="email"
               name="email"
+              placeholder='Enter your email'
               value={formData.email}
               onChange={handleChange}
               required
@@ -73,25 +64,25 @@ const Register = () => {
             />
           </div>
           <div className="mb-4 text-left">
-            <label className="block mb-2 font-semibold text-gray-700">Address:</label>
+            <label className="block mb-2 font-semibold text-gray-700">Name in English:</label>
             <input
               type="text"
-              name="address"
-              value={formData.address}
+              name="name"
+              value={formData.name}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 border rounded-lg focus:ring-2  focus:outline-none"
             />
           </div>
-          <div className="mb-6 text-left">
-            <label className="block mb-2 font-semibold text-gray-700">Phone Number:</label>
+          <div className="mb-4 text-left">
+            <label className="block mb-2 font-semibold text-gray-700">Name in Japan:</label>
             <input
               type="text"
-              name="phoneNumber"
-              value={formData.phoneNumber}
+              name="name"
+              value={formData.name}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:outline-none"
+              className="w-full px-3 py-2 border rounded-lg focus:ring-2  focus:outline-none"
             />
           </div>
           <button

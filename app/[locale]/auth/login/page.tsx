@@ -25,7 +25,7 @@ const Login = () => {
 
         <form  className="flex flex-col gap-4">
           <div className="flex flex-col">
-            <label htmlFor="email" className="text-left font-medium mb-1">Email:</label>
+            <label htmlFor="email" className="text-left font-medium mb-1">Username:</label>
             <input
               id="email"
               type="email"
