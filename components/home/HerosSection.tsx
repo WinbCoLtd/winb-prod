@@ -41,6 +41,7 @@ function HerosSection() {
       const res = await axios.get("api/searchData/");
       if (res.status === 200) {
         setSearchData(res.data);
+        console.log(searchData);
       }
     } catch (error) {
       console.log(error);
@@ -57,6 +58,11 @@ function HerosSection() {
     fetchSearchData();
   }, []);
 
+  //TODO: Add a loading spinner
+  //TODO: Add a fallback UI for when the data is not available
+  //TODO: Add a toast notification for when the search is successful
+  //TODO: Add a toast notification for when the search is unsuccessful
+  //TODO: Add custome styles select dropdowns
   return (
     <div className="relative w-full min-h-screen flex flex-col md:px-12 xl:px-56 mx-auto bg-hero-image pb-10 bg-cover object-center bg-center aspect-video">
       <Navbar />
@@ -64,7 +70,7 @@ function HerosSection() {
         <h1 className="font-bold text-3xl sm:text-5xl lg:text-4xl md:text-6xl text-white text-center mb-10 lg:mb-20">
           信頼できる車両マーケットプレイス。
         </h1>
-        <div className="flex flex-col md:flex-row flex-wrap items-center justify-between bg-white max-w-[770px] w-full rounded-2xl min-w-80 p-4 gap-4 text-[#1f1f1f] font-semibold text-lg">
+        <div className="flex flex-col md:flex-row flex-wrap md:flex-nowrap items-center md:items-end justify-between bg-white max-w-[770px] w-full rounded-2xl min-w-80 p-4 gap-4 text-[#1f1f1f] font-semibold text-lg">
           <div className="flex flex-col items-start flex-1 w-full">
             <label htmlFor="makers" className="text-sm mb-2">
               Makers
@@ -78,8 +84,8 @@ function HerosSection() {
               <option value="">All Makers</option>
               {searchData ? (
                 searchData.makers.map((maker, index) => (
-                  <option value={maker.name} key={index}>
-                    {maker.name}
+                  <option value={maker} key={index}>
+                    {maker}
                   </option>
                 ))
               ) : (
@@ -100,8 +106,8 @@ function HerosSection() {
               <option value="">All Models</option>
               {searchData ? (
                 searchData.models.map((model, index) => (
-                  <option value={model.name} key={index}>
-                    {model.name}
+                  <option value={model} key={index}>
+                    {model}
                   </option>
                 ))
               ) : (
@@ -171,7 +177,7 @@ function HerosSection() {
 
           <button
             type="button"
-            className="rounded-md w-full bg-[#FCDB02] text-black font-bold px-6 py-2 h-12"
+            className="rounded-md md:max-w-32 w-full bg-[#FCDB02] text-black font-bold px-6 py-2 h-12"
             onClick={redirectToSearchResultPage}
           >
             Search
