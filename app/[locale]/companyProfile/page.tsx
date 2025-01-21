@@ -21,19 +21,19 @@ const Profile = () => {
 
         <div className="mt-[212px] sm:mt-[122px] xs:mt-[100px] xxs:mt-[120px] px-10 sm:px-4 xs:px-2 xxs:px-1 text-justify">
           <p className="lg:text-[20px] sm:text-[16px] xs:text-[14px] xxs:text-[14px] font-semibold">
-            WIN-B Co. Ltd. was established in 2024 as a Japanese used car exporter. As a Japanese used car exporter, we export all kinds of used Japanese cars. We carry all major manufacturers of Japanese cars, including Toyota, Honda, Nissan, Mitsubishi, Mazda, Subaru, Isuzu, Suzuki, Daihatsu, and many more with a wide range of models. Buying a used car online from Japan is a difficult task. We make it easier for you.
+          WIN-B Co. Ltd., founded in 2024, specializes in exporting Japanese used cars. We offer a diverse selection of vehicles from all major Japanese manufacturers, including Toyota, Honda, Nissan, Mitsubishi, Mazda, Subaru, Isuzu, Suzuki, Daihatsu, and more, covering a wide range of models. Purchasing a used car online from Japan can be challenging, but we simplify the process to make it seamless and hassle-free for you.
           </p>
           <br />
           <p className="lg:text-[20px] sm:text-[16px] xs:text-[14px] xxs:text-[14px] font-semibold">
-            After studying the demand and requirements in the international market, steps were taken to create a new organization. There was a most difficult task research from root to top in both domestic and international market, which was the toughest struggle to face. Seeing the difficulties of the buyers and the rules and regulations of their country's system, this organization was established.
+          Recognizing the growing demand and unique requirements of the international market, we founded this organization after conducting extensive research. This involved addressing challenges from the ground up, both domestically and globally, and understanding the regulations and needs of customers in different countries. Our mission is to simplify the car-buying experience while adhering to all necessary systems and standards.
           </p>
           <br />
           <p className="lg:text-[20px] sm:text-[16px] xs:text-[14px] xxs:text-[14px] font-semibold">
-            You can choose the car you need from 230,000 used cars sold every week at auctions nationwide. We are sure that you will find the right car in your budget very easily and quickly.
+          With access to over 230,000 vehicles auctioned weekly across Japan, you can easily find the car that fits your preferences and budget. We are committed to helping you secure the best deal, ensuring you buy a car you are completely satisfied with, all at or below your preferred price. This customer-focused approach has contributed to our rapid global growth and a loyal customer base worldwide.
           </p>
           <br />
           <p className="lg:text-[20px] sm:text-[16px] xs:text-[14px] xxs:text-[14px] font-semibold">
-            We always try to win at or below the price you give us and help you buy only the car you are happy with at that price. This system has enabled our business to grow rapidly around the world and is now used by many customers. Thank you for your interest in our organization.
+          We deeply value your interest in our organization. For any inquiries, questions, feedback, or suggestions about our services, vehicle quality, or company, please don’t hesitate to reach out. Your insights are invaluable in helping us enhance the quality of our offerings to better serve your needs. Simply fill out the contact form below to share your thoughts.
           </p>
           <br />
           <p className="lg:text-[20px] sm:text-[16px] xs:text-[14px] xxs:text-[14px] font-semibold">
@@ -60,3 +60,10 @@ const Profile = () => {
 };
 
 export default Profile;
+
+
+
+
+
+
+
