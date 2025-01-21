@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Login = () => {
   const [email, setEmail] = useState<string>('');
@@ -58,7 +59,8 @@ const Login = () => {
         </form>
 
         <p className="mt-4 text-sm text-gray-600">
-          Don’t have an account? <a href="/register" className="text-[#617bc2] hover:text-[#3c5ebb] font-medium">Register Here</a>
+          Don’t have an account? 
+          <Link href={'/auth/register'} className="text-[#617bc2] hover:text-[#3c5ebb] font-medium">Register Here</Link>
         </p>
       </div>
     </div>
