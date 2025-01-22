@@ -75,7 +75,7 @@ const Register = () => {
             />
           </div>
           <div className="mb-4 text-left">
-            <label className="block mb-2 font-semibold text-gray-700">Name in Japan:</label>
+            <label className="block mb-2 font-semibold text-gray-700">Name in Japanese:</label>
             <input
               type="text"
               name="name"
