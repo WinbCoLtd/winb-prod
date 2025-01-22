@@ -6,6 +6,7 @@ export async function GET() {
         select: {
             vehicleType: true
         },
+        distinct: ['vehicleType']
     })
 
     return NextResponse.json(categories, {status: 200})
