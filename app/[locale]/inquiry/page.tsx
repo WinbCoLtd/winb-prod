@@ -36,9 +36,9 @@ export default function Inquiry() {
         Nav
       </div>
 
-      <h2 className="lg:text-[30px]  text-black font-bold mt-[36px] mb-[36px]">Inquiry Form</h2>
+      <h2 className="lg:text-[30px]  text-black font-bold mt-[36px] mb-[36px] px-2">Inquiry Form</h2>
       
-      <div className="mt-[50px] w-full bg-white border border-winb-formblue rounded-[15px] flex flex-col items-center p-6 shadow-md">
+      <div className="mt-[50px] w-full  bg-white border border-winb-formblue rounded-[15px] flex flex-col items-center p-6 shadow-md">
         <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-6">
           <div className="flex flex-col">
             <label className="lg:text-[18px] text-black font-semibold mb-2" htmlFor="name">Name</label>

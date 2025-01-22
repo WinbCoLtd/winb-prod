@@ -65,7 +65,7 @@ const MoreDetails = () => {
 
   return (
     <div className="relative w-full flex flex-col max-w-[1166px] mx-auto">
-      <div className="mt-6 h-[127px] bg-gray-200 flex items-center justify-between px-4 md:px-8">
+      <div className="mt-6 h-[127px] bg-gray-200 flex items-center justify-between px-4 md:px-8 ">
         Nav
       </div>
 
@@ -116,16 +116,16 @@ const MoreDetails = () => {
         </div>
 
         <div className="mt-6 md:mt-0 md:ml-8 flex flex-col justify-start w-full md:w-[500px]">
-          <h2 className="lg:text-[24px] sm:text-[11px] xxs:text[20px] text-black font-bold mb-4">
+          <h2 className="lg:text-[24px] sm:text-[20px] xxs:text[20px] text-black font-bold mb-4">
             {vehicle.name} 
           </h2>
-          <p className="lg:text-[13px] sm:text-[11px] xxs:text-[9px] text-black font-medium mb-4">
+          <p className="lg:text-[16px] sm:text-[12px] xs:text-[12px] xxs:text-[12px] text-black font-medium mb-4">
             {vehicle.description} 
           </p>
-          <p className="lg:text-[13px] sm:text-[11px] xxs:text-[9px] text-black font-medium mb-4">
+          <p className="lg:text-[16px] sm:text-[12px] xs:text-[12px] xxs:text-[12px] text-black font-medium mb-4">
             Key features include an advanced infotainment system, adaptive cruise control, rear parking sensors, and a rearview camera for convenience and safety. The vehicle offers a smooth and comfortable ride in the city and on the highway.
           </p>
-          <p className="lg:text-[13px] sm:text-[11px] xxs:text-[9px] text-black font-medium">
+          <p className="lg:text-[16px] sm:text-[12px] xs:text-[12px] xxs:text-[12px] text-black font-medium">
             With 45,000km on the odometer and the latest safety features, this well-maintained vehicle is waiting for its next owner. Don't miss out — contact us today to schedule a test drive or for more information!
           </p>
 
@@ -171,7 +171,7 @@ const MoreDetails = () => {
             <button>
               <Link
                     href={`/inquiry`}
-                    className="bg-winb-yellow text-sm md:text-[15px] text-black font-medium px-4 py-2 rounded-[25px] hover:bg-yellow-300 transition duration-300"
+                    className="bg-winb-yellow lg:text-[16px] sm:text-[12px] xs:text-[12px] xxs:text-[12px] text-black font-medium px-4 py-2 rounded-[25px] hover:bg-yellow-300 transition duration-300"
               >
                 Request More Information
               </Link>
