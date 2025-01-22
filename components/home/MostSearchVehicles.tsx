@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import axios from "axios";
@@ -5,13 +6,13 @@ import { useEffect, useState } from "react";
 import Card from "./Card";
 
 function MostHeroSection() {
-  const [types, setTypes] = useState<string[]>(["Cars", "Vans"]);
-  const [selectedType, setSelectedType] = useState<string>("Cars");
+  const [types, setTypes] = useState<any[]>([]);
+  const [selectedType, setSelectedType] = useState<string>(types[0]?.vehicleType);
   const [vehicles, setVehicles] = useState([]);
 
   const fetchVehicles = async () => {
     try {
-      const res = await axios.get(`api/vehicles/${selectedType}`);
+      const res = await axios.get(`api/vehicles/latestVehicles?category=${selectedType}`);
       if (res.status === 200) {
         setVehicles(res.data);
       }
@@ -22,7 +23,7 @@ function MostHeroSection() {
   
   const fetchCategories = async () => {
     try {
-      const res = await axios.get(`api/categories`);
+      const res = await axios.get(`api/vehicles/categories`);
       if (res.status === 200) {
         setTypes(res.data);
       }
@@ -59,7 +60,7 @@ function MostHeroSection() {
                 selectedType === type ? "underline" : ""
               }`}
             >
-              {type}
+              {type.vehicleType}
             </button>
           ))
         ) : (
