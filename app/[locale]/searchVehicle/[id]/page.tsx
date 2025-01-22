@@ -8,7 +8,7 @@ import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-
+import Link from 'next/link';
 
 const MoreDetails = () => {
   const { id } = useParams(); 
@@ -168,8 +168,13 @@ const MoreDetails = () => {
           </div>
   
           <div className="mt-[55px] flex justify-end">
-            <button className="bg-yellow-400 text-sm md:text-base text-black font-medium px-4 py-2 rounded-full hover:bg-yellow-300 transition duration-300">
-              Request More Information
+            <button>
+              <Link
+                    href={`/inquiry`}
+                    className="bg-winb-yellow text-sm md:text-[15px] text-black font-medium px-4 py-2 rounded-[25px] hover:bg-yellow-300 transition duration-300"
+              >
+                Request More Information
+              </Link>
             </button>
           </div>
         </div>
