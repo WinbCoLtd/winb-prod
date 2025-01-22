@@ -25,7 +25,7 @@ export default {
         "winb-yellow": "#FCDB02",
         "winb-blue": "#BCDEFF",
         "winb-ash":"#5a5467",
-        "winb-border":"#9dadd7",
+        "winb-border":"#9dadd7",             
         "winb-blue-border":"#8fa1d1",
         "winb-ashborder":"#b2b2b2",
         "winb-ashcolor":"#fafafa",
