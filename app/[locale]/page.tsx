@@ -2,6 +2,7 @@ import Deal from '@/components/deal/deal'
 import HerosSection from '@/components/home/HeroSection'
 import VehicleCard from '@/components/vehicleCard/vehicleCard'
 import Help from '@/components/help/help'
+import Feedback from '@/components/customerFeedback/feedback'
 import React from 'react'
 
 function Home() {
@@ -10,6 +11,7 @@ function Home() {
      {/* <HerosSection/> */}
      <VehicleCard/>
      <Deal/>
+     <Feedback/>
      <Help/>
    </main>
    

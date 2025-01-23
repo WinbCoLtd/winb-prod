@@ -18,7 +18,7 @@ function Details() {
       <div className="mt-[23px] h-[127px] bg-winb-ash flex items-center justify-between px-4 md:px-8">Nav</div>
 
       <div className="mt-[36px] flex">
-        {/* Column 1 */}
+       
         <div className="w-full max-w-[341px] h-auto bg-white border border-black rounded-[15px] p-4">
 
         {/* Manufacture */}
