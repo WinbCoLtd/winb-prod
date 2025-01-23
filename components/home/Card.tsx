@@ -1,4 +1,7 @@
+
+import { ChevronRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export interface Ifields {
     id: number;
@@ -27,20 +30,25 @@ export default function Card({vehicle}: {vehicle: Ifields}) {
   return (
     <div
       key={vehicle.id}
-      className="border p-4 rounded-lg shadow-lg max-w-xs mx-auto"
+      className="relative border border-[#00000032] p-5 rounded-lg shadow-xl max-w-[400px] w-full mx-auto"
     >
       <Image
         src={vehicle.previewUrl}
         alt={vehicle.title}
         width={342}
         height={255}
-        className="w-full h-[255px] object-cover rounded-md"
+        className="w-full h-[255px] object-cover rounded-lg object-center"
       />
-      <h4 className="mt-4 text-lg font-semibold">{vehicle.title}</h4>
-      <p className="text-sm text-[#6e6d70] font-medium">{vehicle.maxPassengers} {vehicle.fuel} {vehicle.drive} </p>
-      <p className="mt-2 text-[20px] sm:text-[24px] md:text-[26px] lg:text-[30px] font-semibold text-black">
-        {vehicle.price}
+      <h4 className="mt-7 text-xl font-semibold">{vehicle.title}</h4>
+      <p className="text-[16px] mt-4 text-[#00000056] font-medium">{vehicle.maxPassengers} - {vehicle.fuel} - {vehicle.drive} </p>
+      <p className="mt-9 text-3xl font-semibold text-black">
+      ¥{vehicle.price}
       </p>
+      <button type="button" className="absolute bottom-2 right-2 bg-transparent p-2">
+        <Link href={`/vehicles/${vehicle.id}`}>
+          <ChevronRight size={24} />
+        </Link>
+      </button>
     </div>
   );
 }

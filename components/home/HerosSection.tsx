@@ -69,7 +69,7 @@ function HerosSection() {
   //TODO: Add a toast notification for when the search is unsuccessful
   //TODO: Add custome styles select dropdowns
   return (
-    <div className="relative w-full min-h-screen flex flex-col md:px-12 xl:px-56 mx-auto bg-hero-image pb-10 bg-cover object-center bg-center aspect-video">
+    <div className="relative w-full min-h-[80vh] flex flex-col md:px-12 xl:px-56 mx-auto bg-hero-image pb-10 bg-cover object-center bg-center">
       <Navbar />
       <div className="flex flex-col justify-center py-10 lg:py-56 items-center h-full px-4">
         <h1 className="font-bold text-3xl sm:text-5xl lg:text-4xl md:text-6xl text-white text-center mb-10 lg:mb-20">

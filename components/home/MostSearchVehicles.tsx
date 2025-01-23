@@ -7,7 +7,7 @@ import Card from "./Card";
 
 function MostHeroSection() {
   const [types, setTypes] = useState<any[]>([]);
-  const [selectedType, setSelectedType] = useState<string>(types[0]?.vehicleType);
+  const [selectedType, setSelectedType] = useState<string>("all");
   const [vehicles, setVehicles] = useState([]);
 
   const fetchVehicles = async () => {
@@ -42,6 +42,7 @@ function MostHeroSection() {
 
   useEffect(() => {
     fetchVehicles();
+    console.log(vehicles);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedType]);
 
@@ -55,10 +56,11 @@ function MostHeroSection() {
           types.map((type, index) => (
             <button
               key={index}
-              onClick={() => handleTypeChange(type)}
-              className={`text-[20px] text-[#6e6e6e] font-semibold hover:underline ${
-                selectedType === type ? "underline" : ""
-              }`}
+              onClick={() => handleTypeChange(type.vehicleType)}
+              className={`text-[20px] text-[#6e6e6e] font-semibold hover:underline capitalize ${
+                selectedType === type.vehicleType ? "underline" : ""
+              }
+              ${selectedType === "all" && index === 0 ? "underline" : ""}`}
             >
               {type.vehicleType}
             </button>
@@ -68,7 +70,7 @@ function MostHeroSection() {
         )}
       </div>
 
-      <div className="flex flex-wrap justify-center space-x-4 items-center w-full h-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-5">
         {vehicles.length > 0 ? (
           vehicles.map((vehicle, index) => (
             <Card key={index} vehicle={vehicle} />

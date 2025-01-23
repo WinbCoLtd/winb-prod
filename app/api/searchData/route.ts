@@ -6,7 +6,8 @@ export async function GET() {
         select: {
             maker: true,
             model: true,
-        }
+        },
+        distinct: ['maker', 'model']
     })
 
     const makers = res.map((item) => item.maker)
