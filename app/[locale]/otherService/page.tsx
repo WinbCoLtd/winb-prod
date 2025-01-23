@@ -10,13 +10,13 @@ const HeroSection = () => {
         Nav
       </div>
 
-      <div className="mt-12 relative bg-black lg:h-[777px]">
+      <div className="mt-12 relative bg-black lg:h-[677px]">
         <Image
           src="/otherService/carrier.png"
           alt="Need Assistance"
           width={1166}
           height={777}
-          className="w-full lg:h-[777px] sm:h-[400px] xxs:h-[350px] xs:h-[473px] object-cover"
+          className="w-full lg:h-[677px] sm:h-[400px] xxs:h-[350px] xs:h-[473px] object-cover"
         />
 
         <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-between px-4 text-white bg-black bg-opacity-60">
