@@ -5,6 +5,7 @@ export default {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -32,18 +33,14 @@ export default {
         "winb-formblue":"#7e68b9"
         
       },
-      width: {
+      maxWidth: {
         "winb-max-1366": "1366px",
         "winb-max-1166": "1166px",
-
       },
-      screens: {
-        lg:'1024px',
-        md:'768px',
-        sm:'425px',
-        xs: '375px',
-        xxs: '320px', 
-      },
+      backgroundImage: {
+        "hero-image": "url('/home/hero-image.svg')",
+      }
+         
     
     },
   },
