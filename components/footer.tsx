@@ -6,16 +6,16 @@ const Footer = () => {
   return (
     <footer className="bg-[#c9d2e9] mt-[69px] text-white w-full py-8 flex flex-col items-center justify-center">
       <div className="flex gap-10 mb-4 sm:gap-6 xs:gap-4">
-        <a href="#" className="text-white lg:text-2xl sm:text-xl xs:text-xl xxs:text-lg hover:text-gray-300">
+        <a href="#" className="text-white lg:text-2xl sm:text-xl xs:text-xl xxs:text-lg hover:text-blue-400">
           <FontAwesomeIcon icon={faTwitter} />
         </a>
-        <a href="#" className="text-white lg:text-2xl sm:text-xl xs:text-xl xxs:text-lg hover:text-gray-300">
+        <a href="#" className="text-white lg:text-2xl sm:text-xl xs:text-xl xxs:text-lg hover:text-blue-400">
           <FontAwesomeIcon icon={faFacebook} />
         </a>
-        <a href="#" className="text-white lg:text-2xl sm:text-xl xs:text-xl xxs:text-lg hover:text-gray-300">
+        <a href="#" className="text-white lg:text-2xl sm:text-xl xs:text-xl xxs:text-lg hover:text-blue-400">
           <FontAwesomeIcon icon={faLinkedin} />
         </a>
-        <a href="#" className="text-white lg:text-2xl sm:text-xl xs:text-xl xxs:text-lg hover:text-gray-300">
+        <a href="#" className="text-white lg:text-2xl sm:text-xl xs:text-xl xxs:text-lg hover:text-blue-400">
           <FontAwesomeIcon icon={faInstagram} />
         </a>
       </div>
