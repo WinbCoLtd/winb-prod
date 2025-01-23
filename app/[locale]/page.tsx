@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link"; 
 import HerosSection from "@/components/home/HerosSection";
 import MostHeroSection from "@/components/home/MostSearchVehicles";
+import WhyToChooseUs from "@/components/home/WhyToChooseUs";
 
 export default function Home() {
 
@@ -11,68 +12,7 @@ export default function Home() {
     <main className=" mx-auto flex flex-col items-start justify-center">
       <HerosSection/>
       <MostHeroSection />
-
-      {/* Why Choose Us Section */}
-      <div className="mt-12 px-4">
-        <h2 className="text-[28px] sm:text-[32px] md:text-[36px] font-semibold text-black text-center">
-          Why Choose Us
-        </h2>
-      </div>
-
-      <div className="mt-12 px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div className="border p-4 rounded-lg shadow-lg w-[280px] h-[250px] mx-auto flex flex-col items-center transition-transform duration-300 ease-in-out hover:transform hover:scale-105 hover:shadow-2xl">
-            <Image
-              src="/home/w1.png"
-              alt="Icon 1"
-              width={30}
-              height={30}
-              className="mb-4"
-            />
-            <h4 className="text-[20px] font-semibold">Reliable Financing Solutions</h4>
-            <p className="text-[16px] font-medium text-justify mt-4 sm:mt-6 md:mt-8">Enjoy hassle-free financing with tailored options to save more on your vehicle.</p>
-          </div>
-
-          <div className="border p-4 rounded-lg shadow-lg w-[280px] h-[250px] mx-auto flex flex-col items-center transition-transform duration-300 ease-in-out hover:transform hover:scale-105 hover:shadow-2xl">
-            <Image
-              src="/home/w2.png"
-              alt="Icon 2"
-              width={30}
-              height={30}
-              className="mb-4"
-            />
-            <h4 className="text-[20px] font-semibold">Certified Pre-Owned Vehicles</h4>
-            <p className="text-[16px] font-medium text-justify mt-4 sm:mt-6 md:mt-8">We guarantee top-certified pre-owned vehicles meeting the highest standards.</p>
-          </div>
-
-          <div className="border p-4 rounded-lg shadow-lg w-[280px] h-[250px] mx-auto flex flex-col items-center transition-transform duration-300 ease-in-out hover:transform hover:scale-105 hover:shadow-2xl">
-            <Image
-              src="/home/w3.png"
-              alt="Icon 3"
-              width={30}
-              height={30}
-              className="mb-4"
-            />
-            <h4 className="text-[20px] font-semibold">Transparent Deals</h4>
-            <p className="text-[16px] font-medium text-justify mt-4 sm:mt-6 md:mt-8">
-              We offer clear and honest pricing with no hidden fees, so you know exactly what you&aposre getting.
-            </p>
-          </div>
-
-
-          <div className="border p-4 rounded-lg shadow-lg w-[280px] h-[250px] mx-auto flex flex-col items-center transition-transform duration-300 ease-in-out hover:transform hover:scale-105 hover:shadow-2xl">
-            <Image
-              src="/home/w4.png"
-              alt="Icon 4"
-              width={30}
-              height={30}
-              className="mb-4"
-            />
-            <h4 className="text-[20px] font-semibold">Expert Customer Service</h4>
-            <p className="text-[16px] font-medium text-justify mt-4 sm:mt-6 md:mt-8">Our team is committed to helping you with any questions and ensuring a seamless buying experience.</p>
-          </div>
-        </div>
-      </div>
+      <WhyToChooseUs />
 
       {/* New Section */}
       <div className="mt-12 bg-[#D9D9D9] px-4 py-12">
