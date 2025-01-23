@@ -30,7 +30,7 @@ export default function Card({vehicle}: {vehicle: Ifields}) {
   return (
     <div
       key={vehicle.id}
-      className="relative border border-[#00000032] p-5 rounded-lg shadow-xl max-w-[400px] w-full mx-auto"
+      className="relative border border-[#00000032] p-5 rounded-lg shadow-sm max-w-[400px] w-full"
     >
       <Image
         src={vehicle.previewUrl}
