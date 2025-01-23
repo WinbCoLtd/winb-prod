@@ -29,7 +29,7 @@ const HeroSection = () => {
           </p>
 
           <div className="mb-[80px] text-right">
-            <Link href="/contact">
+            <Link href="/otherInquiry">
               <button className="bg-winb-yellow text-black  sm:text-[14px] xs:text-[16px] xxs:text-[14px] lg:text-[18px] px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 xxs:mt-5 rounded-[25px] font-semibold hover:bg-yellow-600 w-full max-w-[190px]">
                 Join with Us &gt;
               </button>
