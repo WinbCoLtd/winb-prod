@@ -1,35 +1,9 @@
-'use client';
-
-// import { useState } from "react";
-//import Navbar from "@/components/Navbar";
-//import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link"; 
 import HerosSection from "@/components/home/HerosSection";
 import MostHeroSection from "@/components/home/MostSearchVehicles";
 
 export default function Home() {
-//   const [showCategory, setShowCategory] = useState<string | null>('cars');
-//   setShowCategory('cars');
-// //  const t = useTranslations("HomePage");
-
-//   const cars = [
-//     { id: 1, name: "Toyota Corolla", condition: "New", price: "$20,000", imageUrl: "/vehicledummy.png" },
-//     { id: 2, name: "Honda Civic", condition: "Used", price: "$18,500", imageUrl: "/vehicledummy.png" },
-//     { id: 3, name: "Ford Mustang", condition: "New", price: "$30,000", imageUrl: "/vehicledummy.png" },
-//   ];
-
-//   const vans = [
-//     { id: 1, name: "Ford Transit", condition: "New", price: "$25,000", imageUrl: "/vehicledummy.png" },
-//     { id: 2, name: "Mercedes Sprinter", condition: "Used", price: "$27,000", imageUrl: "/vehicledummy.png" },
-//     { id: 3, name: "Ram ProMaster", condition: "New", price: "$22,000", imageUrl: "/vehicledummy.png" },
-//   ];
-
-//   const trucks = [
-//     { id: 1, name: "Ford F-150", condition: "Used", price: "$35,000", imageUrl: "/vehicledummy.png" },
-//     { id: 2, name: "Chevrolet Silverado", condition: "New", price: "$40,000", imageUrl: "/vehicledummy.png" },
-//     { id: 3, name: "Dodge RAM 2500", condition: "Used", price: "$45,000", imageUrl: "/vehicledummy.png" },
-//   ];
 
 
 
@@ -37,52 +11,6 @@ export default function Home() {
     <main className=" mx-auto flex flex-col items-start justify-center">
       <HerosSection/>
       <MostHeroSection />
-
-
-      {/* Car Details Section
-      {showCategory === 'cars' && (
-        <div className="mt-8 px-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {cars.map((car) => (
-              <div key={car.id} className="border p-4 rounded-lg shadow-lg max-w-xs mx-auto">
-                <Image
-                  src={car.imageUrl}
-                  alt={car.name}
-                  width={342}
-                  height={255}
-                  className="w-full h-[255px] object-cover rounded-md"
-                />
-                <h4 className="mt-4 text-lg font-semibold">{car.name}</h4>
-                <p className="text-sm text-[#6e6d70] font-medium">{car.condition}</p>
-                <p className="mt-2 text-[20px] sm:text-[24px] md:text-[26px] lg:text-[30px] font-semibold text-black">{car.price}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      // {/* Van Details Section *}
-      // {showCategory === 'vans' && (
-      //   <div className="mt-8 px-4">
-      //     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      //       {vans.map((van) => (
-      //         <div key={van.id} className="border p-4 rounded-lg shadow-lg max-w-xs mx-auto">
-      //           <Image
-      //             src={van.imageUrl}
-      //             alt={van.name}
-      //             width={342}
-      //             height={255}
-      //             className="w-full h-[255px] object-cover rounded-md"
-      //           />
-      //           <h4 className="mt-4 text-lg font-semibold">{van.name}</h4>
-      //           <p className="text-sm text-[#6e6d70] font-medium">{van.condition}</p>
-      //           <p className="mt-2 text-[20px] sm:text-[24px] md:text-[26px] lg:text-[30px] font-semibold text-black">{van.price}</p>
-      //         </div>
-      //       ))}
-      //     </div>
-      //   </div>
-      // )}
-
 
       {/* Why Choose Us Section */}
       <div className="mt-12 px-4">
