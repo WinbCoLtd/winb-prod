@@ -59,7 +59,7 @@ export default function Navbar() {
           <Link href="/" className="hover:underline">
             ホーム
           </Link>
-          <Link href="/about" className="hover:underline">
+          <Link href="/companyProfile" className="hover:underline">
             会社概要
           </Link>
           <Link href="/allVehicles" className="hover:underline">
