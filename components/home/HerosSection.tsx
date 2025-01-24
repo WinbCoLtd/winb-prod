@@ -71,7 +71,7 @@ function HerosSection() {
   return (
     <div className="relative w-full min-h-[80vh] flex flex-col md:px-12 xl:px-56 mx-auto bg-hero-image pb-10 bg-cover object-center bg-center">
       <Navbar />
-      <div className="flex bg-red-300 flex-col justify-center py-14 lg:py-56 items-center h-full flex-1 px-4">
+      <div className="flex flex-col justify-center py-14 lg:py-56 items-center h-full flex-1 px-4">
         <h1 className="font-bold text-3xl sm:text-5xl lg:text-4xl md:text-6xl text-white text-center mb-10 lg:mb-20">
           信頼できる車両マーケットプレイス。
         </h1>

@@ -47,7 +47,7 @@ function MostHeroSection() {
   }, [selectedType]);
 
   return (
-    <section className="max-w-winb-max-1366 w-full mx-auto py-16 px-6 space-y-2 bg-red-300">
+    <section className="max-w-winb-max-1366 w-full mx-auto py-16 px-6 space-y-2">
       <h2 className="text-4xl font-semibold text-black">The Most Searched</h2>
       <h2 className="text-2xl font-medium text-black">最も検索された</h2>
 
@@ -70,7 +70,7 @@ function MostHeroSection() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-5 bg-green-300">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-5">
         {vehicles.length > 0 ? (
           vehicles.map((vehicle, index) => (
             <Card key={index} vehicle={vehicle} />

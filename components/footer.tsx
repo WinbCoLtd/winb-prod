@@ -4,7 +4,7 @@ import { faFacebook, faLinkedin, faInstagram, faTwitter } from "@fortawesome/fre
 
 const Footer = () => {
   return (
-    <footer className="bg-[#c9d2e9] mt-[69px] text-white w-full py-8 flex flex-col items-center justify-center">
+    <footer className="bg-[#c9d2e9]  text-white w-full py-8 flex flex-col items-center justify-center">
       <div className="flex gap-10 mb-4 sm:gap-6 xs:gap-4">
         <a href="#" className="text-white lg:text-2xl sm:text-xl xs:text-xl xxs:text-lg hover:text-blue-400">
           <FontAwesomeIcon icon={faTwitter} />
