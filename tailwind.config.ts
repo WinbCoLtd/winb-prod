@@ -39,6 +39,7 @@ export default {
       },
       backgroundImage: {
         "hero-image": "url('/home/hero-image.svg')",
+        "home-vehicle": "url('/home/homeVehicle.svg')",
       }
          
     

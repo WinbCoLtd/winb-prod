@@ -61,11 +61,11 @@ const WhyToChooseUs = () => {
     },
   ];
   return (
-    <div className="max-w-winb-max-1366 w-full mx-auto py-i px-1 flex flex-col items-center justify-center">
+    <div className="max-w-winb-max-1366 w-full mx-auto py-16 px-6 flex flex-col items-center justify-center">
       <h2 className="font-semibold text-4xl text-center mb-2">Why Choose Us</h2>
       <p className="font-medium text-2xl text-center">なぜ私たちを選ぶのか</p>
 
-      <div className="mt-12 py-1 w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-0 px-2">
+      <div className="mt-12 py-1 w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-11">
         {cards.map((card, index) => (
           
             <div

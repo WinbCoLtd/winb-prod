@@ -57,7 +57,7 @@ function MostHeroSection() {
             <button
               key={index}
               onClick={() => handleTypeChange(type.vehicleType)}
-              className={`text-[20px] text-[#6e6e6e] font-semibold hover:underline capitalize ${
+              className={`text-[16px] text-[#00000057] font-medium hover:underline capitalize ${
                 selectedType === type.vehicleType ? "underline" : ""
               }
               ${selectedType === "all" && index === 0 ? "underline" : ""}`}
@@ -70,7 +70,7 @@ function MostHeroSection() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-5">
         {vehicles.length > 0 ? (
           vehicles.map((vehicle, index) => (
             <Card key={index} vehicle={vehicle} />
