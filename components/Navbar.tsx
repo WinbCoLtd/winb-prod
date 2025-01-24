@@ -50,7 +50,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="p-4 bg-gray-100 flex justify-between items-center bg-transparent text-xl text-white">
+    <nav className="p-4 bg-gray-100 w-full flex justify-between items-center bg-transparent text-xl text-white">
       <Link href="/" locale={locale} className="font-extrabold text-3xl">
         WINB
       </Link>
