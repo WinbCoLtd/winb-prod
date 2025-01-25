@@ -5,7 +5,6 @@ import { Building2, CarFront, Fuel, Gem, LifeBuoy, Palette, Calendar, Users } fr
 import { FaRegSnowflake } from "react-icons/fa";
 import React, { useState } from "react";
 
-// Icon mapping
 const icons: any = {
   model: <CarFront size={24} />,
   maker: <Building2 size={24} />,
@@ -19,7 +18,7 @@ const icons: any = {
   maxPassengers: <Users size={24} />,
 };
 
-// Filter type
+
 type FilterItem = {
   [key: string]: string[];
 };
@@ -27,7 +26,6 @@ type FilterItem = {
 const Filterbar = ({ filters }: { filters: FilterItem }) => {
   const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
 
-  // Handle filter selection
   const handleFilterSelect = (name: string, value: string) => {
     setSelectedFilters((prev) => {
       const prevValues = prev[name] || [];
@@ -45,7 +43,7 @@ const Filterbar = ({ filters }: { filters: FilterItem }) => {
     });
   };
 
-  // Trigger filter query
+
   const fetchVehicles = () => {
     console.log("Selected Filters: ", selectedFilters);
   };

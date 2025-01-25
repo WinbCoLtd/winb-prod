@@ -8,23 +8,23 @@ import Filterbar from "@/components/vehicleCard/filterbar";
 import axios from "axios";
 import { PulseLoader } from 'react-spinners'
 
-// Async function to fetch filters
+
 async function getFilters() {
   try {
-    const res = await axios.get("http://localhost:3000/api/filters/"); // Update the URL accordingly
+    const res = await axios.get("/api/filters/"); 
 
     const data = res.data;
     const formattedFilters: { [key: string]: string[] } = {};
 
     for (const key in data) {
       if (key === "manufactureYear") {
-        // Extract only the year, ensuring type safety
+      
         formattedFilters[key] = data[key]
           .map((item: any) => {
-            const dateValue = Object.values(item)[0] as string; // Explicitly cast to string
-            return new Date(dateValue).getFullYear().toString(); // Convert to year
+            const dateValue = Object.values(item)[0] as string; 
+            return new Date(dateValue).getFullYear().toString();
           })
-          .filter((year: string, index: number, self: string[]) => self.indexOf(year) === index); // Ensure distinct years
+          .filter((year: string, index: number, self: string[]) => self.indexOf(year) === index); 
       } else {
         formattedFilters[key] = data[key].map((item: any) => Object.values(item)[0]);
       }
@@ -41,7 +41,6 @@ function Details() {
   const [filters, setFilters] = useState<{ [key: string]: string[] }>({});
   const [loading, setLoading] = useState(true);
 
-  // Fetch filters on component mount
   useEffect(() => {
     const fetchFilters = async () => {
       const data = await getFilters();
@@ -65,10 +64,10 @@ function Details() {
       <div className="bg-[#08001C67] w-full flex items-center justify-center border border-[#00CCEE] rounded-[10px] min-h-32 my-auto">
         <Navbar />
       </div>
-
-      <div className="mt-[36px] flex">
-        {/* Pass filters as props once fetched */}
-        <Filterbar filters={filters} />
+      <div className="mt-[36px] mb-5 flex">
+        <div className="hidden lg:block ">
+           <Filterbar filters={filters} />
+        </div>
         <SearchVehicle />
       </div>
     </div>
