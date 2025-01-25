@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import Filterbar from "@/components/vehicleCard/filterbar";
 import axios from "axios";
 import { PulseLoader } from 'react-spinners'
+import { useRouter } from "next/router";
 
 
 async function getFilters() {
@@ -37,18 +38,37 @@ async function getFilters() {
   }
 }
 
+async function getVehicles(query: object) {
+  try {
+    const res = await axios.get(`/api/vehicles/${query}`)
+    const data = res.data;
+    return data;
+  } catch (error) {
+    console.error("Error fetching vehicles:", error);
+  }
+}
+
 function Details() {
   const [filters, setFilters] = useState<{ [key: string]: string[] }>({});
   const [loading, setLoading] = useState(true);
+  const [vehicles, setVehicles] = useState(true);
+  const router = useRouter();
+  console.log(vehicles);
 
   useEffect(() => {
     const fetchFilters = async () => {
       const data = await getFilters();
       setFilters(data);
-      setLoading(false);
     };
+    const fetchVehicles = async () => {
+      const queryObject ={ ...router.query};
+      const data = await getVehicles(queryObject);
+      setVehicles(data);
+    }
 
     fetchFilters();
+    fetchVehicles();
+    setLoading(false);
   }, []);
 
   if (loading) {
