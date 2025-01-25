@@ -6,6 +6,7 @@ import SearchVehicle from "../searchVehicle/page";
 import Navbar from "@/components/Navbar";
 import Filterbar from "@/components/vehicleCard/filterbar";
 import axios from "axios";
+import { PulseLoader } from 'react-spinners'
 
 // Async function to fetch filters
 async function getFilters() {
@@ -53,8 +54,8 @@ function Details() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center">
-        <h1>Loading filters...</h1>
+      <div className="flex items-center justify-center min-h-screen">
+        <PulseLoader color="#2563eb" size={20} />
       </div>
     );
   }
