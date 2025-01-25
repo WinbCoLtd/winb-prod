@@ -1,134 +1,97 @@
-'use client'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
-import React from 'react';
-import SearchVehicle from '../searchVehicle/page';
+import React, { useEffect, useState } from "react";
+import SearchVehicle from "../searchVehicle/page";
+import Navbar from "@/components/Navbar";
+import Filterbar from "@/components/vehicleCard/filterbar";
+import axios from "axios";
+import { PulseLoader } from 'react-spinners'
+import { useRouter } from "next/router";
 
-import {
-  FaTruck,       // For Manufacture
-  FaCar,         // For Model
-  FaRegSnowflake, // For Condition
-  FaCogs,        // For Drive Type
-  FaGasPump,     // For Fuel Type
-  FaStar         // For Features
-} from 'react-icons/fa'; // Import icons from FontAwesome
+
+async function getFilters() {
+  try {
+    const res = await axios.get("/api/filters/"); 
+
+    const data = res.data;
+    const formattedFilters: { [key: string]: string[] } = {};
+
+    for (const key in data) {
+      if (key === "manufactureYear") {
+      
+        formattedFilters[key] = data[key]
+          .map((item: any) => {
+            const dateValue = Object.values(item)[0] as string; 
+            return new Date(dateValue).getFullYear().toString();
+          })
+          .filter((year: string, index: number, self: string[]) => self.indexOf(year) === index); 
+      } else {
+        formattedFilters[key] = data[key].map((item: any) => Object.values(item)[0]);
+      }
+    }
+
+    return formattedFilters;
+  } catch (error) {
+    console.error("Error fetching filters:", error);
+    return {};
+  }
+}
+
+async function getVehicles(query: object) {
+  try {
+    const res = await axios.get(`/api/vehicles/${query}`)
+    const data = res.data;
+    return data;
+  } catch (error) {
+    console.error("Error fetching vehicles:", error);
+  }
+}
 
 function Details() {
+  const [filters, setFilters] = useState<{ [key: string]: string[] }>({});
+  const [loading, setLoading] = useState(true);
+  const [vehicles, setVehicles] = useState(true);
+  const router = useRouter();
+  console.log(vehicles);
+
+  useEffect(() => {
+    const fetchFilters = async () => {
+      const data = await getFilters();
+      setFilters(data);
+    };
+    const fetchVehicles = async () => {
+      const queryObject ={ ...router.query};
+      const data = await getVehicles(queryObject);
+      setVehicles(data);
+    }
+
+    fetchFilters();
+    fetchVehicles();
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <PulseLoader color="#2563eb" size={20} />
+      </div>
+    );
+  }
+
   return (
-    <div className="relative w-full flex flex-col  max-w-[1166px] mx-auto">
-      <div className="mt-[23px] h-[127px] bg-winb-ash flex items-center justify-between px-4 md:px-8">Nav</div>
-
-      <div className="mt-[36px] flex">
-       
-        <div className="w-full max-w-[341px] h-auto bg-white border border-black rounded-[15px] p-4">
-
-        {/* Manufacture */}
-        <div className="mb-6">
-          <div className="flex items-center mb-2">
-            <FaTruck className="w-[30px] h-[30px] text-gray-500 mr-[21px]" />
-            <h3 className="lg:text-[15px] sm:text-[13px] xs:text-[12px] xxs:text-[12px] text-black font-semibold">Manufacture</h3>
-          </div>
-          
-          <div className="grid lg:grid-cols-4 sm:grid-cols-4 xs:grid-cols-3 xxs:grid-cols-3 lg:text-[13px] sm:text-[13px] xs:text-[11px] xxs:text-[11px] gap-2 mt-[27px]">
-            {['Toyota', 'Honda', 'Nissan', 'Ford', 'Toyota', 'Honda', 'Nissan', 'Ford'].map((brand, index) => (
-              <button key={index} className="w-full sm:w-[68px] h-[25px] rounded-[25px] text-winb-text-dark-blue font-medium bg-white items-center border-2 border-winb-blue-border hover:bg-slate-50">
-                {brand}
-              </button>
-            ))}
-          </div>
-        </div>
-
-      {/* Model */}
-      <div className="mb-6">
-        <div className="flex items-center mb-2 mt-[27px]">
-          <FaCar className="w-[30px] h-[30px] text-gray-500 mr-[21px]" />
-          <h3 className="lg:text-[15px] sm:text-[13px] xs:text-[12px] xxs:text-[12px] text-black font-semibold">Model</h3>
-        </div>
-        
-        <div className="grid lg:grid-cols-4 sm:grid-cols-4 xs:grid-cols-3 xxs:grid-cols-3 lg:text-[13px] sm:text-[13px] xs:text-[11px] xxs:text-[11px] gap-2 mt-[27px]">
-          {['RAV4', 'RAV4', 'RAV4', 'RAV4', 'RAV4', 'RAV4', 'RAV4'].map((model, index) => (
-            <button key={index} className="w-full sm:w-[68px] h-[25px] rounded-[25px] text-winb-text-dark-blue font-medium bg-white items-center border-2 border-winb-blue-border hover:bg-slate-50">
-              {model}
-            </button>
-          ))}
-        </div>
+    <div className="relative w-full flex flex-col max-w-[1366px] mx-auto px-4 py-2">
+      <div className="bg-[#08001C67] w-full flex items-center justify-center border border-[#00CCEE] rounded-[10px] min-h-32 my-auto">
+        <Navbar />
       </div>
-
-      {/* Condition */}
-      <div className="mb-6">
-        <div className="flex items-center mb-2 mt-[27px]">
-          <FaRegSnowflake className="w-[30px] h-[30px] text-gray-500 mr-[21px]" />
-          <h3 className="lg:text-[15px] sm:text-[13px] xs:text-[12px] xxs:text-[12px] text-black font-semibold">Condition</h3>
+      <div className="mt-[36px] mb-5 flex">
+        <div className="hidden lg:block ">
+           <Filterbar filters={filters} />
         </div>
-        
-        <div className="grid lg:grid-cols-2 sm:grid-cols-2 xs:grid-cols-3 xxs:grid-cols-3 lg:text-[13px] sm:text-[13px] xs:text-[11px] xxs:text-[11px] gap-2 mt-[27px]">
-          {['New', 'Used', 'CPO'].map((condition, index) => (
-            <button key={index} className="w-full sm:w-[130px] h-[25px] rounded-[25px] text-winb-text-dark-blue font-medium bg-white items-center border-2 border-winb-blue-border hover:bg-slate-50">
-              {condition}
-            </button>
-          ))}
-        </div>
+        <SearchVehicle />
       </div>
-
-      {/* Drive Type */}
-      <div className="mb-6">
-        <div className="flex items-center mb-2 mt-[27px]">
-          <FaCogs className="w-[30px] h-[30px] text-gray-500 mr-[21px]" />
-          <h3 className="lg:text-[15px] sm:text-[13px] xs:text-[12px] xxs:text-[12px] text-black font-semibold">Drive Type</h3>
-        </div>
-        
-        <div className="grid lg:grid-cols-2 sm:grid-cols-2 xs:grid-cols-3 xxs:grid-cols-3 lg:text-[13px] sm:text-[13px] xs:text-[11px] xxs:text-[11px] gap-2 mt-[27px]">
-          {['FWD', 'RWD', 'AWD', '4WD'].map((driveType, index) => (
-            <button key={index} className="w-full sm:w-[144px] h-[25px] rounded-[25px] text-winb-text-dark-blue font-medium bg-white items-center border-2 border-winb-blue-border hover:bg-slate-50">
-              {driveType}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Fuel Type */}
-      <div className="mb-6">
-        <div className="flex items-center mb-2 mt-[27px]">
-          <FaGasPump className="w-[30px] h-[30px] text-gray-500 mr-[21px]" />
-          <h3 className="lg:text-[15px] sm:text-[13px] xs:text-[12px] xxs:text-[12px] text-black font-semibold">Fuel Type</h3>
-        </div>
-        
-        <div className="grid lg:grid-cols-2 sm:grid-cols-2 xs:grid-cols-3 xxs:grid-cols-3 lg:text-[13px] sm:text-[13px] xs:text-[11px] xxs:text-[11px] gap-2 mt-[27px]">
-          {['Petrol', 'Diesel', 'Electric', 'Hybrid'].map((fuel, index) => (
-            <button key={index} className="w-full sm:w-[144px] h-[25px] rounded-[25px] text-winb-text-dark-blue font-medium bg-white items-center border-2 border-winb-blue-border hover:bg-slate-50">
-              {fuel}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Features */}
-      <div className="mb-6">
-        <div className="flex items-center mb-2 mt-[27px]">
-          <FaStar className="w-[30px] h-[30px] mr-[21px] text-gray-500" />
-          <h3 className="lg:text-[15px] sm:text-[13px] xs:text-[12px] xxs:text-[12px] text-black font-semibold">Features</h3>
-        </div>
-        
-        <div className="grid lg:grid-cols-4 sm:grid-cols-4 xs:grid-cols-3 xxs:grid-cols-3 lg:text-[13px] sm:text-[13px] xs:text-[11px] xxs:text-[11px] gap-2 mt-[27px]">
-          {['AC', 'AC', 'AC', 'AC', 'AC', 'AC'].map((feature, index) => (
-            <button key={index} className="w-full sm:w-[68px] h-[25px] rounded-[25px] text-winb-text-dark-blue font-medium bg-white items-center border-2 border-winb-blue-border hover:bg-slate-50">
-              {feature}
-            </button>
-          ))}
-        </div>
-      </div>
-
-</div>
-
-<SearchVehicle/>
-
-      </div>
-     
-      </div> 
+    </div>
   );
 }
 
 export default Details;
-
-
-
-

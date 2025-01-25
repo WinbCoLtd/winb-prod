@@ -62,7 +62,7 @@ export default function Navbar() {
           <Link href="/companyProfile" className="hover:underline">
             会社概要
           </Link>
-          <Link href="/allVehicles" className="hover:underline">
+          <Link href="/vehicleList" className="hover:underline">
             車両一覧
           </Link>
           <Link href="/contact" className="hover:underline">
