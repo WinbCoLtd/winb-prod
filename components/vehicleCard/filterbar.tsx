@@ -1,157 +1,100 @@
-import React from 'react'
-import {
-  FaTruck, // For Manufacture
-  FaCar, // For Model
-  FaRegSnowflake, // For Condition
-  FaCogs, // For Drive Type
-  FaGasPump, // For Fuel Type
-  FaStar, // For Features
-} from "react-icons/fa"; // Import icons from FontAwesome
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
-const Filterbar = () => {
+import { Building2, CarFront, Fuel, Gem, LifeBuoy, Palette, Calendar, Users } from "lucide-react";
+import { FaRegSnowflake } from "react-icons/fa";
+import React, { useState } from "react";
+
+// Icon mapping
+const icons: any = {
+  model: <CarFront size={24} />,
+  maker: <Building2 size={24} />,
+  vehicleType: <LifeBuoy size={24} />,
+  fuel: <Fuel size={24} />,
+  drive: <Gem size={24} />,
+  condition: <FaRegSnowflake size={24} />,
+  color: <Palette size={24} />,
+  grade: <Gem size={24} />,
+  manufactureYear: <Calendar size={24} />,
+  maxPassengers: <Users size={24} />,
+};
+
+// Filter type
+type FilterItem = {
+  [key: string]: string[];
+};
+
+const Filterbar = ({ filters }: { filters: FilterItem }) => {
+  const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
+
+  // Handle filter selection
+  const handleFilterSelect = (name: string, value: string) => {
+    setSelectedFilters((prev) => {
+      const prevValues = prev[name] || [];
+      if (prevValues.includes(value)) {
+        return {
+          ...prev,
+          [name]: prevValues.filter((item) => item !== value),
+        };
+      } else {
+        return {
+          ...prev,
+          [name]: [...prevValues, value],
+        };
+      }
+    });
+  };
+
+  // Trigger filter query
+  const fetchVehicles = () => {
+    console.log("Selected Filters: ", selectedFilters);
+  };
+
   return (
-    <div>
-        <div className="w-full max-w-[341px] h-auto bg-white border border-black rounded-[15px] p-4">
-          {/* Manufacture */}
-          <div className="mb-6">
-            <div className="flex items-center mb-2">
-              <FaTruck className="w-[30px] h-[30px] text-gray-500 mr-[21px]" />
-              <h3 className="lg:text-[15px] sm:text-[13px] xs:text-[12px] xxs:text-[12px] text-black font-semibold">
-                Manufacture
-              </h3>
-            </div>
+    <div className="max-w-[360px] min-w-[320px] w-full bg-white rounded-xl p-6 border border-gray-200 shadow-md">
+      <h2 className="text-xl font-semibold mb-4 text-gray-800">Filter Vehicles</h2>
+      <button
+        type="button"
+        className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium mb-4 hover:bg-blue-700 transition"
+        onClick={fetchVehicles}
+      >
+        Apply Filters
+      </button>
 
-            <div className="grid lg:grid-cols-4 sm:grid-cols-4 xs:grid-cols-3 xxs:grid-cols-3 lg:text-[13px] sm:text-[13px] xs:text-[11px] xxs:text-[11px] gap-2 mt-[27px]">
-              {[
-                "Toyota",
-                "Honda",
-                "Nissan",
-                "Ford",
-                "Toyota",
-                "Honda",
-                "Nissan",
-                "Ford",
-              ].map((brand, index) => (
-                <button
-                  key={index}
-                  className="w-full sm:w-[68px] h-[25px] rounded-[25px] text-winb-text-dark-blue font-medium bg-white items-center border-2 border-winb-blue-border hover:bg-slate-50"
+      {Object.keys(filters).length > 0 ? (
+        Object.keys(filters).map((filterKey) => (
+          <div className="w-full mb-6" key={filterKey}>
+            <div className="w-full flex items-center mb-2 text-gray-800">
+              <span className="mr-2">{icons[filterKey] || null}</span>
+              <h3 className="text-lg font-semibold capitalize">{filterKey}</h3>
+            </div>
+            <div className="w-full grid grid-cols-3 gap-2">
+              {filters[filterKey].map((item) => (
+                <label
+                  className="flex items-center cursor-pointer bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 hover:bg-gray-200 transition"
+                  key={item}
                 >
-                  {brand}
-                </button>
+                  <input
+                    type="checkbox"
+                    id={`${filterKey}-${item}`}
+                    name={item}
+                    value={item}
+                    className="mr-2 accent-blue-600"
+                    onChange={() => handleFilterSelect(filterKey, item)}
+                  />
+                  {item}
+                </label>
               ))}
             </div>
           </div>
-
-          {/* Model */}
-          <div className="mb-6">
-            <div className="flex items-center mb-2 mt-[27px]">
-              <FaCar className="w-[30px] h-[30px] text-gray-500 mr-[21px]" />
-              <h3 className="lg:text-[15px] sm:text-[13px] xs:text-[12px] xxs:text-[12px] text-black font-semibold">
-                Model
-              </h3>
-            </div>
-
-            <div className="grid lg:grid-cols-4 sm:grid-cols-4 xs:grid-cols-3 xxs:grid-cols-3 lg:text-[13px] sm:text-[13px] xs:text-[11px] xxs:text-[11px] gap-2 mt-[27px]">
-              {["RAV4", "RAV4", "RAV4", "RAV4", "RAV4", "RAV4", "RAV4"].map(
-                (model, index) => (
-                  <button
-                    key={index}
-                    className="w-full sm:w-[68px] h-[25px] rounded-[25px] text-winb-text-dark-blue font-medium bg-white items-center border-2 border-winb-blue-border hover:bg-slate-50"
-                  >
-                    {model}
-                  </button>
-                )
-              )}
-            </div>
-          </div>
-
-          {/* Condition */}
-          <div className="mb-6">
-            <div className="flex items-center mb-2 mt-[27px]">
-              <FaRegSnowflake className="w-[30px] h-[30px] text-gray-500 mr-[21px]" />
-              <h3 className="lg:text-[15px] sm:text-[13px] xs:text-[12px] xxs:text-[12px] text-black font-semibold">
-                Condition
-              </h3>
-            </div>
-
-            <div className="grid lg:grid-cols-2 sm:grid-cols-2 xs:grid-cols-3 xxs:grid-cols-3 lg:text-[13px] sm:text-[13px] xs:text-[11px] xxs:text-[11px] gap-2 mt-[27px]">
-              {["New", "Used", "CPO"].map((condition, index) => (
-                <button
-                  key={index}
-                  className="w-full sm:w-[130px] h-[25px] rounded-[25px] text-winb-text-dark-blue font-medium bg-white items-center border-2 border-winb-blue-border hover:bg-slate-50"
-                >
-                  {condition}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Drive Type */}
-          <div className="mb-6">
-            <div className="flex items-center mb-2 mt-[27px]">
-              <FaCogs className="w-[30px] h-[30px] text-gray-500 mr-[21px]" />
-              <h3 className="lg:text-[15px] sm:text-[13px] xs:text-[12px] xxs:text-[12px] text-black font-semibold">
-                Drive Type
-              </h3>
-            </div>
-
-            <div className="grid lg:grid-cols-2 sm:grid-cols-2 xs:grid-cols-3 xxs:grid-cols-3 lg:text-[13px] sm:text-[13px] xs:text-[11px] xxs:text-[11px] gap-2 mt-[27px]">
-              {["FWD", "RWD", "AWD", "4WD"].map((driveType, index) => (
-                <button
-                  key={index}
-                  className="w-full sm:w-[144px] h-[25px] rounded-[25px] text-winb-text-dark-blue font-medium bg-white items-center border-2 border-winb-blue-border hover:bg-slate-50"
-                >
-                  {driveType}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Fuel Type */}
-          <div className="mb-6">
-            <div className="flex items-center mb-2 mt-[27px]">
-              <FaGasPump className="w-[30px] h-[30px] text-gray-500 mr-[21px]" />
-              <h3 className="lg:text-[15px] sm:text-[13px] xs:text-[12px] xxs:text-[12px] text-black font-semibold">
-                Fuel Type
-              </h3>
-            </div>
-
-            <div className="grid lg:grid-cols-2 sm:grid-cols-2 xs:grid-cols-3 xxs:grid-cols-3 lg:text-[13px] sm:text-[13px] xs:text-[11px] xxs:text-[11px] gap-2 mt-[27px]">
-              {["Petrol", "Diesel", "Electric", "Hybrid"].map((fuel, index) => (
-                <button
-                  key={index}
-                  className="w-full sm:w-[144px] h-[25px] rounded-[25px] text-winb-text-dark-blue font-medium bg-white items-center border-2 border-winb-blue-border hover:bg-slate-50"
-                >
-                  {fuel}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Features */}
-          <div className="mb-6">
-            <div className="flex items-center mb-2 mt-[27px]">
-              <FaStar className="w-[30px] h-[30px] mr-[21px] text-gray-500" />
-              <h3 className="lg:text-[15px] sm:text-[13px] xs:text-[12px] xxs:text-[12px] text-black font-semibold">
-                Features
-              </h3>
-            </div>
-
-            <div className="grid lg:grid-cols-4 sm:grid-cols-4 xs:grid-cols-3 xxs:grid-cols-3 lg:text-[13px] sm:text-[13px] xs:text-[11px] xxs:text-[11px] gap-2 mt-[27px]">
-              {["AC", "AC", "AC", "AC", "AC", "AC"].map((feature, index) => (
-                <button
-                  key={index}
-                  className="w-full sm:w-[68px] h-[25px] rounded-[25px] text-winb-text-dark-blue font-medium bg-white items-center border-2 border-winb-blue-border hover:bg-slate-50"
-                >
-                  {feature}
-                </button>
-              ))}
-            </div>
-          </div>
+        ))
+      ) : (
+        <div className="flex items-center justify-center">
+          <h1 className="text-gray-600">No filters available</h1>
         </div>
-
+      )}
     </div>
-  )
-}
+  );
+};
 
 export default Filterbar;
