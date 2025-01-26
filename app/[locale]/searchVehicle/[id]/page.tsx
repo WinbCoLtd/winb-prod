@@ -1,91 +1,132 @@
-"use client"; 
+"use client";
 
-import { useParams } from 'next/navigation';
-import Image from 'next/image';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules'; 
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import Link from 'next/link';
+import { useParams } from "next/navigation";
+import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Navbar from "@/components/Navbar";
+import { PulseLoader } from "react-spinners";
+
+// Define types for vehicle and images
+interface Vehicle {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  model: string;
+  maker: string;
+  vehicleType: string;
+  fuel: string;
+  drive: string;
+  condition: string;
+  color: string;
+  grade: string;
+  chassieNumber: string;
+  Shaken: string;
+  manufactureYear: string;
+  mileage: number;
+  isAvailable: boolean;
+  isPublished: boolean;
+  maxPassengers: number;
+  imageCount: number;
+  previewUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  images: ImageData[];
+}
+
+interface ImageData {
+  id: number;
+  vehicleId: number;
+  url: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 const MoreDetails = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
+  const [loading, setLoading] = useState(true);
+  const vid = typeof id === "string" ? parseInt(id) : null;
+  const [vehicle, setVehicle] = useState<Vehicle | null>(null);
+  const [currentPreview, setCurrentPreview] = useState<string | null>(null);
 
-  const vehicleId = typeof id === 'string' ? parseInt(id) : null;
+  const fetchVehicle = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(`/api/vehicles/readOne?id=${vid}`);
+      if (res.status === 200) {
+        setVehicle(res.data);
+        setCurrentPreview(res.data.previewUrl); // Set initial preview
+      } else {
+        console.error("Error fetching vehicle:", res.data.error);
+      }
+    } catch (error) {
+      console.error("Failed to fetch vehicle:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const vehicles = [
-    {
-      id: 1,
-      name: "Vehicle#1",
-      description: "A reliable and fuel-efficient sedan perfect for daily commuting. Well-maintained with a clean interior and exterior.",
-      imageUrl: "/cardvehicle.png",
-      fuelType: "Petrol",
-      driveType: "AWD",
-      condition: "New",
-      engine:"1.8L I4",
-      exterior:"Silver",
-      interior:"Black",
-      transmission:"Automatic"
-    },
-    {
-      id: 2,
-      name: "Vehicle#2",
-      description: "A spacious SUV with advanced safety features. Great for family trips and off-road adventures.",
-      imageUrl: "/cardvehicle.png",
-      fuelType: "Diesel",
-      driveType: "FWD",
-      condition: "Used",
-      engine:"1.8L I4",
-      exterior:"Silver",
-      interior:"Black",
-      transmission:"Automatic"
-    },
-    {
-      id: 3,
-      name: "Vehicle#3",
-      description: "A luxury sports car with a sleek design and high performance for driving enthusiasts.",
-      imageUrl: "/cardvehicle.png",
-      fuelType: "Electric",
-      driveType: "AWD",
-      condition: "Used",
-      engine:"1.8L I4",
-      exterior:"Silver",
-      interior:"Black",
-      transmission:"Automatic"
-    },
-  ];
+  useEffect(() => {
+    if (vid) fetchVehicle();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const vehicle = vehicles.find((v) => v.id === vehicleId);
-
-  if (!vehicle) {
-    return <div>Loading...</div>; 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <PulseLoader color="#2563eb" size={20} />
+      </div>
+    );
   }
 
-  return (
-    <div className="relative w-full flex flex-col max-w-[1166px] mx-auto">
-      <div className="mt-6 h-[127px] bg-gray-200 flex items-center justify-between px-4 md:px-8 ">
-        Nav
+  if (!vehicle) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-red-500 text-lg">Vehicle not found.</p>
       </div>
+    );
+  }
+
+  // Create a carousel array with preview image at the start and end
+  const carouselImages = [
+    { id: 0, url: vehicle.previewUrl },
+    ...vehicle.images,
+  ];
+
+  return (
+    <div className="relative w-full flex flex-col max-w-[1366px] mx-auto">
+      <div className="bg-[#08001C67] w-full flex items-center justify-center border border-[#00CCEE] rounded-[10px] min-h-32 my-auto">
+        <Navbar />
+      </div>
+
 
       <div className="mt-[110px] w-full h-auto bg-winb-ashcolor rounded-[15px] flex flex-col md:flex-row p-[39px]">
         <div className="flex flex-col w-full md:w-[612px]">
+          {/* Large Preview Image */}
           <div className="w-full lg:h-[528px] bg-gray-300 rounded-lg overflow-hidden">
             <Image
-              src={vehicle.imageUrl}
+              src={currentPreview || vehicle.previewUrl}
               alt="Large View"
               width={612}
               height={528}
               className="w-full h-full object-cover"
             />
           </div>
-  
-          <div className="mt-[51px] grid  gap-4">
+
+          {/* Carousel */}
+          <div className="mt-[51px] grid gap-4">
             <Swiper
               modules={[Navigation, Pagination]}
               navigation
               pagination={{ clickable: true }}
+              loop
               spaceBetween={20}
               slidesPerView={1}
               breakpoints={{
@@ -94,84 +135,59 @@ const MoreDetails = () => {
                 1024: { slidesPerView: 4 },
               }}
               className="w-full"
+              onSlideChange={(swiper) => {
+                const activeIndex = swiper.realIndex;
+                setCurrentPreview(carouselImages[activeIndex].url);
+              }}
             >
-
-            {Array(4)
-              .fill(vehicle.imageUrl)
-              .map((src, index) => (
-                <SwiperSlide key={index}>
-                <div className="w-full lg:h-[110px] bg-gray-300 rounded-lg overflow-hidden">
-                  <Image
-                    src={src}
-                    alt={`Small View ${index + 1}`}
-                    width={110}
-                    height={110}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+              {carouselImages.map((image) => (
+                <SwiperSlide key={image.id}>
+                  <div
+                    className="w-full lg:h-[110px] bg-gray-300 rounded-lg overflow-hidden cursor-pointer"
+                    onClick={() => setCurrentPreview(image.url)}
+                  >
+                    <Image
+                      src={image.url}
+                      alt={`Small View ${image.id}`}
+                      width={110}
+                      height={110}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                 </SwiperSlide>
               ))}
-               </Swiper>
+            </Swiper>
           </div>
         </div>
 
+        {/* Vehicle Details */}
         <div className="mt-6 md:mt-0 md:ml-8 flex flex-col justify-start w-full md:w-[500px]">
           <h2 className="lg:text-[24px] sm:text-[20px] xxs:text[20px] text-black font-bold mb-4">
-            {vehicle.name} 
+            {vehicle.title}
           </h2>
           <p className="lg:text-[16px] sm:text-[12px] xs:text-[12px] xxs:text-[12px] text-black font-medium mb-4">
-            {vehicle.description} 
-          </p>
-          <p className="lg:text-[16px] sm:text-[12px] xs:text-[12px] xxs:text-[12px] text-black font-medium mb-4">
-            Key features include an advanced infotainment system, adaptive cruise control, rear parking sensors, and a rearview camera for convenience and safety. The vehicle offers a smooth and comfortable ride in the city and on the highway.
-          </p>
-          <p className="lg:text-[16px] sm:text-[12px] xs:text-[12px] xxs:text-[12px] text-black font-medium">
-            With 45,000km on the odometer and the latest safety features, this well-maintained vehicle is waiting for its next owner. Don't miss out — contact us today to schedule a test drive or for more information!
+            {vehicle.description}
           </p>
 
           <div className="mt-[46px] grid lg:grid-cols-3 sm:grid-cols-3 xxs:grid-cols-3 md:grid-cols-4 gap-4 items-center">
-            {[{ src: '/vehicleDetails/fuel-icon.png', label: 'Fuel Type' },
-              { src: '/vehicleDetails/drive-icon.png', label: 'Drive Type' },
-              { src: '/vehicleDetails/condition-icon.png', label: 'Condition' }].map(({ src, label }, index) => (
+            {[
+              { label: "Fuel Type", value: vehicle.fuel },
+              { label: "Drive Type", value: vehicle.drive },
+              { label: "Condition", value: vehicle.condition },
+            ].map(({ label, value }, index) => (
               <div key={index} className="flex items-center">
-                <Image src={src} alt={label} width={16} height={16} className="w-4 h-4 mr-2" />
-                <p className="lg:text-[13px] sm:text-[11px] xxs:text-[9px] text-black font-semibold">{label}</p>
+                <p className="lg:text-[13px] sm:text-[11px] xxs:text-[9px] text-black font-semibold">
+                  {label}: {value}
+                </p>
               </div>
             ))}
           </div>
-  
-          <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 xxs:grid-cols-3 md:grid-cols-4 gap-4 text-center">
-            <p className="lg:text-[13px] sm:text-[11px] xxs:text-[9px] text-winb-ash font-medium">{vehicle.fuelType}</p>
-            <p className="lg:text-[13px] sm:text-[11px] xxs:text-[9px] text-winb-ash font-medium">{vehicle.driveType}</p>
-            <p className="lg:text-[13px] sm:text-[11px] xxs:text-[9px] text-winb-ash font-medium">{vehicle.condition}</p>
-          </div>
-  
-          <div className="mt-[46px] grid lg:grid-cols-4 sm:grid-cols-4 xxs:grid-cols-4 md:grid-cols-4 gap-4 items-center">
-            {[ 
-              { src: '/vehicleDetails/engine.png', label: 'Engine' },
-              { src: '/vehicleDetails/exterior.png', label: 'Exterior Colour' },
-              { src: '/vehicleDetails/interior.png', label: 'Interior Colour' },
-              { src: '/vehicleDetails/transmission.png', label: 'Transmission' },
-            ].map(({ src, label }, index) => (
-              <div key={index} className="flex items-center">
-                <Image src={src} alt={label} width={16} height={16} className="w-4 h-4 mr-2" />
-                <p className="lg:text-[13px] sm:text-[11px] xxs:text-[9px] text-black font-semibold">{label}</p>
-              </div>
-            ))}
-          </div>
-  
-          <div className="mt-4 grid lg:grid-cols-4 sm:grid-cols-4 xxs:grid-cols-4 md:grid-cols-4 gap-4 text-center">
-            <p className="lg:text-[13px] sm:text-[11px] xxs:text-[9px] text-winb-ash font-medium">1.8L I4</p>
-            <p className="lg:text-[13px] sm:text-[11px] xxs:text-[9px] text-winb-ash font-medium">Silver</p>
-            <p className="lg:text-[13px] sm:text-[11px] xxs:text-[9px] text-winb-ash font-medium">Black</p>
-            <p className="lg:text-[13px] sm:text-[11px] xxs:text-[9px] text-winb-ash font-medium">Automatic</p>
-          </div>
-  
+
           <div className="mt-[55px] flex justify-end">
             <button>
               <Link
-                    href={`/inquiry`}
-                    className="bg-winb-yellow lg:text-[16px] sm:text-[12px] xs:text-[12px] xxs:text-[12px] text-black font-medium px-4 py-2 rounded-[25px] hover:bg-yellow-300 transition duration-300"
+                href={`/inquiry`}
+                className="bg-winb-yellow lg:text-[16px] sm:text-[12px] xs:text-[12px] xxs:text-[12px] text-black font-medium px-4 py-2 rounded-[25px] hover:bg-yellow-300 transition duration-300"
               >
                 Request More Information
               </Link>
@@ -184,23 +200,3 @@ const MoreDetails = () => {
 };
 
 export default MoreDetails;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

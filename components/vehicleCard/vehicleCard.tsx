@@ -1,5 +1,6 @@
 import {  ChevronRight, Fuel, Gem, LifeBuoy } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 import { FaRegSnowflake } from 'react-icons/fa';
 
@@ -79,6 +80,7 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
 
             {/* More Info Button */}
             <div className=" absolute bottom-10 right-4 flex justify-end mt-auto">
+              <Link href={`/searchVehicle/${vehicle.id}`}>
               <button
                 type="button"
                 className="bg-yellow-400 hover:bg-yellow-500 text-black font-medium text-sm py-2 px-4 rounded-full flex items-center space-x-2"
@@ -86,6 +88,7 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
                 <span>More info</span>
                 <ChevronRight size={15} />
               </button>
+              </Link>
             </div>
           </div>
         </div>

@@ -73,7 +73,7 @@ const Filterbar = ({
   };
 
   return (
-    <div className="relative max-w-[360px] min-w-[320px] max-h-screen overflow-y-auto lg:h-auto w-full bg-white rounded-xl p-6 border border-gray-200 shadow-md">
+    <div className="relative max-w-[360px] min-w-[320px] max-h-screen lg:max-h-max overflow-y-auto lg:h-auto w-full bg-white rounded-xl p-6 border border-gray-200 shadow-md">
       <button type="button" className="bg-black font-medium" onClick={close}> <X size={40}/> </button>
       <h2 className="text-xl font-semibold mb-4 text-gray-800">Filter Vehicles</h2>
       <button
