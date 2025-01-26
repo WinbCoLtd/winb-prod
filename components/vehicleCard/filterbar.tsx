@@ -1,7 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { Building2, CarFront, Fuel, Gem, LifeBuoy, Palette, Calendar, Users } from "lucide-react";
+import {
+  Building2,
+  CarFront,
+  Fuel,
+  Gem,
+  LifeBuoy,
+  Palette,
+  Calendar,
+  Users,
+  X,
+} from "lucide-react";
 import { FaRegSnowflake } from "react-icons/fa";
 import React, { useState } from "react";
 
@@ -18,23 +28,27 @@ const icons: any = {
   maxPassengers: <Users size={24} />,
 };
 
-
 type FilterItem = {
   [key: string]: string[];
 };
 
-
 const Filterbar = ({
   filters,
   onApplyFilters,
+  initialSelectedFilters,
+  close
 }: {
   filters: FilterItem;
   onApplyFilters: (selectedFilters: { [key: string]: string[] }) => void;
+  initialSelectedFilters: { [key: string]: string[] }; // Initial state to persist filters
+  close?: () => void
 }) => {
-  const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
+  // Local state to manage filter selection
+  const [localSelectedFilters, setLocalSelectedFilters] =
+    useState<{ [key: string]: string[] }>(initialSelectedFilters);
 
   const handleFilterSelect = (name: string, value: string) => {
-    setSelectedFilters((prev) => {
+    setLocalSelectedFilters((prev) => {
       const prevValues = prev[name] || [];
       if (prevValues.includes(value)) {
         return {
@@ -50,18 +64,22 @@ const Filterbar = ({
     });
   };
 
-
-  const fetchVehicles = async () => {
-   await onApplyFilters(selectedFilters);
+  const applyFilters = () => {
+    const cleanedFilters = Object.fromEntries(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      Object.entries(localSelectedFilters).filter( ([_,values]) => values.length >0)
+    )
+    onApplyFilters(cleanedFilters);
   };
 
   return (
-    <div className="max-w-[360px] min-w-[320px] w-full bg-white rounded-xl p-6 border border-gray-200 shadow-md">
+    <div className="relative max-w-[360px] min-w-[320px] max-h-screen overflow-y-auto lg:h-auto w-full bg-white rounded-xl p-6 border border-gray-200 shadow-md">
+      <button type="button" className="bg-black font-medium" onClick={close}> <X size={40}/> </button>
       <h2 className="text-xl font-semibold mb-4 text-gray-800">Filter Vehicles</h2>
       <button
         type="button"
         className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium mb-4 hover:bg-blue-700 transition"
-        onClick={fetchVehicles}
+        onClick={applyFilters}
       >
         Apply Filters
       </button>
@@ -84,6 +102,9 @@ const Filterbar = ({
                     id={`${filterKey}-${item}`}
                     name={item}
                     value={item}
+                    checked={
+                      localSelectedFilters[filterKey]?.includes(item) || false
+                    } // Use local state
                     className="mr-2 accent-blue-600"
                     onChange={() => handleFilterSelect(filterKey, item)}
                   />

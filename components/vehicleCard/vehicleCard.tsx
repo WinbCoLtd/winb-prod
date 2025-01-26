@@ -13,13 +13,13 @@ export type VehicleCardProps = {
     drive: string;
     description: string;
     condition: string;
-    milage: number;
+    mileage: number;
   };
 };
 
 const VehicleCard = ({ vehicle }: VehicleCardProps) => {
   return (
-    <div className=" relative flex bg-white shadow-md rounded-2xl p-5 max-w-[987px] w-full min-h-[300px] border border-gray-200 mb-6">
+    <div className=" relative flex flex-col md:flex-row bg-white shadow-md rounded-2xl p-5 max-w-[987px] w-full min-h-[300px] border border-gray-200 mb-6">
       {vehicle.previewUrl && (
         <div className="flex gap-5 w-full">
           {/* Vehicle Image */}
@@ -29,7 +29,7 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
               alt={vehicle.title}
               width={306}
               height={250}
-              className="rounded-xl border border-gray-300 lg:max-h-[250px]"
+              className="rounded-xl border border-gray-300 md:max-h-[250px]"
             />
           </div>
 
@@ -72,7 +72,7 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
                 <Gem size={20} className="text-gray-600" />
                 <div className="text-sm">
                   <p className="text-gray-500">Distance</p>
-                  <span className="text-gray-800 font-medium">{vehicle.milage} km</span>
+                  <span className="text-gray-800 font-medium">{vehicle.mileage} km</span>
                 </div>
               </div>
             </div>

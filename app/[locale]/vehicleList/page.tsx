@@ -60,6 +60,8 @@ async function getVehicles(filters: any, search: string, currentPage: number) {
 // Main Details Component
 function Details() {
   const [filters, setFilters] = useState<{ [key: string]: string[] }>({});
+  const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
+  const [search, setSearch] = useState("");
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
@@ -100,11 +102,19 @@ function Details() {
     };
 
     initializeData();
-  }, [searchParams]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleFilterChange = async (newFilters: any) => {
     // Update vehicles when filters are changed
-    await fetchVehicles(newFilters, searchParams.get("search") || "", 1);
+    setSelectedFilters(newFilters);
+    await fetchVehicles(newFilters, search, 1);
+  };
+
+  const handlesearchChange = async (newSearch: any) => {
+    // Update vehicles when filters are changed
+    setSearch(newSearch);
+    await fetchVehicles(selectedFilters, newSearch, 1);
   };
 
   if (loading) {
@@ -116,15 +126,21 @@ function Details() {
   }
 
   return (
-    <div className="relative w-full flex flex-col justify-start max-w-[1366px] mx-auto px-4 py-2">
+    <div className="w-full flex flex-col justify-start max-w-[1366px] mx-auto px-4 py-2">
       <div className="bg-[#08001C67] w-full flex items-center justify-center border border-[#00CCEE] rounded-[10px] min-h-32 my-auto">
         <Navbar />
       </div>
-      <div className="mt-[36px] mb-5 flex min-h-[768px]">
+      <div className="mt-[36px] mb-5 flex gap-3 min-h-[768px]">
         <div className="hidden lg:block">
-          <Filterbar filters={filters} onApplyFilters={handleFilterChange} />
+          <Filterbar
+            filters={filters}
+            onApplyFilters={handleFilterChange}
+            initialSelectedFilters={selectedFilters}
+          />
         </div>
-        <VehicleSection vehicles={vehicles} />
+        <VehicleSection vehicles={vehicles} onSearchChange={handlesearchChange} filters={filters}
+            onApplyFilters={handleFilterChange}
+            initialSelectedFilters={selectedFilters} />
       </div>
     </div>
   );

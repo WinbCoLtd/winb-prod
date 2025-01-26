@@ -57,18 +57,17 @@ export async function GET(req: NextRequest) {
     const skip = (currentPage - 1) * itemsPerPage;
 
     const whereClause: any = {};
-
-    if (search) {
+    if (search && search.trim() !== "") {
       whereClause.OR = [
         { title: { contains: search } },
-        { description: { contains: search } },
+        { description: { contains: search} },
       ];
     }
 
-    if (filters) {
+    if (filters && Object.keys(filters).length > 0) {
       // Iterate over valid `VehicleWhereInput` keys
       for (const [key, value] of Object.entries(filters) as [keyof Prisma.VehicleWhereInput, any][]) {
-        if (value !== undefined) {
+        if (value !== undefined && value !== null) {
           if (Array.isArray(value)) {
             if (key === "price") {
               whereClause[key] = applyPriceFilter(value as number[]);
@@ -97,7 +96,7 @@ export async function GET(req: NextRequest) {
       prisma.vehicle.count({ where: whereClause }),
     ]);
 
-    const totalPages = Math.ceil(totalVehicles / itemsPerPage);
+    const totalPages = totalVehicles > 0 ? Math.ceil(totalVehicles / itemsPerPage) : 1; 
 
     return NextResponse.json(
       {
