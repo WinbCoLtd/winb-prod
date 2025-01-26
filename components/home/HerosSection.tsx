@@ -16,7 +16,7 @@ type searchType = {
 function HerosSection() {
   const [searchData, setSearchData] = useState<searchType>();
   const [currentSelectedPrice, setCurrentSelectedPrice] = useState({
-    min: 300,
+    min: 0,
     max: 1000,
   });
   const [currentSelectedMaker, setCurrentSelectedMaker] = useState<string>("");
@@ -53,11 +53,30 @@ function HerosSection() {
   };
 
   const redirectToSearchResultPage = () => {
-    const path = `/vehicleList?maker=${currentSelectedMaker}&model=${currentSelectedModel}&minPrice=${currentSelectedPrice.min}&maxPrice=${currentSelectedPrice.max}`;
+    const queryParams = [];
+  
+    if (currentSelectedMaker !== "") {
+      queryParams.push(`maker=${currentSelectedMaker}`);
+    }
+  
+    if (currentSelectedModel !== "") {
+      queryParams.push(`model=${currentSelectedModel}`);
+    }
+  
+    if (currentSelectedPrice.min >= 0) {
+      queryParams.push(`minPrice=${currentSelectedPrice.min}`);
+    }
+  
+    if (currentSelectedPrice.max <= 1000) {
+      queryParams.push(`maxPrice=${currentSelectedPrice.max}`);
+    }
+  
+    const path = `/vehicleList${queryParams.length > 0 ? '?' + queryParams.join('&') : ''}`;
+  
     console.log("Redirecting to:", path);
-    router.push(path)
-    // Use router.push(path) if you're using Next.js routing
+    router.push(path);
   };
+  
 
   useEffect(() => {
     fetchSearchData();

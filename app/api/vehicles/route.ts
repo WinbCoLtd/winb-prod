@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/prisma/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 
 export type QueryType = {
@@ -42,7 +42,7 @@ const applyStringArrayFilter = (value: string[] | number[] | unknown) => ({ in: 
 
 const applyStringFilter = (value: string) => ({ equals: value });
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.url);
     const searchParams = url.searchParams;
@@ -86,6 +86,8 @@ export async function GET(req: Request) {
       }
     }
 
+    console.log(whereClause);
+    
     const [vehicles, totalVehicles] = await Promise.all([
       prisma.vehicle.findMany({
         where: whereClause,

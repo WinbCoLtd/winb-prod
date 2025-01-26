@@ -23,7 +23,14 @@ type FilterItem = {
   [key: string]: string[];
 };
 
-const Filterbar = ({ filters }: { filters: FilterItem }) => {
+
+const Filterbar = ({
+  filters,
+  onApplyFilters,
+}: {
+  filters: FilterItem;
+  onApplyFilters: (selectedFilters: { [key: string]: string[] }) => void;
+}) => {
   const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
 
   const handleFilterSelect = (name: string, value: string) => {
@@ -44,8 +51,8 @@ const Filterbar = ({ filters }: { filters: FilterItem }) => {
   };
 
 
-  const fetchVehicles = () => {
-    console.log("Selected Filters: ", selectedFilters);
+  const fetchVehicles = async () => {
+   await onApplyFilters(selectedFilters);
   };
 
   return (
