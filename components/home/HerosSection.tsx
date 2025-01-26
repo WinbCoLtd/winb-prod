@@ -80,6 +80,7 @@ function HerosSection() {
 
   useEffect(() => {
     fetchSearchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   //TODO: Add a loading spinner
