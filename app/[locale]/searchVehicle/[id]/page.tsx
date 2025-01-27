@@ -164,11 +164,11 @@ const MoreDetails = () => {
           <h2 className="text-[40px] lg:text-[40px] md:text-[20px]  text-black font-bold mb-4">
             {vehicle.title}
           </h2>
-          <p className="text-[24px] lg:text-[20px] md:text-[24px]  text-black font-medium mb-4 ">
+          <p className="text-[24px] lg:text-[30px] md:text-[24px]  text-black font-medium mb-4 ">
             {vehicle.description}
           </p>
 
-          <div className="mt-[46px] grid lg:grid-cols-3 md:grid-cols-3 gap-4 items-center">
+          <div className="text-[24px] lg:text-[30px] md:text-[24px] mt-[46px] grid lg:grid-cols-2 md:grid-cols-3 gap-4 items-center">
             {[
               { label: "Price", value: `¥ ${vehicle.price}` },
               { label: "Model", value: vehicle.model },
@@ -188,7 +188,7 @@ const MoreDetails = () => {
               { label: "Condition", value: vehicle.condition },
             ].map(({ label, value }, index) => (
               <div key={index} className="flex items-center">
-                <p className="lg:text-[13px] sm:text-[11px] xxs:text-[9px] text-black font-semibold">
+                <p className="text-[16px] lg:text-[18px] md:text-[16px]  text-black font-semibold">
                   {label}: {value}
                 </p>
               </div>

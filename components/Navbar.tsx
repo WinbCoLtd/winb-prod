@@ -21,8 +21,8 @@ export default function Navbar() {
   const [toggle, setIsToggled] = useState(false);
 
   useEffect(() => {
-    setIsMobile(() => window.innerWidth <= 768)
-  }, [])
+    setIsMobile(() => window.innerWidth <= 768);
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -39,7 +39,7 @@ export default function Navbar() {
 
   useEffect(() => {
     if (!isMobile) {
-      setIsToggled(false); 
+      setIsToggled(false);
     }
   }, [isMobile]);
 
@@ -53,7 +53,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="p-4  bg-gray-100 w-full flex justify-between items-center bg-transparent text-xl text-white">
+    <nav className="z-50 p-4  bg-gray-100 w-full flex justify-between items-center bg-transparent text-xl text-white">
       <Link href="/" locale={locale} className="font-extrabold text-3xl">
         WINB
       </Link>
@@ -68,7 +68,10 @@ export default function Navbar() {
           <Link href="/vehicleList" className="hover:underline">
             車両一覧
           </Link>
-          <Link href="/inquiry" className="hover:underline">
+          <Link href="/otherService" className="hover:underline">
+            その他のサービス
+          </Link>
+          <Link href="/contact" className="hover:underline">
             お問い合わせ
           </Link>
         </nav>
@@ -82,13 +85,16 @@ export default function Navbar() {
           <Link href="/" className="hover:underline">
             ホーム
           </Link>
-          <Link href="/about" className="hover:underline">
+          <Link href="/companyProfile" className="hover:underline">
             会社概要
           </Link>
           <Link href="/allVehicles" className="hover:underline">
             車両一覧
           </Link>
-          <Link href="/inquiry" className="hover:underline">
+          <Link href="/otherService" className="hover:underline">
+            その他のサービス
+          </Link>
+          <Link href="/contact" className="hover:underline">
             お問い合わせ
           </Link>
         </nav>
@@ -102,10 +108,10 @@ export default function Navbar() {
         </button>
         {isMobile && (
           <Menu
-          size={40}
-          onClick={handleToggle}
-          className="mx-2 cursor-pointer"
-        />
+            size={40}
+            onClick={handleToggle}
+            className="mx-2 cursor-pointer"
+          />
         )}
       </div>
     </nav>
