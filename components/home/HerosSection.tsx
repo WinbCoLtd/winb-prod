@@ -238,10 +238,9 @@
 
 
 
-
 'use client';
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../Navbar";
 import axios from "axios";
 import { ChevronDown, MapPin } from "lucide-react";
@@ -264,6 +263,7 @@ function HerosSection() {
   const [toggle, setToggle] = useState(false);
   const [locationAlt, setLocationAlt] = useState(false);
   const router = useRouter();
+  const dropdownRef = useRef<HTMLDivElement>(null); // Reference to the dropdown container
 
   const displayPriceRangers = () => {
     setToggle(!toggle);
@@ -276,8 +276,10 @@ function HerosSection() {
     }));
   };
 
-  const displayLocationAlt = () => {
-    setLocationAlt(!locationAlt);
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      setToggle(false); // Close the dropdown if the click is outside
+    }
   };
 
   const redirectToSearchResultPage = () => {
@@ -307,6 +309,13 @@ function HerosSection() {
       }
     };
     fetchSearchData();
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   return (
@@ -367,7 +376,7 @@ function HerosSection() {
           </div>
 
           {/* Price Selection */}
-          <div className="flex flex-col items-start flex-1 relative justify-between min-w-40 w-full">
+          <div className="flex flex-col items-start flex-1 relative justify-between min-w-40 w-full" ref={dropdownRef}>
             <label htmlFor="models" className="text-sm mb-2">
               Price
             </label>
@@ -444,10 +453,10 @@ function HerosSection() {
         rel="noopener noreferrer"
       >
         <button
-          onMouseEnter={displayLocationAlt}
-          onMouseLeave={displayLocationAlt}
-          onTouchStart={displayLocationAlt}
-          onTouchEnd={displayLocationAlt}
+          onMouseEnter={() => setLocationAlt(true)}
+          onMouseLeave={() => setLocationAlt(false)}
+          onTouchStart={() => setLocationAlt(true)}
+          onTouchEnd={() => setLocationAlt(false)}
           className="gap-2 font-bold text-black text-sm flex items-center justify-center rounded-lg md:bg-white md:w-44 min-h-14 h-14 absolute bottom-2 right-5"
         >
           <MapPin

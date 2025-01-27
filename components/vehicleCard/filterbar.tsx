@@ -36,16 +36,17 @@ const Filterbar = ({
   filters,
   onApplyFilters,
   initialSelectedFilters,
-  close
+  close,
 }: {
   filters: FilterItem;
   onApplyFilters: (selectedFilters: { [key: string]: string[] }) => void;
   initialSelectedFilters: { [key: string]: string[] }; // Initial state to persist filters
-  close?: () => void
+  close?: () => void;
 }) => {
   // Local state to manage filter selection
-  const [localSelectedFilters, setLocalSelectedFilters] =
-    useState<{ [key: string]: string[] }>(initialSelectedFilters);
+  const [localSelectedFilters, setLocalSelectedFilters] = useState<{
+    [key: string]: string[];
+  }>(initialSelectedFilters);
 
   const handleFilterSelect = (name: string, value: string) => {
     setLocalSelectedFilters((prev) => {
@@ -67,18 +68,25 @@ const Filterbar = ({
   const applyFilters = () => {
     const cleanedFilters = Object.fromEntries(
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      Object.entries(localSelectedFilters).filter( ([_,values]) => values.length >0)
-    )
+      Object.entries(localSelectedFilters).filter(
+        ([_, values]) => values.length > 0
+      )
+    );
     onApplyFilters(cleanedFilters);
   };
 
   return (
     <div className="relative max-w-[360px] min-w-[320px] max-h-screen lg:max-h-max overflow-y-auto lg:h-auto w-full bg-white rounded-xl p-6 border border-gray-200 shadow-md">
-      <button type="button" className="bg-black font-medium" onClick={close}> <X size={40}/> </button>
-      <h2 className="text-xl font-semibold mb-4 text-gray-800">Filter Vehicles</h2>
+      <button type="button" className=" font-medium" onClick={close}>
+        {" "}
+        <X size={30} />{" "}
+      </button>
+      <h2 className="text-xl font-semibold mb-4 text-gray-800">
+        Filter Vehicles
+      </h2>
       <button
         type="button"
-        className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium mb-4 hover:bg-blue-700 transition"
+        className="w-full bg-slate-500 text-white py-2 rounded-lg font-medium mb-12  hover:bg-slate-400 transition"
         onClick={applyFilters}
       >
         Apply Filters
@@ -89,27 +97,33 @@ const Filterbar = ({
           <div className="w-full mb-6" key={filterKey}>
             <div className="w-full flex items-center mb-2 text-gray-800">
               <span className="mr-2">{icons[filterKey] || null}</span>
-              <h3 className="text-lg font-semibold capitalize">{filterKey}</h3>
+              <h3 className="text-[16px] font-semibold capitalize">{filterKey}</h3>
             </div>
+
             <div className="w-full grid grid-cols-3 gap-2">
               {filters[filterKey].map((item) => (
-                <label
-                  className="flex items-center cursor-pointer bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 hover:bg-gray-200 transition"
+                <button
                   key={item}
+                  onClick={() => handleFilterSelect(filterKey, item)}
+                  className={`mt-4 mb-3 flex items-center justify-center gap-2 cursor-pointer px-3 py-1 rounded-[15px] text-[14px] transition ${
+                    localSelectedFilters[filterKey]?.includes(item)
+                      ? "border border-winb-blue-border bg-yellow-200 text-winb-text-dark-blue"
+                      : "bg-white border border-winb-blue-border text-winb-text-dark-blue font-semibold hover:bg-gray-200"
+                  }`}
                 >
-                  <input
-                    type="checkbox"
-                    id={`${filterKey}-${item}`}
-                    name={item}
-                    value={item}
-                    checked={
-                      localSelectedFilters[filterKey]?.includes(item) || false
-                    } // Use local state
-                    className="mr-2 accent-blue-600"
-                    onChange={() => handleFilterSelect(filterKey, item)}
-                  />
-                  {item}
-                </label>
+                  <span>{item}</span>
+                  {localSelectedFilters[filterKey]?.includes(item) && (
+                    <span
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent button click event
+                        handleFilterSelect(filterKey, item);
+                      }}
+                      className="text-winb-text-dark-blue text-sm font-bold cursor-pointer"
+                    >
+                      ✕
+                    </span>
+                  )}
+                </button>
               ))}
             </div>
           </div>

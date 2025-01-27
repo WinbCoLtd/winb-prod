@@ -106,7 +106,6 @@ const MoreDetails = () => {
         <Navbar />
       </div>
 
-
       <div className="mt-[110px] w-full h-auto bg-winb-ashcolor rounded-[15px] flex flex-col md:flex-row p-[39px]">
         <div className="flex flex-col w-full md:w-[612px]">
           {/* Large Preview Image */}
@@ -132,7 +131,7 @@ const MoreDetails = () => {
               breakpoints={{
                 640: { slidesPerView: 2 },
                 768: { slidesPerView: 3 },
-                1024: { slidesPerView: 4 },
+                1024: { slidesPerView: 3 },
               }}
               className="w-full"
               onSlideChange={(swiper) => {
@@ -143,7 +142,7 @@ const MoreDetails = () => {
               {carouselImages.map((image) => (
                 <SwiperSlide key={image.id}>
                   <div
-                    className="w-full lg:h-[110px] bg-gray-300 rounded-lg overflow-hidden cursor-pointer"
+                    className="w-[110px] lg:w-[110px] md:w-[100px]  h-[110px] lg:h-[110px] md:h-[100px] bg-gray-300 rounded-lg overflow-hidden cursor-pointer items-center"
                     onClick={() => setCurrentPreview(image.url)}
                   >
                     <Image
@@ -151,7 +150,7 @@ const MoreDetails = () => {
                       alt={`Small View ${image.id}`}
                       width={110}
                       height={110}
-                      className="w-full h-full object-cover"
+                      className="w-full  h-full object-cover"
                     />
                   </div>
                 </SwiperSlide>
@@ -162,17 +161,30 @@ const MoreDetails = () => {
 
         {/* Vehicle Details */}
         <div className="mt-6 md:mt-0 md:ml-8 flex flex-col justify-start w-full md:w-[500px]">
-          <h2 className="lg:text-[24px] sm:text-[20px] xxs:text[20px] text-black font-bold mb-4">
+          <h2 className="text-[40px] lg:text-[40px] md:text-[20px]  text-black font-bold mb-4">
             {vehicle.title}
           </h2>
-          <p className="lg:text-[16px] sm:text-[12px] xs:text-[12px] xxs:text-[12px] text-black font-medium mb-4">
+          <p className="text-[24px] lg:text-[20px] md:text-[24px]  text-black font-medium mb-4 ">
             {vehicle.description}
           </p>
 
-          <div className="mt-[46px] grid lg:grid-cols-3 sm:grid-cols-3 xxs:grid-cols-3 md:grid-cols-4 gap-4 items-center">
+          <div className="mt-[46px] grid lg:grid-cols-3 md:grid-cols-3 gap-4 items-center">
             {[
+              { label: "Price", value: `¥ ${vehicle.price}` },
+              { label: "Model", value: vehicle.model },
+              { label: "Maker", value: vehicle.maker },
+              { label: "Vehicle Type", value: vehicle.vehicleType },
               { label: "Fuel Type", value: vehicle.fuel },
               { label: "Drive Type", value: vehicle.drive },
+              { label: "Color", value: vehicle.color },
+              { label: "Grade", value: vehicle.grade },
+              { label: "Chassi Number", value: vehicle.chassieNumber },
+              { label: "Shaken", value: vehicle.Shaken },
+              {
+                label: "Manufacture Year",
+                value: new Date(vehicle.manufactureYear).getFullYear(),
+              },
+              { label: "Milage", value: vehicle.mileage },
               { label: "Condition", value: vehicle.condition },
             ].map(({ label, value }, index) => (
               <div key={index} className="flex items-center">
