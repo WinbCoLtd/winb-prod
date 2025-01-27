@@ -18,8 +18,12 @@ export default function Navbar() {
   const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(false);
   const [toggle, setIsToggled] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(() => window.innerWidth <= 768)
+  }, [])
 
   useEffect(() => {
     const handleResize = () => {
@@ -85,7 +89,7 @@ export default function Navbar() {
           <Link href="/allVehicles" className="hover:underline">
             車両一覧
           </Link>
-          <Link href="/contact" className="hover:underline">
+          <Link href="/inquiry" className="hover:underline">
             お問い合わせ
           </Link>
         </nav>
