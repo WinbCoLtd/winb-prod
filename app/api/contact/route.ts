@@ -4,7 +4,8 @@ import nodemailer from "nodemailer";
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, email, phone, message, id } = await req.json();
+    const { name, email, phone, message, vehicleId } = await req.json();
+    const id = Number(vehicleId);
 
     // Validate required fields
     if (!name || !email || !message) {
@@ -73,10 +74,10 @@ export async function POST(req: NextRequest) {
               overflow: hidden;
             }
             .email-header {
-              background-color: #4CAF50;
+              background-color: #facc15;
               padding: 20px;
               text-align: center;
-              color: #ffffff;
+              color: #1f1f1f;
             }
             .email-header img {
               max-width: 120px;
@@ -126,7 +127,7 @@ export async function POST(req: NextRequest) {
             
             <!-- Body Section -->
             <div class="email-body">
-              <h1>Hi,</h1>
+              <h1>Hi, Admin sir</h1>
               <p><strong>Name:</strong> ${name}</p>
               <p><strong>Email:</strong> ${email}</p>
               <p><strong>Phone:</strong> ${phone || "Not provided"}</p>
@@ -137,7 +138,7 @@ export async function POST(req: NextRequest) {
             <!-- Footer Section -->
             <div class="email-footer">
               <p>Thank you for reaching out to us!</p>
-              <p>&copy; ${new Date().getFullYear()} Your Company. All rights reserved.</p>
+              <p>&copy; ${new Date().getFullYear()} winb Company. All rights reserved.</p>
             </div>
           </div>
         </body>

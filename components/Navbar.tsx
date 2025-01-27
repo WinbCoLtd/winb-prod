@@ -69,7 +69,7 @@ export default function Navbar() {
           <Link href="/vehicleList" className="hover:underline">
             車両一覧
           </Link>
-          <Link href="/contact" className="hover:underline">
+          <Link href="/inquiry" className="hover:underline">
             お問い合わせ
           </Link>
         </nav>
