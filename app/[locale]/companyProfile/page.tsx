@@ -9,14 +9,14 @@ const Profile = () => {
       </div>
 
       <div className="min-h-[783px] mb-9 relative w-full flex flex-col mt-16 sm:mt-8 sm:p-4 md:p-8 bg-company-profile bg-cover bg-center object-center bg-no-repeat items-center justify-center">
-        <h1 className=" text-black font-semibold  lg:text-[36px] md:text-[32px] sm:text-[28px]xxs:text-[24px] leading-tight text-center">
+        <h1 className=" text-black font-semibold text-[36px] lg:text-[36px] md:text-[32px] sm:text-[28px] xxs:text-[24px] leading-tight text-center">
           会社概要
         </h1>
 
-        <div className="max-w-[1029px] font-semibold text-xl text-[#000743] text-center mt-8">
+        <div className="max-w-[1029px] font-semibold text-xl lg:text-xl md:text-16px text-[#000743] text-center mt-8">
           <p className="">
-            WIN-Bへようこそ！
-            [Year]に設立されたWIN-Bは、簡単かつ効率的に車両を売買できるプラットフォームとして知られるようになりました。自動車業界で信頼される名前として、私たちは売り手と買い手の両方にシームレスな体験を提供し、最高のサービスと満足を保証します。
+            WIN-Bへようこそ！ 2025
+            に設立されたWIN-Bは、簡単かつ効率的に車両を売買できるプラットフォームとして知られるようになりました。自動車業界で信頼される名前として、私たちは売り手と買い手の両方にシームレスな体験を提供し、最高のサービスと満足を保証します。
           </p>
           <p className="">
             私たちの使命：
@@ -29,7 +29,7 @@ const Profile = () => {
             多様なメーカーとモデルからなる膨大な車両データベース。
             製造元、モデル、状態、場所など、さまざまな基準に基づいて完璧な車両を見つけるための高度な検索機能。
           </p>
-          <p className="lg:text-[18px] sm:text-[14px] xs:text-[14px] xxs:text-[14px] font-semibold">
+          <p className="">
             写真、仕様、特徴を含む詳細な車両リスト。
             車両の詳細の正確性と品質を保証する専用の管理チーム。
             買い手が簡単に車両についての問い合わせやメールを送ることができるユーザーフレンドリーなプラットフォー
