@@ -3,11 +3,11 @@ import React from "react";
 
 const DealSection = () => {
   return (
-    <section className="mt-10 bg-[#D9D9D930] px-4 py-20 w-full">
+    <section className="mt-10 bg-[#d3df2c30] px-4 py-20 w-full">
       <div className="max-w-winb-max-1366 mx-auto flex flex-col md:flex-row items-center justify-between space-y-8 md:space-y-0">
         {/* Image Section */}
         <Image
-          src="/vehicledummy.png"
+          src="/home/deal.jpg"
           alt="Vehicle Deal"
           width={591}
           height={557}
