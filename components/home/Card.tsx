@@ -45,7 +45,7 @@ export default function Card({vehicle}: {vehicle: Ifields}) {
       ¥{vehicle.price}
       </p>
       <button type="button" className="absolute bottom-2 right-2 bg-transparent p-2">
-        <Link href={`/vehicles/${vehicle.id}`}>
+        <Link href={`/searchVehicle/${vehicle.id}`}>
           <ChevronRight size={24} />
         </Link>
       </button>

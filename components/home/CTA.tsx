@@ -12,7 +12,7 @@ const CTA = () => {
           助けが必要ですか?私たちがお手伝いできます!
         </p>
         <div className=" w-full mt-6 min-h-[144px] flex items-center justify-center">
-          <p className="mt-4 text-[18px] md:text-[24px] font-semibold text-left max-w-[793px]">
+          <p className="mt-4 text-[16px] lg:text-[20px] md:text-[24px] font-semibold text-left max-w-[793px]">
           当社のサービスについてご質問がある場合、またはさらに詳しい情報が必要ですか?私たちのチームがお手伝いいたします。 WIN-B についてさらに詳しく知りたい場合、または具体的な質問がある場合は、お気軽にお問い合わせください。お客様の満足が私たちの最優先事項です。
           </p>
           <div className="mt-6 text-center"></div>
