@@ -18,8 +18,12 @@ export default function Navbar() {
   const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(false);
   const [toggle, setIsToggled] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(() => window.innerWidth <= 768)
+  }, [])
 
   useEffect(() => {
     const handleResize = () => {
