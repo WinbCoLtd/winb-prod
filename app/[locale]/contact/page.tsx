@@ -79,7 +79,7 @@ export default function Inquiry() {
         お問い合わせ <Mail size={40} />
       </h2>
 
-      <div className="max-w-winb-max-1366 p-[1px] bg-gradient-to-b from-[#1119B4] to-[#58056B] rounded-2xl">
+      <div className="max-w-winb-max-1366 p-[1px] bg-gradient-to-b from-[#1119B4] to-[#58056B] rounded-2xl mb-10">
         <div className="w-full bg-[#fefefe] border rounded-2xl flex justify-between items-center p-5">
           <Image
             src="/inquiry/contact.png"
