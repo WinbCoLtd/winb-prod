@@ -21,6 +21,7 @@ export async function PUT(req: NextRequest) {
     const formdata = await req.formData();
     const vehicleId = Number(formdata.get("id"));
 
+    // Ensure vehicleId is provided
     if (!vehicleId) {
       return NextResponse.json({
         success: false,
@@ -28,6 +29,7 @@ export async function PUT(req: NextRequest) {
       });
     }
 
+    // Fetch existing vehicle details
     const existingVehicle = await prisma.vehicle.findUnique({ where: { id: vehicleId } });
     if (!existingVehicle) {
       return NextResponse.json({
@@ -42,13 +44,16 @@ export async function PUT(req: NextRequest) {
     ) as string[];
 
     const existingImages = await prisma.vehicleImages.findMany({ where: { vehicleId } });
-    const imagesToDelete = existingImages.filter((img) => !retainedUrls.includes(img.url));
+    const imagesToDelete = existingImages.filter(
+      (img) => !retainedUrls.includes(img.url) && img.url !== existingVehicle.previewUrl
+    );
 
     // Delete unused images from filesystem and database
     for (const img of imagesToDelete) {
       const imgPath = path.join(process.cwd(), "public", img.url);
       if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
     }
+
     await prisma.vehicleImages.deleteMany({
       where: {
         vehicleId,
@@ -90,14 +95,14 @@ export async function PUT(req: NextRequest) {
       await prisma.vehicleImages.create({ data: { url: fileUrl, vehicleId } });
     }
 
-    // Update primary image record if applicable
+    // Update or create primary image record
     const primaryImageRecord = existingImages.find((img) => img.url === existingVehicle.previewUrl);
     if (primaryImageRecord) {
       await prisma.vehicleImages.update({
         where: { id: primaryImageRecord.id },
         data: { url: previewUrl },
       });
-    } else {
+    } else if (previewUrl !== existingVehicle.previewUrl) {
       await prisma.vehicleImages.create({
         data: { url: previewUrl, vehicleId },
       });
