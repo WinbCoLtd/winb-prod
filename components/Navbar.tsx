@@ -94,7 +94,7 @@ export default function Navbar() {
           <Link href="/" className="hover:underline">
             ホーム
           </Link>
-          <Link href="/compantProfile" className="hover:underline">
+          <Link href="/companyProfile" className="hover:underline">
             会社概要
           </Link>
           <Link href="/vehicleList" className="hover:underline">

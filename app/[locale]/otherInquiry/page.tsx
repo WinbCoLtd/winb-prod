@@ -1,25 +1,28 @@
-'use client'
+"use client";
 
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, ChangeEvent, FormEvent } from "react";
+import Navbar from "@/components/Navbar";
 
 interface FormData {
   name: string;
   email: string;
   phone: string;
-  vehicle:string;
+  vehicle: string;
   message: string;
 }
 
 export default function OtherInquiry() {
   const [formData, setFormData] = useState<FormData>({
-    name: '',
-    email: '',
-    phone: '',
-    vehicle:'',
-    message: '',
+    name: "",
+    email: "",
+    phone: "",
+    vehicle: "",
+    message: "",
   });
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -29,36 +32,47 @@ export default function OtherInquiry() {
 
     const phoneNumber = formData.phone ? parseInt(formData.phone, 10) : null;
 
-    console.log('Form submitted:', { ...formData, phone: phoneNumber });
+    console.log("Form submitted:", { ...formData, phone: phoneNumber });
   };
 
   return (
-    <div className="relative w-full flex flex-col max-w-[1166px] mx-auto">
-      <div className="mt-6 h-[127px] bg-gray-200 flex items-center justify-between px-4 md:px-8">
-        Nav
+    <div className="relative w-full flex flex-col max-w-[1366px] mx-auto px-4 py-2">
+      <div className="bg-[#08001C67] w-full flex items-center justify-center border border-[#00CCEE] rounded-[10px] min-h-32 my-auto">
+        <Navbar />
       </div>
 
-      <h2 className="lg:text-[30px] text-[24px] text-black font-bold mt-[36px] mb-[36px] px-2">Vehicle Carrier Request</h2>
-      
-      <div className="mt-[50px] w-full  bg-white border border-winb-formblue rounded-[15px] flex flex-col items-center p-6 shadow-md">
+      <h2 className="lg:text-[30px] text-[24px] text-black font-bold mt-[36px] mb-[16px] px-2">
+        車両運搬業者の依頼
+      </h2>
+
+      <div className="mt-[50px] w-full  bg-white border border-winb-formblue rounded-[15px] flex flex-col items-center p-6 shadow-md mb-10">
         <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-6">
-         
           <div className="flex flex-col md:flex-row md:space-x-6">
             <div className="flex flex-col w-full md:w-1/2">
-              <label className="lg:text-[18px] text-black font-semibold mb-2" htmlFor="email">Name</label>
+              <label
+                className="lg:text-[18px] text-black font-semibold mb-2"
+                htmlFor="email"
+              >
+                Name
+              </label>
               <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="p-3 border border-gray-300 rounded-[15px] focus:outline-none focus:ring-2 "
-            />
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="p-3 border border-gray-300 rounded-[15px] focus:outline-none focus:ring-2 "
+              />
             </div>
 
             <div className="flex flex-col w-full md:w-1/2">
-              <label className="lg:text-[18px] text-black font-semibold mb-2" htmlFor="phone">Email Address</label>
+              <label
+                className="lg:text-[18px] text-black font-semibold mb-2"
+                htmlFor="phone"
+              >
+                Email Address
+              </label>
               <input
                 type="email"
                 id="email"
@@ -73,7 +87,12 @@ export default function OtherInquiry() {
 
           <div className="flex flex-col md:flex-row md:space-x-6">
             <div className="flex flex-col w-full md:w-1/2">
-              <label className="lg:text-[18px] text-black font-semibold mb-2" htmlFor="phone">Phone Number</label>
+              <label
+                className="lg:text-[18px] text-black font-semibold mb-2"
+                htmlFor="phone"
+              >
+                Phone Number
+              </label>
               <input
                 type="tel"
                 id="phone"
@@ -86,7 +105,12 @@ export default function OtherInquiry() {
             </div>
 
             <div className="flex flex-col w-full md:w-1/2">
-              <label className="lg:text-[18px] text-black font-semibold mb-2" htmlFor="email">Vehicle Number</label>
+              <label
+                className="lg:text-[18px] text-black font-semibold mb-2"
+                htmlFor="email"
+              >
+                Vehicle Number
+              </label>
               <input
                 type="venum"
                 id="venum"
@@ -97,11 +121,15 @@ export default function OtherInquiry() {
                 className="p-3 border border-gray-300 rounded-[15px] focus:outline-none focus:ring-2 "
               />
             </div>
-
           </div>
 
           <div className="flex flex-col">
-            <label className="lg:text-[18px] text-black font-semibold mb-2" htmlFor="message">Message</label>
+            <label
+              className="lg:text-[18px] text-black font-semibold mb-2"
+              htmlFor="message"
+            >
+              Message
+            </label>
             <textarea
               id="message"
               name="message"
