@@ -50,17 +50,18 @@ interface Vehicle {
 
 interface Profile {
   id: number;
-  name: string;
-  email: string;
-  role: string;
+  nameEn: string;
+  nameJa: string;
+  username: string;
   createdAt: string;
   updatedAt: string;
 }
 
 const Admin = () => {
   const [showVehicleForm, setShowVehicleForm] = useState(false);
+  const [showProfileForm, setShowProfileForm] = useState(false);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [profiles, setProfiles] = useState({} as Profile);
   const [files, setFiles] = useState<File[]>([]);
   const [screenShot, setScreenShot] = useState<File | null>(null);
   const [formData, setFormData] = useState<Partial<Vehicle>>({
@@ -92,8 +93,16 @@ const Admin = () => {
 
   useEffect(() => {
     fetchVehicles();
-    fetchProfiles();
-    setToken(localStorage.getItem("token") as string);
+    const token = localStorage.getItem('token')
+    if (!token) {
+      console.log('error token not found')
+
+    }else {
+      setToken(token)
+      console.log(token);
+      fetchProfiles();
+      console.log(profiles)
+    }
   }, []);
 
   const fetchVehicles = async () => {
@@ -112,9 +121,13 @@ const Admin = () => {
 
   const fetchProfiles = async () => {
     try {
-      const response = await axios.get("/api/profiles/");
+      const id = await localStorage.getItem('id')
+      const response = await axios.get(`/api/profile?id=${id}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        }});
       if (response.status === 200) {
-        setProfiles(response.data.profiles);
+        setProfiles(response.data);
       } else {
         setError(response.data.error || "Failed to fetch profiles.");
       }
@@ -220,10 +233,23 @@ const Admin = () => {
     }
   };
 
-  const handleEdit = (vehicle: Vehicle | Profile) => {
-    setFormData(vehicle);
-    setIsEditing(true);
-    setShowVehicleForm(true);
+  const handleEdit = async (vehicle: Vehicle) => {
+    try {
+      const res = await axios.get(`/api/vehicles/readOne?id=${vehicle.id}`);
+      if (res.status === 200) {
+        const vehicleData = res.data;
+        setFormData(vehicleData);
+        setScreenShot(vehicleData.previewUrl ? new File([], vehicleData.previewUrl) : null);
+        setFiles(vehicleData.images.map((img: ImageData) => new File([], img.url)));
+        setIsEditing(true);
+        setShowVehicleForm(true);
+      } else {
+        setError("Failed to fetch vehicle data.");
+      }
+    } catch (err) {
+      console.error("Error fetching vehicle data:", err);
+      setError("An unexpected error occurred. Please try again.");
+    }
   };
 
   const handleDelete = async (id: number) => {
@@ -241,6 +267,48 @@ const Admin = () => {
       }
     } catch (err) {
       console.error("Error deleting vehicle:", err);
+      setError("An unexpected error occurred. Please try again.");
+    }
+  };
+
+  const handleProfileUpdate = async () => {
+    try {
+      const response = await axios.put(`/api/auth/authUpdate`, profiles, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data.success) {
+        setShowProfileForm(false);
+        setError("");
+        fetchProfiles();
+      } else {
+        setError(response.data.error || "Failed to update profile.");
+      }
+    } catch (err) {
+      console.error("Error updating profile:", err);
+      setError("An unexpected error occurred. Please try again.");
+    }
+  };
+
+  const handleProfileDelete = async () => {
+    try {
+      const response = await axios.delete(`/api/profile/delete`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data.success) {
+        setProfiles({} as Profile);
+        setError("");
+        // Redirect or handle the deletion appropriately
+      } else {
+        setError(response.data.error || "Failed to delete profile.");
+      }
+    } catch (err) {
+      console.error("Error deleting profile:", err);
       setError("An unexpected error occurred. Please try again.");
     }
   };
@@ -263,35 +331,85 @@ const Admin = () => {
               <tr className="bg-gray-200 text-left">
                 <th className="border border-gray-300 p-2">Name</th>
                 <th className="border border-gray-300 p-2">Email</th>
-                <th className="border border-gray-300 p-2">Role</th>
                 <th className="border border-gray-300 p-2">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {profiles.map((profile) => (
-                <tr key={profile.id} className="hover:bg-gray-100">
-                  <td className="border border-gray-300 p-2">{profile.name}</td>
-                  <td className="border border-gray-300 p-2">{profile.email}</td>
-                  <td className="border border-gray-300 p-2">{profile.role}</td>
+              {profiles &&
+                <tr key={profiles.id} className="hover:bg-gray-100">
+                  <td className="border border-gray-300 p-2">{profiles.nameEn}</td>
+                  <td className="border border-gray-300 p-2">{profiles.username}</td>
                   <td className="border border-gray-300 p-2">
                     <button
-                      onClick={() => handleEdit(profile)}
+                      onClick={() => setShowProfileForm(true)}
                       className="px-3 py-1 bg-yellow-400 text-white rounded-md mr-2"
                     >
                       <FontAwesomeIcon icon={faEdit} />
                     </button>
                     <button
-                      onClick={() => handleDelete(profile.id)}
+                      onClick={handleProfileDelete}
                       className="px-3 py-1 bg-red-500 text-white rounded-md"
                     >
                       <FontAwesomeIcon icon={faTrash} />
                     </button>
                   </td>
                 </tr>
-              ))}
+              }
             </tbody>
           </table>
         </div>
+
+        {/* Edit Profile Popup */}
+        {showProfileForm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white p-6 rounded-md shadow-md w-full max-w-lg">
+              <h2 className="text-xl font-semibold mb-4">Edit Profile</h2>
+              {error && (
+                <p className="text-red-500 mb-4">
+                  <FontAwesomeIcon icon={faExclamationCircle} className="mr-2" />
+                  {error}
+                </p>
+              )}
+              <div className="grid grid-cols-2 gap-4">
+                <input
+                  name="nameEn"
+                  value={profiles.nameEn}
+                  onChange={(e) => setProfiles({ ...profiles, nameEn: e.target.value })}
+                  placeholder="Name (English)"
+                  className="border border-gray-300 p-2 rounded-md w-full"
+                />
+                <input
+                  name="nameJa"
+                  value={profiles.nameJa}
+                  onChange={(e) => setProfiles({ ...profiles, nameJa: e.target.value })}
+                  placeholder="Name (Japanese)"
+                  className="border border-gray-300 p-2 rounded-md w-full"
+                />
+                <input
+                  name="username"
+                  value={profiles.username}
+                  onChange={(e) => setProfiles({ ...profiles, username: e.target.value })}
+                  placeholder="Username"
+                  className="border border-gray-300 p-2 rounded-md w-full"
+                />
+              </div>
+              <div className="flex justify-end mt-6">
+                <button
+                  onClick={() => setShowProfileForm(false)}
+                  className="px-4 py-2 bg-gray-500 text-white rounded-md mr-2"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleProfileUpdate}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                >
+                  Update
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Vehicle Management Section */}
         <div className="mt-6 flex justify-between items-center">
@@ -373,217 +491,217 @@ const Admin = () => {
 
         {/* Add/Edit Vehicle Popup */}
         {showVehicleForm && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-6 rounded-md shadow-md w-full max-w-lg">
-              <h2 className="text-xl font-semibold mb-4">
-                {isEditing ? "Edit Vehicle" : "Add New Vehicle"}
-              </h2>
-              {error && (
-                <p className="text-red-500 mb-4">
-                  <FontAwesomeIcon icon={faExclamationCircle} className="mr-2" />
-                  {error}
-                </p>
-              )}
-              <div className="grid grid-cols-2 gap-4">
-                <input
-                  name="title"
-                  value={formData.title}
-                  onChange={handleInputChange}
-                  placeholder="Title"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="price"
-                  value={formData.price}
-                  onChange={handleInputChange}
-                  placeholder="Price"
-                  type="number"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="model"
-                  value={formData.model}
-                  onChange={handleInputChange}
-                  placeholder="Model"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="maker"
-                  value={formData.maker}
-                  onChange={handleInputChange}
-                  placeholder="Maker"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="vehicleType"
-                  value={formData.vehicleType}
-                  onChange={handleInputChange}
-                  placeholder="Vehicle Type"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="fuel"
-                  value={formData.fuel}
-                  onChange={handleInputChange}
-                  placeholder="Fuel Type"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="drive"
-                  value={formData.drive}
-                  onChange={handleInputChange}
-                  placeholder="Drive Type"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="condition"
-                  value={formData.condition}
-                  onChange={handleInputChange}
-                  placeholder="Condition"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="color"
-                  value={formData.color}
-                  onChange={handleInputChange}
-                  placeholder="Color"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="grade"
-                  value={formData.grade}
-                  onChange={handleInputChange}
-                  placeholder="Grade"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="chassieNumber"
-                  value={formData.chassieNumber}
-                  onChange={handleInputChange}
-                  placeholder="Chassie Number"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="Shaken"
-                  value={formData.Shaken}
-                  onChange={handleInputChange}
-                  placeholder="Shaken"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="manufactureYear"
-                  value={formData.manufactureYear}
-                  onChange={handleInputChange}
-                  placeholder="Manufacture Year"
-                  type="date"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="mileage"
-                  value={formData.mileage}
-                  onChange={handleInputChange}
-                  placeholder="Mileage"
-                  type="number"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="maxPassengers"
-                  value={formData.maxPassengers}
-                  onChange={handleInputChange}
-                  placeholder="Max Passengers"
-                  type="number"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <div className="flex items-center gap-2">
-                  <input
-                    name="isAvailable"
-                    type="checkbox"
-                    checked={formData.isAvailable || false}
-                    onChange={handleInputChange}
-                    className="border border-gray-300 p-2 rounded-md"
-                  />
-                  <label>Is Available</label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    name="isPublished"
-                    type="checkbox"
-                    checked={formData.isPublished || false}
-                    onChange={handleInputChange}
-                    className="border border-gray-300 p-2 rounded-md"
-                  />
-                  <label>Is Published</label>
-                </div>
-              </div>
-              <div className="mt-4">
-                <label className="block font-medium mb-2">Primary Screenshot:</label>
-                {screenShot && (
-                  <div className="relative inline-block">
-                    <img
-                      src={URL.createObjectURL(screenShot)}
-                      alt="Screenshot Preview"
-                      className="w-24 h-24 object-cover rounded-md"
-                    />
-                    <button
-                      onClick={handleRemoveScreenshot}
-                      className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
-                    >
-                      <FontAwesomeIcon icon={faTimes} className="w-3 h-3" />
-                    </button>
-                  </div>
-                )}
-                <input type="file" onChange={handleScreenShotChange} className="mt-2" />
-              </div>
-              <div className="mt-4">
-                <label className="block font-medium mb-2">Additional Images:</label>
-                <div
-                  {...getRootProps()}
-                  className={`p-4 border-2 border-dashed rounded-md ${
-                    isDragActive ? "border-blue-500" : "border-gray-300"
-                  }`}
-                >
-                  <input {...getInputProps()} />
-                  {isDragActive ? (
-                    <p>Drop the files here...</p>
-                  ) : (
-                    <p>Drag &apos;n&apos; drop some files here, or click to select files</p>
-                  )}
-                </div>
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {files.map((file, index) => (
-                    <div key={index} className="relative">
-                      <img
-                        src={URL.createObjectURL(file)}
-                        alt={`Preview ${index}`}
-                        className="w-24 h-24 object-cover rounded-md"
-                      />
-                      <button
-                        onClick={() => handleRemoveFile(index)}
-                        className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
-                      >
-                        <FontAwesomeIcon icon={faTimes} className="w-3 h-3" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="flex justify-end mt-6">
-                <button
-                  onClick={() => setShowVehicleForm(false)}
-                  className="px-4 py-2 bg-gray-500 text-white rounded-md mr-2"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSubmit}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                >
-                  {isEditing ? "Update" : "Submit"}
-                </button>
-              </div>
-            </div>
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div className="bg-white p-6 rounded-md shadow-md w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+      <h2 className="text-xl font-semibold mb-4">
+        {isEditing ? "Edit Vehicle" : "Add New Vehicle"}
+      </h2>
+      {error && (
+        <p className="text-red-500 mb-4">
+          <FontAwesomeIcon icon={faExclamationCircle} className="mr-2" />
+          {error}
+        </p>
+      )}
+      <div className="grid grid-cols-2 gap-4">
+        <input
+          name="title"
+          value={formData.title}
+          onChange={handleInputChange}
+          placeholder="Title"
+          className="border border-gray-300 p-2 rounded-md w-full"
+        />
+        <input
+          name="price"
+          value={formData.price}
+          onChange={handleInputChange}
+          placeholder="Price"
+          type="number"
+          className="border border-gray-300 p-2 rounded-md w-full"
+        />
+        <input
+          name="model"
+          value={formData.model}
+          onChange={handleInputChange}
+          placeholder="Model"
+          className="border border-gray-300 p-2 rounded-md w-full"
+        />
+        <input
+          name="maker"
+          value={formData.maker}
+          onChange={handleInputChange}
+          placeholder="Maker"
+          className="border border-gray-300 p-2 rounded-md w-full"
+        />
+        <input
+          name="vehicleType"
+          value={formData.vehicleType}
+          onChange={handleInputChange}
+          placeholder="Vehicle Type"
+          className="border border-gray-300 p-2 rounded-md w-full"
+        />
+        <input
+          name="fuel"
+          value={formData.fuel}
+          onChange={handleInputChange}
+          placeholder="Fuel Type"
+          className="border border-gray-300 p-2 rounded-md w-full"
+        />
+        <input
+          name="drive"
+          value={formData.drive}
+          onChange={handleInputChange}
+          placeholder="Drive Type"
+          className="border border-gray-300 p-2 rounded-md w-full"
+        />
+        <input
+          name="condition"
+          value={formData.condition}
+          onChange={handleInputChange}
+          placeholder="Condition"
+          className="border border-gray-300 p-2 rounded-md w-full"
+        />
+        <input
+          name="color"
+          value={formData.color}
+          onChange={handleInputChange}
+          placeholder="Color"
+          className="border border-gray-300 p-2 rounded-md w-full"
+        />
+        <input
+          name="grade"
+          value={formData.grade}
+          onChange={handleInputChange}
+          placeholder="Grade"
+          className="border border-gray-300 p-2 rounded-md w-full"
+        />
+        <input
+          name="chassieNumber"
+          value={formData.chassieNumber}
+          onChange={handleInputChange}
+          placeholder="Chassie Number"
+          className="border border-gray-300 p-2 rounded-md w-full"
+        />
+        <input
+          name="Shaken"
+          value={formData.Shaken}
+          onChange={handleInputChange}
+          placeholder="Shaken"
+          className="border border-gray-300 p-2 rounded-md w-full"
+        />
+        <input
+          name="manufactureYear"
+          value={formData.manufactureYear}
+          onChange={handleInputChange}
+          placeholder="Manufacture Year"
+          type="date"
+          className="border border-gray-300 p-2 rounded-md w-full"
+        />
+        <input
+          name="mileage"
+          value={formData.mileage}
+          onChange={handleInputChange}
+          placeholder="Mileage"
+          type="number"
+          className="border border-gray-300 p-2 rounded-md w-full"
+        />
+        <input
+          name="maxPassengers"
+          value={formData.maxPassengers}
+          onChange={handleInputChange}
+          placeholder="Max Passengers"
+          type="number"
+          className="border border-gray-300 p-2 rounded-md w-full"
+        />
+        <div className="flex items-center gap-2">
+          <input
+            name="isAvailable"
+            type="checkbox"
+            checked={formData.isAvailable || false}
+            onChange={handleInputChange}
+            className="border border-gray-300 p-2 rounded-md"
+          />
+          <label>Is Available</label>
+        </div>
+        <div className="flex items-center gap-2">
+          <input
+            name="isPublished"
+            type="checkbox"
+            checked={formData.isPublished || false}
+            onChange={handleInputChange}
+            className="border border-gray-300 p-2 rounded-md"
+          />
+          <label>Is Published</label>
+        </div>
+      </div>
+      <div className="mt-4">
+        <label className="block font-medium mb-2">Primary Screenshot:</label>
+        {screenShot && (
+          <div className="relative inline-block">
+            <img
+              src={screenShot instanceof File ? URL.createObjectURL(screenShot) : `http://localhost:3000${screenShot}`}
+              alt="Screenshot Preview"
+              className="w-24 h-24 object-cover rounded-md"
+            />
+            <button
+              onClick={handleRemoveScreenshot}
+              className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
+            >
+              <FontAwesomeIcon icon={faTimes} className="w-3 h-3" />
+            </button>
           </div>
         )}
+        <input type="file" onChange={handleScreenShotChange} className="mt-2" />
+      </div>
+      <div className="mt-4">
+        <label className="block font-medium mb-2">Additional Images:</label>
+        <div
+          {...getRootProps()}
+          className={`p-4 border-2 border-dashed rounded-md ${
+            isDragActive ? "border-blue-500" : "border-gray-300"
+          }`}
+        >
+          <input {...getInputProps()} />
+          {isDragActive ? (
+            <p>Drop the files here...</p>
+          ) : (
+            <p>Drag &apos;n&apos; drop some files here, or click to select files</p>
+          )}
+        </div>
+        <div className="flex flex-wrap gap-2 mt-4">
+          {files.map((file, index) => (
+            <div key={index} className="relative">
+              <img
+                src={file instanceof File ? URL.createObjectURL(file) : file}
+                alt={`Preview ${index}`}
+                className="w-24 h-24 object-cover rounded-md"
+              />
+              <button
+                onClick={() => handleRemoveFile(index)}
+                className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
+              >
+                <FontAwesomeIcon icon={faTimes} className="w-3 h-3" />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="flex justify-end mt-6">
+        <button
+          onClick={() => setShowVehicleForm(false)}
+          className="px-4 py-2 bg-gray-500 text-white rounded-md mr-2"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleSubmit}
+          className="px-4 py-2 bg-blue-500 text-white rounded-md"
+        >
+          {isEditing ? "Update" : "Submit"}
+        </button>
+      </div>
+    </div>
+  </div>
+)}
       </div>
     </div>
   );
