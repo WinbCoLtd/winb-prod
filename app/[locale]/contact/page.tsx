@@ -54,6 +54,7 @@ export default function Inquiry() {
     setSuccess(false);
 
     try {
+      alert(formData.vehicleId + ' , ' + formData.title )
       const res = await axios.post("/api/contact", formData);
 
       if (res.status === 200) {
@@ -70,7 +71,7 @@ export default function Inquiry() {
   };
 
   return (
-    <div className="relative min-h-[87vh] w-full max-w-[1366px] mx-auto px-2">
+    <div className="relative min-h-[87vh] w-full max-w-[1366px] mx-auto px-2 pb-10">
       <div className="bg-[#08001C67] w-full flex items-center justify-center border border-[#00CCEE] rounded-[10px] min-h-32 mt-2 my-auto">
         <Navbar />
       </div>
@@ -182,11 +183,11 @@ export default function Inquiry() {
               />
             </div>
 
-            <div className="flex justify-center">
+            <div className="flex justify-center w-full">
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-yellow-400 text-sm md:text-base text-black font-medium px-6 py-2 rounded-full hover:bg-yellow-300 transition duration-300"
+                className="bg-yellow-400 w-full text-lg md:text-base text-[#1b1b1b] cursor-pointer font-bold px-6 py-3 rounded-xl hover:bg-yellow-300 transition duration-300"
               >
                 {loading ? "Submitting..." : "Submit Inquiry"}
               </button>

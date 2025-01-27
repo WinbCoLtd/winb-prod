@@ -10,6 +10,7 @@ import {
   faTrash,
   faTimes,
   faUser,
+  faUsersCog,
 } from "@fortawesome/free-solid-svg-icons";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
@@ -52,6 +53,7 @@ interface Profile {
   nameEn: string;
   nameJa: string;
   username: string;
+  stringPassword?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -90,6 +92,9 @@ const Admin = () => {
   const [error, setError] = useState<string>("");
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [token, setToken] = useState<string>("");
+  const [selectedUser, setSelectedUser] = useState<Profile | null>(null);
+  const [users, setUsers] = useState<Profile[]>([]);
+  const [showUserForm, setShowUserForm] = useState(false);
 
   useEffect(() => {
     fetchVehicles();
@@ -101,8 +106,77 @@ const Admin = () => {
       console.log(token);
       fetchProfiles();
       console.log(profiles);
+      fetchUsers();
     }
   }, []);
+
+    // Add this new fetch function
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("/api/users", {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.status === 200) {
+          setUsers(response.data.users);
+          console.log(response.data.users);
+          
+        } else {
+          setError(response.data.error || "Failed to fetch users.");
+        }
+      } catch (err) {
+        console.error("Error fetching users:", err);
+        setError("An unexpected error occurred. Please try again.");
+      }
+    };
+  
+    // Add these new handler functions
+    const handleUserUpdate = async () => {
+      try {
+        const endpoint = selectedUser?.id 
+          ? `/api/users/update?id=${selectedUser.id}`
+          : "/api/users/register";
+        const method = selectedUser?.id ? "put" : "post";
+  
+        const response = await axios[method](endpoint, selectedUser, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+  
+        if (response.status == 201) {
+          setShowUserForm(false);
+          setSelectedUser(null);
+          fetchUsers();
+          setError("");
+        } else {
+          setError(response.data.error || "Failed to update user.");
+        }
+      } catch (err) {
+        console.error("Error updating user:", err);
+        setError("An unexpected error occurred. Please try again.");
+      }
+    };
+  
+    const handleUserDelete = async (id: number) => {
+      try {
+        const response = await axios.delete(`/api/users/delete?id=${id}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+  
+        if (response.status == 201) {
+          setUsers(users.filter(user => user.id !== id));
+        } else {
+          setError(response.data.error || "Failed to delete user.");
+        }
+      } catch (err) {
+        console.error("Error deleting user:", err);
+        setError("An unexpected error occurred. Please try again.");
+      }
+    };
 
   const fetchVehicles = async () => {
     try {
@@ -332,6 +406,152 @@ const Admin = () => {
       <Navbar />
       <div className="container mx-auto px-4 pb-10">
         <h1 className="text-2xl font-bold mt-6">Admin Dashboard</h1>
+
+        <div className="mt-6 bg-white shadow-md rounded-md p-4">
+            <h2 className="text-xl font-semibold mb-4">
+              <FontAwesomeIcon icon={faUsersCog} className="mr-2" /> User Management
+            </h2>
+            <button
+              onClick={() => {
+                setSelectedUser(null);
+                setShowUserForm(true);
+              }}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md mb-4"
+            >
+              <FontAwesomeIcon icon={faPlus} className="mr-2" /> Add New User
+            </button>
+            <table className="w-full border-collapse border border-gray-300">
+              <thead>
+                <tr className="bg-gray-200 text-left">
+                  <th className="border border-gray-300 p-2">Name</th>
+                  <th className="border border-gray-300 p-2">Username</th>
+                  <th className="border border-gray-300 p-2">Admin</th>
+                  <th className="border border-gray-300 p-2">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.length > 0 && users.map(user => (
+                  <tr key={user.id} className="hover:bg-gray-100">
+                    <td className="border border-gray-300 p-2">{user.nameEn}</td>
+                    <td className="border border-gray-300 p-2">{user.username}</td>
+                    <td className="border border-gray-300 p-2">
+                      {user ? "Yes" : "No"}
+                    </td>
+                    <td className="border border-gray-300 p-2">
+                      <button
+                        onClick={() => {
+                          setSelectedUser(user);
+                          setShowUserForm(true);
+                        }}
+                        className="px-3 py-1 bg-yellow-400 text-white rounded-md mr-2"
+                      >
+                        <FontAwesomeIcon icon={faEdit} />
+                      </button>
+                      <button
+                        onClick={() => handleUserDelete(user.id)}
+                        className="px-3 py-1 bg-red-500 text-white rounded-md"
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+                  {/* User Form Popup */}
+        {showUserForm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white p-6 rounded-md shadow-md w-full max-w-lg">
+              <h2 className="text-xl font-semibold mb-4">
+                {selectedUser ? "Edit User" : "Add New User"}
+              </h2>
+              {error && (
+                <p className="text-red-500 mb-4">
+                  <FontAwesomeIcon icon={faExclamationCircle} className="mr-2" />
+                  {error}
+                </p>
+              )}
+              <div className="grid grid-cols-2 gap-4">
+                <input
+                  name="nameEn"
+                  value={selectedUser?.nameEn || ""}
+                  onChange={(e) => setSelectedUser({
+                    ...selectedUser || {} as Profile,
+                    nameEn: e.target.value
+                  })}
+                  placeholder="Name (English)"
+                  readOnly={selectedUser?.nameEn !== "" && selectedUser?.nameEn !== undefined}
+                  className="border border-gray-300 p-2 rounded-md w-full"
+                  
+                />
+                <input
+                  name="nameJa"
+                  value={selectedUser?.nameJa || ""}
+                  onChange={(e) => setSelectedUser({
+                    ...selectedUser || {} as Profile,
+                    nameJa: e.target.value
+                  })}
+                  placeholder="Name (Japanese)"
+                  readOnly={selectedUser?.nameJa !== "" && selectedUser?.nameJa !== undefined}
+                  className="border border-gray-300 p-2 rounded-md w-full"
+                />
+                <input
+                  name="username"
+                  value={selectedUser?.username || ""}
+                  onChange={(e) => setSelectedUser({
+                    ...selectedUser || {} as Profile,
+                    username: e.target.value
+                  })}
+                  placeholder="username"
+                  className="border border-gray-300 p-2 rounded-md w-full"
+                  type="text"
+                />
+                {!selectedUser?.id && (
+                  <input
+                    name="stringPassword"
+                    onChange={(e) => setSelectedUser({
+                      ...selectedUser || {} as Profile,
+                      stringPassword: e.target.value
+                    })}
+                    placeholder="Password"
+                    className="border border-gray-300 p-2 rounded-md w-full"
+                    type="password"
+                  />
+                )}
+                <div className="flex items-center gap-2">
+                  <input
+                    name="isAdmin"
+                    type="checkbox"
+                    onChange={() => setSelectedUser({
+                      ...selectedUser || {} as Profile,
+                    })}
+                    className="border border-gray-300 p-2 rounded-md"
+                  />
+                  <label>Admin User</label>
+                </div>
+              </div>
+              <div className="flex justify-end mt-6">
+                <button
+                  onClick={() => {
+                    setShowUserForm(false);
+                    setSelectedUser(null);
+                  }}
+                  className="px-4 py-2 bg-gray-500 text-white rounded-md mr-2"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleUserUpdate}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                >
+                  {selectedUser?.id ? "Update" : "Create"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Profile Management Section */}
         <div className="mt-6 bg-white shadow-md rounded-md p-4">
