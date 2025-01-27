@@ -1,24 +1,16 @@
-import { Autherize } from "@/helpers/auth";
 import { prisma } from "@/prisma/prisma";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
-    const headersList = await headers();
-    const token = headersList.get('authorization')?.split(' ')[1];
+export async function GET( req: NextRequest) {
 
     try {
-        // Authenticate the user using the token
-        const auth = await Autherize(token as string);
-
-        if (!auth) {
-            redirect('/auth');
-        }
+        const url = new URL(req.url);
+        const searchParams = url.searchParams;
+        const id = Number(searchParams.get("id"));
 
         // Fetch the admin profile using the authenticated user ID
         const adminProfile = await prisma.admin.findUnique({
-            where: { id: Number(auth.id) }
+            where: { id: Number(id) }
         });
 
         if (!adminProfile) {
