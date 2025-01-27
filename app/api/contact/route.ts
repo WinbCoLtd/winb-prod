@@ -148,7 +148,7 @@ export async function POST(req: NextRequest) {
     // Send email
     await transporter.sendMail({
       from: `vihanm0120@gmail.com`,
-      to: "vihanganethusara00@gmail.com", // Replace with the recipient's email
+      to: email, 
       subject: "New Inquiry",
       html: emailContent,
     });
