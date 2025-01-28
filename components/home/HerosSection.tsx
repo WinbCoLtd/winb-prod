@@ -54,29 +54,28 @@
 
 //   const redirectToSearchResultPage = () => {
 //     const queryParams = [];
-  
+
 //     if (currentSelectedMaker !== "") {
 //       queryParams.push(`maker=${currentSelectedMaker}`);
 //     }
-  
+
 //     if (currentSelectedModel !== "") {
 //       queryParams.push(`model=${currentSelectedModel}`);
 //     }
-  
+
 //     if (currentSelectedPrice.min >= 0) {
 //       queryParams.push(`minPrice=${currentSelectedPrice.min}`);
 //     }
-  
+
 //     if (currentSelectedPrice.max <= 1000) {
 //       queryParams.push(`maxPrice=${currentSelectedPrice.max}`);
 //     }
-  
+
 //     const path = `/vehicleList${queryParams.length > 0 ? '?' + queryParams.join('&') : ''}`;
-  
+
 //     console.log("Redirecting to:", path);
 //     router.push(path);
 //   };
-  
 
 //   useEffect(() => {
 //     fetchSearchData();
@@ -236,9 +235,7 @@
 
 // export default HerosSection;
 
-
-
-'use client';
+"use client";
 
 import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../Navbar";
@@ -277,7 +274,10 @@ function HerosSection() {
   };
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
       setToggle(false); // Close the dropdown if the click is outside
     }
   };
@@ -319,9 +319,14 @@ function HerosSection() {
   }, []);
 
   return (
-    <div className="relative w-full min-h-[80vh] flex flex-col md:px-12 xl:px-56 mx-auto bg-hero-image pb-10 bg-cover object-center bg-center">
-      <Navbar />
-      <div className="flex flex-col justify-center py-14 lg:py-56 items-center h-full flex-1 px-4">
+    <div className="relative w-full min-h-[80vh] flex flex-col bg-hero-image bg-cover bg-center">
+      {/* Navbar */}
+      <div className="bg-[#08001C67] border border-white rounded-[10px] absolute top-0 left-0 w-full z-10 min-h-32 flex items-center px-4 sm:px-6 md:px-8 lg:px-12 ">
+        <Navbar />
+      </div>
+
+      {/* Content */}
+      <div className="flex flex-col justify-center py-14 lg:py-56 items-center h-full flex-1 px-4 md:px-12 xl:px-56">
         <h1 className="font-bold text-3xl lg:text-4xl md:text-4xl text-white text-center mb-10 lg:mb-20 relative -top-2">
           信頼に基づいて構築され、安全性を重視し、品質を完璧にします!
         </h1>
@@ -376,7 +381,10 @@ function HerosSection() {
           </div>
 
           {/* Price Selection */}
-          <div className="flex flex-col items-start flex-1 relative justify-between min-w-40 w-full" ref={dropdownRef}>
+          <div
+            className="flex flex-col items-start flex-1 relative justify-between min-w-40 w-full"
+            ref={dropdownRef}
+          >
             <label htmlFor="models" className="text-sm mb-2">
               Price
             </label>
@@ -392,7 +400,7 @@ function HerosSection() {
               <div className="w-64 shadow-md border flex flex-col items-center justify-start border-gray-300 h-auto py-4 px-3 bg-white rounded-md min-h-36 absolute top-20 left-0 right-0 gap-4">
                 <div className="w-full flex justify-between gap-1 items-center border border-gray-300 rounded-md p-2 text-lg font-light">
                   <label htmlFor="min" className="font-semibold">
-                    Min{" "}
+                    Min
                   </label>
                   <input
                     type="range"
@@ -413,7 +421,7 @@ function HerosSection() {
                 </div>
                 <div className="w-full flex justify-between gap-1 items-center border border-gray-300 rounded-md p-2 text-lg font-light">
                   <label htmlFor="max" className="font-semibold">
-                    Max{" "}
+                    Max
                   </label>
                   <input
                     type="range"

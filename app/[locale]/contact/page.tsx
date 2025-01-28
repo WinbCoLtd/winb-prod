@@ -187,7 +187,7 @@ export default function Inquiry() {
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-yellow-400 w-full text-lg md:text-base text-[#1b1b1b] cursor-pointer font-bold px-6 py-3 rounded-xl hover:bg-yellow-300 transition duration-300"
+                className="bg-yellow-400 w-[50px]] text-lg md:text-base text-[#1b1b1b] cursor-pointer font-bold px-6 py-3 rounded-xl hover:bg-yellow-300 transition duration-300"
               >
                 {loading ? "Submitting..." : "Submit Inquiry"}
               </button>

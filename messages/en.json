@@ -4,16 +4,100 @@
         "homeTitle": "Home Page",
         "about": "About",
         "AboutTitle": "About Page",
-        "profile": "Profile",
-        "profileTitle": "Profile Page"
+        "profile": "Company Profile",
+        "profileTitle": "Profile Page",
+        "otherService":"Other Service",
+        "contact":"Contact Us"
     },
     "HomePage": {
-        "title": "Landing Page"
+        "title": "Built on Trust, Driven by Safety, Perfected in Quality!",
+        "searchBar":{
+            "maker":"Makers",
+            "model":"Models",
+            "price":"Price",
+            "search":"Search",
+            "map":"View on the map"
+        },
+        "card1":{
+            "title":"Reliable Financing Solutions",
+            "description":"Enjoy stress-free financing with options tailored to your needs, helping you save more on your vehicle."
+        },
+        "card2":{
+            "title":"Certified Pre-Owned Vehicles",
+            "description":"Our dealership ensures every vehicle meets the highest standards, providing you with only the best-certified pre-owned vehicles."
+        },
+        "card3":{
+            "title":"Transparent Deals",
+            "description":"We offer clear and honest pricing with no hidden fees, so you know exactly what you&aposre getting."
+        },
+        "card4":{
+            "title":"Expert Customer Service",
+            "description":"Our dedicated team is here to assist you with any questions and ensure a smooth buying experience."
+        },
+        "dealSection":{
+            "title":"Get the Best Deal for Your Vehicle Today",
+            "description":"Join thousands of satisfied customers who found their perfect car with us. We offer exclusive benefits and 24/7 support.",
+            "list1":"Largest network of certified cars.",
+            "list2":"Round-the-clock customer assistance.",
+            "list3":"Unmatched roadside assistance for all our vehicles."
+        },
+        "testomial":{
+            "tes1":"I found the perfect car for my family through this platform. The buying process was smooth, and the car was delivered on time!  -John, Buyer from Colombo",
+            "tes2":"Selling my old car was hassle-free with this platform. I got a great price and excellent support throughout the process. -Priya, Seller from Galle",
+            "test3":"I’ve never experienced such seamless service in vehicle purchases. Highly recommend this platform for all your car needs. -Ahmed, Buyer from Jaffna"
+        },
+        "cta":{
+            "title":"Need Assistance? We're Here to Help!",
+            "description":"Have questions about our services or would you like more information? Our team is here to help. If you would like to learn more about WIN-B or have a specific question, feel free to contact us. Your satisfaction is our number one priority.",
+            "buttonTitle":"Contact Us"
+        }
     },
+
     "AboutPage": {
         "title": "About"
     },
     "ProfilePage": {
-        "title": "Profile"
+        "title": "Comany Profile",
+        "description1":"Welcome to WIN-B! Founded in 2025, WIN-B has become known as a platform where you can buy and sell vehicles easily and efficiently. As a trusted name in the automotive industry, we provide a seamless experience for both sellers and buyers, ensuring the best service and satisfaction.",
+        "description2":"Our Mission: WIN-B's mission is to simplify the process of buying and selling vehicles and provide the best options in the market. We are dedicated to providing a comprehensive platform that caters to different vehicle preferences and requirements.",
+        "description3":"Our Vision: We aim to lead the vehicle sales industry by ensuring a user-friendly experience and reliable service. We create a community where users can buy and sell vehicles with confidence and uphold our commitment to quality and transparency.What We Offer: A vast vehicle database of diverse makes and models. Advanced search capabilities to find the perfect vehicle based on various criteria such as make, model, condition, location, etc.Detailed vehicle listings with photos, specifications, and features. A dedicated management team to ensure accuracy and quality of vehicle details. A user-friendly platform where buyers can easily inquire or email about vehicles."
+    },
+    "OtherServicePage":{
+        "title":"Stranded? We’re Just a Call Away!",
+        "herodescription":"Don’t let a breakdown ruin your day! With our fast and reliable towing service, help is just a phone call away. We’re here to get you back on the road safely and quickly.",
+        "button":"Join with Us",
+        "description1":"While traveling by car or visiting your hometown, unexpected situations can arise that might require a towing service. Whether it’s a car breakdown, a flat tire, or damage from an accident, these moments can leave you unable to move your vehicle on your own, making professional towing assistance essential.",
+        "description2":"We are with you...........!",
+        "tableTitle":"Please refer to the following fee table for towing fees.",
+        "tabHeading1":"Basic fee + work fee",
+        "tabHeading2":"Towing fee",
+        "tabHeading3":"Normal Road",
+        "tabHeading4":"Highway",
+        "cost1":"8:00-20:00 13,130 yen",
+        "cost2":"Additional 730 yen per 1 km",
+        "cost3":"8:00-20:00 21,520 yen",
+        "cost4":"Additional 730 yen per 1 km"
+    },
+    "OtherServiceInquiryPage":{
+        "title":"Vehicle Carrier Request",
+        "input1":"Name",
+        "input2":"Email Address",
+        "input3":"Phone Number",
+        "input4":"Vehicle Number",
+        "input5":"Message",
+        "buttonTitle":"Submit Request"
+    },
+    "ContactPage":{
+        "title":"Contact Form",
+        "input1":"Name",
+        "input2":"Email Address",
+        "input3":"Phone Number",
+        "input4":"Message",
+        "buttonTitle":"Submit Inquiry"
+    },
+    "FooterPage":{
+        "address":"1314-1010 Toyama, Yachimata, Chiba 289-1141, Japan | +81-80-5442-4596 | winb.coltd@gmail.com",
+        "paragraph":"© 2025 WIN-B Company. All rights reserved.",
+        "developCompany":"Powered by EquoLabs"
     }
 }

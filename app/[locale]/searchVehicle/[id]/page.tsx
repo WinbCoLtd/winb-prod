@@ -101,7 +101,7 @@ const MoreDetails = () => {
   ];
 
   return (
-    <div className="relative w-full flex flex-col max-w-[1366px] mx-auto">
+    <div className="relative w-full flex flex-col max-w-[1366px] mx-auto py-3 px-3 ">
       <div className="bg-[#08001C67] w-full flex items-center justify-center border border-[#00CCEE] rounded-[10px] min-h-32 my-auto">
         <Navbar />
       </div>
@@ -198,7 +198,7 @@ const MoreDetails = () => {
           <div className="mt-[55px] flex justify-end">
             <button>
               <Link
-                href={`/contact`}
+                href={`/contact?vehicleId=${vehicle.id}`}
                 className="bg-winb-yellow lg:text-[16px] sm:text-[12px] xs:text-[12px] xxs:text-[12px] text-black font-medium px-4 py-2 rounded-[25px] hover:bg-yellow-300 transition duration-300"
               >
                 Request More Information

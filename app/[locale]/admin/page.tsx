@@ -110,73 +110,72 @@ const Admin = () => {
     }
   }, []);
 
-    // Add this new fetch function
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get("/api/users", {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.status === 200) {
-          setUsers(response.data.users);
-          console.log(response.data.users);
-          
-        } else {
-          setError(response.data.error || "Failed to fetch users.");
-        }
-      } catch (err) {
-        console.error("Error fetching users:", err);
-        setError("An unexpected error occurred. Please try again.");
+  // Add this new fetch function
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get("/api/users", {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        setUsers(response.data.users);
+        console.log(response.data.users);
+      } else {
+        setError(response.data.error || "Failed to fetch users.");
       }
-    };
-  
-    // Add these new handler functions
-    const handleUserUpdate = async () => {
-      try {
-        const endpoint = selectedUser?.id 
-          ? `/api/users/update?id=${selectedUser.id}`
-          : "/api/users/register";
-        const method = selectedUser?.id ? "put" : "post";
-  
-        const response = await axios[method](endpoint, selectedUser, {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        });
-  
-        if (response.status == 201) {
-          setShowUserForm(false);
-          setSelectedUser(null);
-          fetchUsers();
-          setError("");
-        } else {
-          setError(response.data.error || "Failed to update user.");
-        }
-      } catch (err) {
-        console.error("Error updating user:", err);
-        setError("An unexpected error occurred. Please try again.");
+    } catch (err) {
+      console.error("Error fetching users:", err);
+      setError("An unexpected error occurred. Please try again.");
+    }
+  };
+
+  // Add these new handler functions
+  const handleUserUpdate = async () => {
+    try {
+      const endpoint = selectedUser?.id
+        ? `/api/users/update?id=${selectedUser.id}`
+        : "/api/users/register";
+      const method = selectedUser?.id ? "put" : "post";
+
+      const response = await axios[method](endpoint, selectedUser, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status == 201) {
+        setShowUserForm(false);
+        setSelectedUser(null);
+        fetchUsers();
+        setError("");
+      } else {
+        setError(response.data.error || "Failed to update user.");
       }
-    };
-  
-    const handleUserDelete = async (id: number) => {
-      try {
-        const response = await axios.delete(`/api/users/delete?id=${id}`, {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        });
-  
-        if (response.status == 201) {
-          setUsers(users.filter(user => user.id !== id));
-        } else {
-          setError(response.data.error || "Failed to delete user.");
-        }
-      } catch (err) {
-        console.error("Error deleting user:", err);
-        setError("An unexpected error occurred. Please try again.");
+    } catch (err) {
+      console.error("Error updating user:", err);
+      setError("An unexpected error occurred. Please try again.");
+    }
+  };
+
+  const handleUserDelete = async (id: number) => {
+    try {
+      const response = await axios.delete(`/api/users/delete?id=${id}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status == 201) {
+        setUsers(users.filter((user) => user.id !== id));
+      } else {
+        setError(response.data.error || "Failed to delete user.");
       }
-    };
+    } catch (err) {
+      console.error("Error deleting user:", err);
+      setError("An unexpected error occurred. Please try again.");
+    }
+  };
 
   const fetchVehicles = async () => {
     try {
@@ -402,38 +401,46 @@ const Admin = () => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Navbar />
+    <div className="px-5 py-5 min-h-screen bg-gray-100">
+      <div className=" bg-[#08001C67] w-full flex items-center justify-center border border-[#00CCEE] rounded-[10px] min-h-32 my-auto">
+        <Navbar />
+      </div>
       <div className="container mx-auto px-4 pb-10">
         <h1 className="text-2xl font-bold mt-6">Admin Dashboard</h1>
 
         <div className="mt-6 bg-white shadow-md rounded-md p-4">
-            <h2 className="text-xl font-semibold mb-4">
-              <FontAwesomeIcon icon={faUsersCog} className="mr-2" /> User Management
-            </h2>
-            <button
-              onClick={() => {
-                setSelectedUser(null);
-                setShowUserForm(true);
-              }}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md mb-4"
-            >
-              <FontAwesomeIcon icon={faPlus} className="mr-2" /> Add New User
-            </button>
-            <table className="w-full border-collapse border border-gray-300">
-              <thead>
-                <tr className="bg-gray-200 text-left">
-                  <th className="border border-gray-300 p-2">Name</th>
-                  <th className="border border-gray-300 p-2">Username</th>
-                  <th className="border border-gray-300 p-2">Admin</th>
-                  <th className="border border-gray-300 p-2">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.length > 0 && users.map(user => (
+          <h2 className="text-xl font-semibold mb-4">
+            <FontAwesomeIcon icon={faUsersCog} className="mr-2" /> User
+            Management
+          </h2>
+          <button
+            onClick={() => {
+              setSelectedUser(null);
+              setShowUserForm(true);
+            }}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md mb-4"
+          >
+            <FontAwesomeIcon icon={faPlus} className="mr-2" /> Add New User
+          </button>
+          <table className="w-full border-collapse border border-gray-300">
+            <thead>
+              <tr className="bg-gray-200 text-left">
+                <th className="border border-gray-300 p-2">Name</th>
+                <th className="border border-gray-300 p-2">Username</th>
+                <th className="border border-gray-300 p-2">Admin</th>
+                <th className="border border-gray-300 p-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.length > 0 &&
+                users.map((user) => (
                   <tr key={user.id} className="hover:bg-gray-100">
-                    <td className="border border-gray-300 p-2">{user.nameEn}</td>
-                    <td className="border border-gray-300 p-2">{user.username}</td>
+                    <td className="border border-gray-300 p-2">
+                      {user.nameEn}
+                    </td>
+                    <td className="border border-gray-300 p-2">
+                      {user.username}
+                    </td>
                     <td className="border border-gray-300 p-2">
                       {user ? "Yes" : "No"}
                     </td>
@@ -456,11 +463,11 @@ const Admin = () => {
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
+            </tbody>
+          </table>
+        </div>
 
-                  {/* User Form Popup */}
+        {/* User Form Popup */}
         {showUserForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
             <div className="bg-white p-6 rounded-md shadow-md w-full max-w-lg">
@@ -469,7 +476,10 @@ const Admin = () => {
               </h2>
               {error && (
                 <p className="text-red-500 mb-4">
-                  <FontAwesomeIcon icon={faExclamationCircle} className="mr-2" />
+                  <FontAwesomeIcon
+                    icon={faExclamationCircle}
+                    className="mr-2"
+                  />
                   {error}
                 </p>
               )}
@@ -477,33 +487,44 @@ const Admin = () => {
                 <input
                   name="nameEn"
                   value={selectedUser?.nameEn || ""}
-                  onChange={(e) => setSelectedUser({
-                    ...selectedUser || {} as Profile,
-                    nameEn: e.target.value
-                  })}
+                  onChange={(e) =>
+                    setSelectedUser({
+                      ...(selectedUser || ({} as Profile)),
+                      nameEn: e.target.value,
+                    })
+                  }
                   placeholder="Name (English)"
-                  readOnly={selectedUser?.nameEn !== "" && selectedUser?.nameEn !== undefined}
+                  readOnly={
+                    selectedUser?.nameEn !== "" &&
+                    selectedUser?.nameEn !== undefined
+                  }
                   className="border border-gray-300 p-2 rounded-md w-full"
-                  
                 />
                 <input
                   name="nameJa"
                   value={selectedUser?.nameJa || ""}
-                  onChange={(e) => setSelectedUser({
-                    ...selectedUser || {} as Profile,
-                    nameJa: e.target.value
-                  })}
+                  onChange={(e) =>
+                    setSelectedUser({
+                      ...(selectedUser || ({} as Profile)),
+                      nameJa: e.target.value,
+                    })
+                  }
                   placeholder="Name (Japanese)"
-                  readOnly={selectedUser?.nameJa !== "" && selectedUser?.nameJa !== undefined}
+                  readOnly={
+                    selectedUser?.nameJa !== "" &&
+                    selectedUser?.nameJa !== undefined
+                  }
                   className="border border-gray-300 p-2 rounded-md w-full"
                 />
                 <input
                   name="username"
                   value={selectedUser?.username || ""}
-                  onChange={(e) => setSelectedUser({
-                    ...selectedUser || {} as Profile,
-                    username: e.target.value
-                  })}
+                  onChange={(e) =>
+                    setSelectedUser({
+                      ...(selectedUser || ({} as Profile)),
+                      username: e.target.value,
+                    })
+                  }
                   placeholder="username"
                   className="border border-gray-300 p-2 rounded-md w-full"
                   type="text"
@@ -511,10 +532,12 @@ const Admin = () => {
                 {!selectedUser?.id && (
                   <input
                     name="stringPassword"
-                    onChange={(e) => setSelectedUser({
-                      ...selectedUser || {} as Profile,
-                      stringPassword: e.target.value
-                    })}
+                    onChange={(e) =>
+                      setSelectedUser({
+                        ...(selectedUser || ({} as Profile)),
+                        stringPassword: e.target.value,
+                      })
+                    }
                     placeholder="Password"
                     className="border border-gray-300 p-2 rounded-md w-full"
                     type="password"
@@ -524,9 +547,11 @@ const Admin = () => {
                   <input
                     name="isAdmin"
                     type="checkbox"
-                    onChange={() => setSelectedUser({
-                      ...selectedUser || {} as Profile,
-                    })}
+                    onChange={() =>
+                      setSelectedUser({
+                        ...(selectedUser || ({} as Profile)),
+                      })
+                    }
                     className="border border-gray-300 p-2 rounded-md"
                   />
                   <label>Admin User</label>
@@ -758,134 +783,256 @@ const Admin = () => {
                 </p>
               )}
               <div className="grid grid-cols-2 gap-4">
-                <input
-                  name="title"
-                  value={formData.title}
-                  onChange={handleInputChange}
-                  placeholder="Title"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="price"
-                  value={formData.price}
-                  onChange={handleInputChange}
-                  placeholder="Price"
-                  type="number"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="model"
-                  value={formData.model}
-                  onChange={handleInputChange}
-                  placeholder="Model"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="maker"
-                  value={formData.maker}
-                  onChange={handleInputChange}
-                  placeholder="Maker"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="vehicleType"
-                  value={formData.vehicleType}
-                  onChange={handleInputChange}
-                  placeholder="Vehicle Type"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="fuel"
-                  value={formData.fuel}
-                  onChange={handleInputChange}
-                  placeholder="Fuel Type"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="drive"
-                  value={formData.drive}
-                  onChange={handleInputChange}
-                  placeholder="Drive Type"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="condition"
-                  value={formData.condition}
-                  onChange={handleInputChange}
-                  placeholder="Condition"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="color"
-                  value={formData.color}
-                  onChange={handleInputChange}
-                  placeholder="Color"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="grade"
-                  value={formData.grade}
-                  onChange={handleInputChange}
-                  placeholder="Grade"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="chassieNumber"
-                  value={formData.chassieNumber}
-                  onChange={handleInputChange}
-                  placeholder="Chassie Number"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="Shaken"
-                  value={formData.Shaken}
-                  onChange={handleInputChange}
-                  placeholder="Shaken"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="manufactureYear"
-                  value={formData.manufactureYear}
-                  onChange={handleInputChange}
-                  placeholder="Manufacture Year"
-                  type="date"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="mileage"
-                  value={formData.mileage}
-                  onChange={handleInputChange}
-                  placeholder="Mileage"
-                  type="number"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="maxPassengers"
-                  value={formData.maxPassengers}
-                  onChange={handleInputChange}
-                  placeholder="Max Passengers"
-                  type="number"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col">
+                  <label
+                    className="text-slate-600 font-semibold mb-5"
+                    htmlFor="title"
+                  >
+                    Title
+                  </label>
                   <input
-                    name="isAvailable"
-                    type="checkbox"
-                    checked={formData.isAvailable || false}
+                    name="title"
+                    value={formData.title}
                     onChange={handleInputChange}
-                    className="border border-gray-300 p-2 rounded-md"
+                    className="border border-gray-300 p-2 rounded-md w-full"
                   />
-                  <label>Is Available</label>
                 </div>
-                <div className="flex items-center gap-2">
+
+                <div className="flex flex-col">
+                  <label
+                    className="text-slate-600 font-semibold mb-5"
+                    htmlFor="price"
+                  >
+                    Price
+                  </label>
                   <input
-                    name="isPublished"
-                    type="checkbox"
-                    checked={formData.isPublished || false}
+                    name="price"
+                    value={formData.price}
                     onChange={handleInputChange}
-                    className="border border-gray-300 p-2 rounded-md"
+                    type="number"
+                    className="border border-gray-300 p-2 rounded-md w-full"
                   />
-                  <label>Is Published</label>
+                </div>
+
+                <div className="flex flex-col">
+                  <label
+                    className="text-slate-600 font-semibold mb-5"
+                    htmlFor="model"
+                  >
+                    Model
+                  </label>
+                  <input
+                    name="model"
+                    value={formData.model}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 p-2 rounded-md w-full"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label
+                    className="text-slate-600 font-semibold mb-5"
+                    htmlFor="maker"
+                  >
+                    Maker
+                  </label>
+                  <input
+                    name="maker"
+                    value={formData.maker}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 p-2 rounded-md w-full"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label
+                    className="text-slate-600 font-semibold mb-5"
+                    htmlFor="vehicleType"
+                  >
+                    Vehicle Type
+                  </label>
+                  <input
+                    name="vehicleType"
+                    value={formData.vehicleType}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 p-2 rounded-md w-full"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label
+                    className="text-slate-600 font-semibold mb-5"
+                    htmlFor="fuel"
+                  >
+                    Fuel Type
+                  </label>
+                  <input
+                    name="fuel"
+                    value={formData.fuel}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 p-2 rounded-md w-full"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label
+                    className="text-slate-600 font-semibold mb-5"
+                    htmlFor="drive"
+                  >
+                    Drive Type
+                  </label>
+                  <input
+                    name="drive"
+                    value={formData.drive}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 p-2 rounded-md w-full"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label
+                    className="text-slate-600 font-semibold mb-5"
+                    htmlFor="condition"
+                  >
+                    Condition
+                  </label>
+                  <input
+                    name="condition"
+                    value={formData.condition}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 p-2 rounded-md w-full"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label
+                    className="text-slate-600 font-semibold mb-5"
+                    htmlFor="color"
+                  >
+                    Color
+                  </label>
+                  <input
+                    name="color"
+                    value={formData.color}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 p-2 rounded-md w-full"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label
+                    className="text-slate-600 font-semibold mb-5"
+                    htmlFor="grade"
+                  >
+                    Grade
+                  </label>
+                  <input
+                    name="grade"
+                    value={formData.grade}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 p-2 rounded-md w-full"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label
+                    className="text-slate-600font-semibold mb-5"
+                    htmlFor="chassieNumber"
+                  >
+                    Chassie Number
+                  </label>
+                  <input
+                    name="chassieNumber"
+                    value={formData.chassieNumber}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 p-2 rounded-md w-full"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label
+                    className="text-slate-600 font-semibold mb-5"
+                    htmlFor="Shaken"
+                  >
+                    Shaken
+                  </label>
+                  <input
+                    name="Shaken"
+                    value={formData.Shaken}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 p-2 rounded-md w-full"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label
+                    className="text-slate-600 font-semibold mb-5"
+                    htmlFor="manufactureYear"
+                  >
+                    Manufacture Year
+                  </label>
+                  <input
+                    name="manufactureYear"
+                    value={formData.manufactureYear}
+                    onChange={handleInputChange}
+                    type="date"
+                    className="border border-gray-300 p-2 rounded-md w-full"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label
+                    className="text-slate-600 font-semibold mb-5"
+                    htmlFor="mileage"
+                  >
+                    Mileage
+                  </label>
+                  <input
+                    name="mileage"
+                    value={formData.mileage}
+                    onChange={handleInputChange}
+                    type="number"
+                    className="border border-gray-300 p-2 rounded-md w-full"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label
+                    className="text-slate-600 font-semibold mb-5"
+                    htmlFor="maxPassengers"
+                  >
+                    Max Passengers
+                  </label>
+                  <input
+                    name="maxPassengers"
+                    value={formData.maxPassengers}
+                    onChange={handleInputChange}
+                    type="number"
+                    className="border border-gray-300 p-2 rounded-md w-full"
+                  />
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="flex items-center gap-2">
+                    <input
+                      name="isAvailable"
+                      type="checkbox"
+                      checked={formData.isAvailable || false}
+                      onChange={handleInputChange}
+                      className="border border-gray-300 p-2 rounded-md"
+                    />
+                    <label>Is Available</label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      name="isPublished"
+                      type="checkbox"
+                      checked={formData.isPublished || false}
+                      onChange={handleInputChange}
+                      className="border border-gray-300 p-2 rounded-md"
+                    />
+                    <label>Is Published</label>
+                  </div>
                 </div>
               </div>
               <div className="mt-4">
@@ -900,7 +1047,9 @@ const Admin = () => {
                       className="w-24 h-24 object-cover rounded-md"
                     />
                     <button
-                      onClick={() => setFormData({ ...formData, previewUrl: "" })}
+                      onClick={() =>
+                        setFormData({ ...formData, previewUrl: "" })
+                      }
                       className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
                     >
                       <FontAwesomeIcon icon={faTimes} className="w-3 h-3" />
@@ -934,7 +1083,7 @@ const Admin = () => {
                 </label>
                 <div
                   {...getRootProps()}
-                  className={`p-4 border-2 border-dashed rounded-md ${
+                  className={`p-10 border-2 border-dashed rounded-md ${
                     isDragActive ? "border-blue-500" : "border-gray-300"
                   }`}
                 >
@@ -942,10 +1091,15 @@ const Admin = () => {
                   {isDragActive ? (
                     <p>Drop the files here...</p>
                   ) : (
-                    <p>
-                      Drag &apos;n&apos; drop some files here, or click to
-                      select files
-                    </p>
+                    <div className="flex items-center justify-center text-center">
+                      <FontAwesomeIcon
+                        icon={faExclamationCircle}
+                        className="mr-2 text-2xl text-gray-500"
+                      />
+                      <p className="text-red-600 font-bold">
+                        Drag and drop some files here, or click to select files
+                      </p>
+                    </div>
                   )}
                 </div>
                 <div className="flex flex-wrap gap-2 mt-4">

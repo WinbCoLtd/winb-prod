@@ -4,6 +4,7 @@ import { useLocale } from "next-intl";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 function debounce(func: (...args: any[]) => void, wait: number) {
   let timeout: NodeJS.Timeout;
@@ -53,25 +54,59 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="z-50 p-4  bg-gray-100 w-full flex justify-between items-center bg-transparent text-xl text-white">
-      <Link href="/" locale={locale} className="font-extrabold text-3xl">
-        WINB
-      </Link>
+    <nav className="z-50 p-4  bg-gray-100 w-full flex justify-between items-center bg-transparent text-xl text-slate-400 font-bold">
+      <div className="flex flex-col items-center">
+        <Image
+          src="/home/logo1.jpg"
+          alt="Logo"
+          width={96}
+          height={96}
+          className="w-26 lg:w-26 md-w[20] h-auto mx-auto mb-6"
+        />
+        <Link
+          href="/"
+          locale={locale}
+          className="font-extrabold text-xl text-white"
+        >
+          株式会社 WIN-B
+        </Link>
+      </div>
+
       {!isMobile && (
-        <nav className="flex items-center justify-center gap-4">
-          <Link href="/" className="hover:underline">
+        <nav className="flex items-center justify-center gap-4 text-white">
+          <Link
+            href="/"
+            className="hover:underline"
+          
+          >
             ホーム
           </Link>
-          <Link href="/companyProfile" className="hover:underline">
+          <Link
+            href="/companyProfile"
+            className="hover:underline"
+            
+          >
             会社概要
           </Link>
-          <Link href="/vehicleList" className="hover:underline">
+          <Link
+            href="/vehicleList"
+            className="hover:underline"
+            
+          >
             車両一覧
           </Link>
-          <Link href="/otherService" className="hover:underline">
+          <Link
+            href="/otherService"
+            className="hover:underline"
+           
+          >
             その他のサービス
           </Link>
-          <Link href="/contact" className="hover:underline">
+          <Link
+            href="/contact"
+            className="hover:underline"
+            
+          >
             お問い合わせ
           </Link>
         </nav>
