@@ -21,9 +21,18 @@ export default function Navbar() {
   const [isMobile, setIsMobile] = useState(false);
   const [toggle, setIsToggled] = useState(false);
 
+  const navbarLinks = {
+    home: locale === "en" ? "Home" : "ホーム",
+    about: locale === "en" ? "About" : "アバウト",
+    vehicleList: locale === "en" ? "Vehicle List" : "車両一覧",
+    inquiry: locale === "en" ? "Inquiry" : "お問い合わせ",
+  };
+
+  const localeToggleText = locale === "en" ? "日本語" : "English";
+
   useEffect(() => {
     setIsMobile(() => window.innerWidth <= 768)
-  }, [])
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -54,43 +63,41 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="p-4  bg-gray-100 w-full flex justify-between items-center bg-transparent text-xl text-white">
+    <nav className="p-4 bg-gray-100 w-full flex justify-between items-center bg-transparent text-xl text-white">
       <Link href="/" locale={locale} className="font-extrabold text-3xl">
         WINB
       </Link>
       {!isMobile && (
         <nav className="flex items-center justify-center gap-4">
           <Link href="/" className="hover:underline">
-            ホーム
+            {navbarLinks.home}
           </Link>
           <Link href="/companyProfile" className="hover:underline">
-            会社概要
+            {navbarLinks.about}
           </Link>
           <Link href="/vehicleList" className="hover:underline">
-            車両一覧
+            {navbarLinks.vehicleList}
           </Link>
           <Link href="/inquiry" className="hover:underline">
-            お問い合わせ
+            {navbarLinks.inquiry}
           </Link>
         </nav>
       )}
       {isMobile && (
         <nav
-          className={`absolute top-20 bg-[#0000009c] rounded-2xl p-5 right-5 flex-col items-center justify-center gap-4 ${
-            toggle ? "flex" : "hidden"
-          }`}
+          className={`absolute top-20 bg-[#0000009c] rounded-2xl p-5 right-5 flex-col items-center justify-center gap-4 ${toggle ? "flex" : "hidden"}`}
         >
           <Link href="/" className="hover:underline">
-            ホーム
+            {navbarLinks.home}
           </Link>
           <Link href="/about" className="hover:underline">
-            会社概要
+            {navbarLinks.about}
           </Link>
           <Link href="/allVehicles" className="hover:underline">
-            車両一覧
+            {navbarLinks.vehicleList}
           </Link>
           <Link href="/inquiry" className="hover:underline">
-            お問い合わせ
+            {navbarLinks.inquiry}
           </Link>
         </nav>
       )}
@@ -99,14 +106,10 @@ export default function Navbar() {
           onClick={() => handleLocaleChange(locale === "en" ? "ja" : "en")}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
-          {locale === "en" ? "日本語" : "English"}
+          {localeToggleText}
         </button>
         {isMobile && (
-          <Menu
-          size={40}
-          onClick={handleToggle}
-          className="mx-2 cursor-pointer"
-        />
+          <Menu size={40} onClick={handleToggle} className="mx-2 cursor-pointer" />
         )}
       </div>
     </nav>

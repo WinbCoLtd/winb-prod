@@ -38,10 +38,6 @@ const applyManufactureYearFilter = (value: Date[]) => ({
   lte: new Date(value[1]),
 });
 
-const applyStringArrayFilter = (value: string[] | number[] | unknown) => ({ in: value });
-
-const applyStringFilter = (value: string) => ({ equals: value });
-
 export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.url);
@@ -51,42 +47,65 @@ export async function GET(req: NextRequest) {
     const filters: QueryType["filters"] = JSON.parse(
       searchParams.get("filters") || "{}"
     );
+
+    console.log('search', search);
+    console.log('search', filters);
+    
     const currentPage = parseInt(searchParams.get("currentPage") || "1", 10) || 1;
 
     const itemsPerPage = 50;
     const skip = (currentPage - 1) * itemsPerPage;
 
-    const whereClause: any = {};
+    const andConditions: Prisma.VehicleWhereInput[] = [];
+
+    // Handle search conditions (title OR description)
     if (search && search.trim() !== "") {
-      whereClause.OR = [
-        { title: { contains: search } },
-        { description: { contains: search} },
-      ];
+      andConditions.push({
+        OR: [
+          { title: { contains: search } },
+          { description: { contains: search } },
+        ],
+      });
     }
 
+    // Handle filter conditions
     if (filters && Object.keys(filters).length > 0) {
-      // Iterate over valid `VehicleWhereInput` keys
-      for (const [key, value] of Object.entries(filters) as [keyof Prisma.VehicleWhereInput, any][]) {
-        if (value !== undefined && value !== null) {
-          if (Array.isArray(value)) {
-            if (key === "price") {
-              whereClause[key] = applyPriceFilter(value as number[]);
-            } else if (key === "mileage") {
-              whereClause[key] = applyMileageFilter(value as number[]);
-            } else if (key === "manufactureYear") {
-              whereClause[key] = applyManufactureYearFilter(value as Date[]);
-            } else {
-              whereClause[key] = applyStringArrayFilter(value);
-            }
-          } else {
-            whereClause[key] = applyStringFilter(value as string);
-          }
+      for (const [key, value] of Object.entries(filters)) {
+        if (value === undefined || value === null || (Array.isArray(value) && value.length === 0)) continue;
+
+        let filterCondition: Prisma.VehicleWhereInput;
+
+        // Handle range filters
+        if (key === "price" && Array.isArray(value) && value.length === 2) {
+          filterCondition = { price: applyPriceFilter(value as number[]) };
+        } 
+        else if (key === "mileage" && Array.isArray(value) && value.length === 2) {
+          filterCondition = { mileage: applyMileageFilter(value as number[]) };
+        } 
+        else if (key === "manufactureYear" && Array.isArray(value) && value.length === 2) {
+          filterCondition = { manufactureYear: applyManufactureYearFilter(value as Date[]) };
         }
+        // Handle array filters (OR within group)
+        else if (Array.isArray(value)) {
+          filterCondition = {
+            OR: value.map((val) => ({ [key]: { contains: val } })),
+          };
+        }
+        // Handle single-value filters
+        else {
+          filterCondition = { [key]: { contains: value } };
+        }
+
+        andConditions.push(filterCondition);
       }
     }
 
-    console.log(whereClause);
-    
+
+    const whereClause: Prisma.VehicleWhereInput = 
+      andConditions.length > 0 ? { OR: andConditions } : {};
+
+    console.log("Final Where Clause:", JSON.stringify(whereClause, null, 2));
+
     const [vehicles, totalVehicles] = await Promise.all([
       prisma.vehicle.findMany({
         where: whereClause,
@@ -96,7 +115,7 @@ export async function GET(req: NextRequest) {
       prisma.vehicle.count({ where: whereClause }),
     ]);
 
-    const totalPages = totalVehicles > 0 ? Math.ceil(totalVehicles / itemsPerPage) : 1; 
+    const totalPages = Math.ceil(totalVehicles / itemsPerPage) || 1;
 
     return NextResponse.json(
       {
@@ -108,16 +127,12 @@ export async function GET(req: NextRequest) {
           totalVehicles,
         },
       },
-      {
-        status: 200,
-      }
+      { status: 200 }
     );
   } catch (error) {
-    console.error("Error Fetching vehicles:", error);
+    console.error("Error fetching vehicles:", error);
     return NextResponse.json(
-      {
-        error: "An error occurred while fetching vehicles.",
-      },
+      { error: "An error occurred while fetching vehicles." },
       { status: 500 }
     );
   }

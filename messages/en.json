@@ -15,5 +15,22 @@
     },
     "ProfilePage": {
         "title": "Profile"
-    }
+    },
+        "hero": {
+          "title": "A Trusted Vehicle Marketplace",
+          "makers": "Makers",
+          "models": "Models",
+          "price": "Price",
+          "searchButton": "Search",
+          "viewOnMap": "View on Map",
+          "clickToFollowLink": "Click to follow the link"
+        },
+        "price": {
+          "min": "Min",
+          "max": "Max"
+        },
+        "location": {
+          "altText": "Location"
+        }
+      
 }
