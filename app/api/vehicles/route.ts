@@ -47,6 +47,10 @@ export async function GET(req: NextRequest) {
     const filters: QueryType["filters"] = JSON.parse(
       searchParams.get("filters") || "{}"
     );
+
+    console.log('search', search);
+    console.log('search', filters);
+    
     const currentPage = parseInt(searchParams.get("currentPage") || "1", 10) || 1;
 
     const itemsPerPage = 50;
@@ -84,20 +88,21 @@ export async function GET(req: NextRequest) {
         // Handle array filters (OR within group)
         else if (Array.isArray(value)) {
           filterCondition = {
-            OR: value.map((val) => ({ [key]: { equals: val } })),
+            OR: value.map((val) => ({ [key]: { contains: val } })),
           };
         }
         // Handle single-value filters
         else {
-          filterCondition = { [key]: { equals: value } };
+          filterCondition = { [key]: { contains: value } };
         }
 
         andConditions.push(filterCondition);
       }
     }
 
+
     const whereClause: Prisma.VehicleWhereInput = 
-      andConditions.length > 0 ? { AND: andConditions } : {};
+      andConditions.length > 0 ? { OR: andConditions } : {};
 
     console.log("Final Where Clause:", JSON.stringify(whereClause, null, 2));
 

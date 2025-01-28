@@ -15,5 +15,21 @@
     },
     "ProfilePage": {
         "title": "プロフィール"
-    }
+    },
+    "hero": {
+    "title": "信頼できる車両マーケットプレイス。",
+    "makers": "メーカー",
+    "models": "モデル",
+    "price": "価格",
+    "searchButton": "検索",
+    "viewOnMap": "地図で表示",
+    "clickToFollowLink": "リンクをクリック"
+  },
+  "price": {
+    "min": "最小",
+    "max": "最大"
+  },
+  "location": {
+    "altText": "場所"
+  }
 }
