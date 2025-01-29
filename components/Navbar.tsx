@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import OtherService from "@/app/[locale]/otherService/page";
 
 function debounce(func: (...args: any[]) => void, wait: number) {
   let timeout: NodeJS.Timeout;
@@ -25,7 +26,8 @@ export default function Navbar() {
     home: locale === "en" ? "Home" : "ホーム",
     about: locale === "en" ? "About" : "アバウト",
     vehicleList: locale === "en" ? "Vehicle List" : "車両一覧",
-    inquiry: locale === "en" ? "Inquiry" : "お問い合わせ",
+    otherService: locale === "en" ? "Other Service" : "その他サービス",
+    contact: locale === "en" ? "Inquiry" : "お問い合わせ",
   };
 
   const localeToggleText = locale === "en" ? "日本語" : "English";
@@ -62,18 +64,7 @@ export default function Navbar() {
     router.push(`/${newLocale}/${path}`);
   };
 
-  const navbarLinks = {
-    home: locale === "en" ? "Home" : "ホーム",
-
-    about: locale === "en" ? "About" : "アバウト",
-
-    vehicleList: locale === "en" ? "Vehicle List" : "車両一覧",
-
-    otherService: locale === "en" ? "Other Service" : "その他のサービス",
-
-    contact: locale === "en" ? "Contact" : "お問い合わせ",
-  };
-
+  
   return (
     <nav className="p-4 bg-gray-100 w-full flex justify-between items-center bg-transparent text-xl text-white">
       <Link href="/" locale={locale} className="font-extrabold text-3xl">
@@ -90,8 +81,11 @@ export default function Navbar() {
           <Link href="/vehicleList" className="hover:underline">
             {navbarLinks.vehicleList}
           </Link>
-          <Link href="/inquiry" className="hover:underline">
-            {navbarLinks.inquiry}
+          <Link href="/otherService" className="hover:underline">
+            {navbarLinks.otherService}
+          </Link>
+          <Link href="/contact" className="hover:underline">
+            {navbarLinks.contact}
           </Link>
         </nav>
       )}
@@ -108,8 +102,11 @@ export default function Navbar() {
           <Link href="/allVehicles" className="hover:underline">
             {navbarLinks.vehicleList}
           </Link>
-          <Link href="/inquiry" className="hover:underline">
-            {navbarLinks.inquiry}
+          <Link href="/otherService" className="hover:underline">
+            {navbarLinks.otherService}
+          </Link>
+          <Link href="/contact" className="hover:underline">
+            {navbarLinks.contact}
           </Link>
         </nav>
       )}

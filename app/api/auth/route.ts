@@ -48,7 +48,7 @@ export async function POST(req: Request) {
     }
 
     const token = await getToken(admin?.id as number);
-    return NextResponse.json({ token: token, id: admin?.id }, { status: 200 });
+    return NextResponse.json({ token: token, id: admin?.id, role: "admin" }, { status: 200 });
   } catch (error) {
     console.error("Error occured while interacting with database : ", error);
     return NextResponse.json("Internal server error", { status: 500 });

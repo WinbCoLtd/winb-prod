@@ -34,7 +34,7 @@ export async function POST (req: NextRequest) {
             }
         })
 
-        return NextResponse.json(newAdmin, {status: 200})
+        return NextResponse.json(newAdmin, {status: 201})
     } catch (error) { // No need for : any here
         console.error("Error creating admin:", error);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

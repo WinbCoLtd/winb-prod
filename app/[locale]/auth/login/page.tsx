@@ -32,7 +32,9 @@ const Login = () => {
         const res = await response.json();
          localStorage.setItem('token', res.token)
          localStorage.setItem('id', res.id)
-        // Handle success (e.g., save token or redirect)
+         if(res.role){
+          localStorage.setItem('role',res.role)
+         }
         router.push('/admin'); // Redirect to the dashboard or home
       } else {
         const { error } = await response.json();

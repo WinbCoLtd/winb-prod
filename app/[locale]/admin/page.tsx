@@ -14,6 +14,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
+import jwt, { JwtPayload, JsonWebTokenError } from "jsonwebtoken";
+import { useRouter } from "next/navigation";
 
 interface ImageData {
   id: number;
@@ -95,21 +97,27 @@ const Admin = () => {
   const [selectedUser, setSelectedUser] = useState<Profile | null>(null);
   const [users, setUsers] = useState<Profile[]>([]);
   const [showUserForm, setShowUserForm] = useState(false);
+  const [role, setRole] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
+    setIsLoading(true);
     fetchVehicles();
     const token = localStorage.getItem("token");
+    const roles = localStorage.getItem("role");
     if (!token) {
-      console.log("error token not found");
+      router.push("/auth/login");
     } else {
       setToken(token);
+      setRole(roles as string);
       console.log(token);
       fetchProfiles();
       console.log(profiles);
       fetchUsers();
+      setIsLoading(false);
     }
   }, []);
-
   // Add this new fetch function
   const fetchUsers = async () => {
     try {
@@ -160,7 +168,7 @@ const Admin = () => {
 
   const handleUserDelete = async (id: number) => {
     try {
-      const response = await axios.delete(`/api/users/delete?id=${id}`, {
+      const response = await axios.delete(`/api/users/authRemove?id=${id}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -364,7 +372,7 @@ const Admin = () => {
         },
       });
 
-      if (response.data.success) {
+      if (response.status === 201) {
         setShowProfileForm(false);
         setError("");
         fetchProfiles();
@@ -399,7 +407,14 @@ const Admin = () => {
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  if (isLoading) {
+    return <h1>Loading.....</h1>;
+  }
 
+  const handleLogout = () => {
+    localStorage.clear();
+    router.push("/auth/login");
+  };
   return (
     <div className="px-5 py-5 min-h-screen bg-gray-100">
       <div className=" bg-[#08001C67] w-full flex items-center justify-center border border-[#00CCEE] rounded-[10px] min-h-32 my-auto">
@@ -408,64 +423,66 @@ const Admin = () => {
       <div className="container mx-auto px-4 pb-10">
         <h1 className="text-2xl font-bold mt-6">Admin Dashboard</h1>
 
-        <div className="mt-6 bg-white shadow-md rounded-md p-4">
-          <h2 className="text-xl font-semibold mb-4">
-            <FontAwesomeIcon icon={faUsersCog} className="mr-2" /> User
-            Management
-          </h2>
-          <button
-            onClick={() => {
-              setSelectedUser(null);
-              setShowUserForm(true);
-            }}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md mb-4"
-          >
-            <FontAwesomeIcon icon={faPlus} className="mr-2" /> Add New User
-          </button>
-          <table className="w-full border-collapse border border-gray-300">
-            <thead>
-              <tr className="bg-gray-200 text-left">
-                <th className="border border-gray-300 p-2">Name</th>
-                <th className="border border-gray-300 p-2">Username</th>
-                <th className="border border-gray-300 p-2">Admin</th>
-                <th className="border border-gray-300 p-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.length > 0 &&
-                users.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-100">
-                    <td className="border border-gray-300 p-2">
-                      {user.nameEn}
-                    </td>
-                    <td className="border border-gray-300 p-2">
-                      {user.username}
-                    </td>
-                    <td className="border border-gray-300 p-2">
-                      {user ? "Yes" : "No"}
-                    </td>
-                    <td className="border border-gray-300 p-2">
-                      <button
-                        onClick={() => {
-                          setSelectedUser(user);
-                          setShowUserForm(true);
-                        }}
-                        className="px-3 py-1 bg-yellow-400 text-white rounded-md mr-2"
-                      >
-                        <FontAwesomeIcon icon={faEdit} />
-                      </button>
-                      <button
-                        onClick={() => handleUserDelete(user.id)}
-                        className="px-3 py-1 bg-red-500 text-white rounded-md"
-                      >
-                        <FontAwesomeIcon icon={faTrash} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
+        {role === "admin" && (
+          <div className="mt-6 bg-white shadow-md rounded-md p-4">
+            <h2 className="text-xl font-semibold mb-4">
+              <FontAwesomeIcon icon={faUsersCog} className="mr-2" /> User
+              Management
+            </h2>
+            <button
+              onClick={() => {
+                setSelectedUser(null);
+                setShowUserForm(true);
+              }}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md mb-4"
+            >
+              <FontAwesomeIcon icon={faPlus} className="mr-2" /> Add New User
+            </button>
+            <table className="w-full border-collapse border border-gray-300">
+              <thead>
+                <tr className="bg-gray-200 text-left">
+                  <th className="border border-gray-300 p-2">Name</th>
+                  <th className="border border-gray-300 p-2">Username</th>
+                  <th className="border border-gray-300 p-2">Admin</th>
+                  <th className="border border-gray-300 p-2">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.length > 0 &&
+                  users.map((user) => (
+                    <tr key={user.id} className="hover:bg-gray-100">
+                      <td className="border border-gray-300 p-2">
+                        {user.nameEn}
+                      </td>
+                      <td className="border border-gray-300 p-2">
+                        {user.username}
+                      </td>
+                      <td className="border border-gray-300 p-2">
+                        {user ? "Yes" : "No"}
+                      </td>
+                      <td className="border border-gray-300 p-2">
+                        <button
+                          onClick={() => {
+                            setSelectedUser(user);
+                            setShowUserForm(true);
+                          }}
+                          className="px-3 py-1 bg-yellow-400 text-white rounded-md mr-2"
+                        >
+                          <FontAwesomeIcon icon={faEdit} />
+                        </button>
+                        <button
+                          onClick={() => handleUserDelete(user.id)}
+                          className="px-3 py-1 bg-red-500 text-white rounded-md"
+                        >
+                          <FontAwesomeIcon icon={faTrash} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        )}
 
         {/* User Form Popup */}
         {showUserForm && (
@@ -494,10 +511,6 @@ const Admin = () => {
                     })
                   }
                   placeholder="Name (English)"
-                  readOnly={
-                    selectedUser?.nameEn !== "" &&
-                    selectedUser?.nameEn !== undefined
-                  }
                   className="border border-gray-300 p-2 rounded-md w-full"
                 />
                 <input
@@ -510,10 +523,6 @@ const Admin = () => {
                     })
                   }
                   placeholder="Name (Japanese)"
-                  readOnly={
-                    selectedUser?.nameJa !== "" &&
-                    selectedUser?.nameJa !== undefined
-                  }
                   className="border border-gray-300 p-2 rounded-md w-full"
                 />
                 <input
@@ -543,19 +552,7 @@ const Admin = () => {
                     type="password"
                   />
                 )}
-                <div className="flex items-center gap-2">
-                  <input
-                    name="isAdmin"
-                    type="checkbox"
-                    onChange={() =>
-                      setSelectedUser({
-                        ...(selectedUser || ({} as Profile)),
-                      })
-                    }
-                    className="border border-gray-300 p-2 rounded-md"
-                  />
-                  <label>Admin User</label>
-                </div>
+               
               </div>
               <div className="flex justify-end mt-6">
                 <button
@@ -614,6 +611,7 @@ const Admin = () => {
                     >
                       <FontAwesomeIcon icon={faTrash} />
                     </button>
+                    <button onClick={() => handleLogout()}>Logout</button>
                   </td>
                 </tr>
               )}
@@ -1012,7 +1010,7 @@ const Admin = () => {
                   />
                 </div>
 
-                <div className="flex gap-4">
+                {/* <div className="flex gap-4">
                   <div className="flex items-center gap-2">
                     <input
                       name="isAvailable"
@@ -1033,7 +1031,7 @@ const Admin = () => {
                     />
                     <label>Is Published</label>
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="mt-4">
                 <label className="block font-medium mb-2">
