@@ -16,8 +16,7 @@ const WhyToChooseUs = () => {
           className="object-cover object-center"
         />
       ),
-      title:
-        "Reliable Financing Solutions/信頼できるファイナンシングソリューション",
+      title: "Reliable Financing Solutions/信頼できるファイナンシングソリューション",
       description:
         "Enjoy stress-free financing with options tailored to your needs, helping you save more on your vehicle./ニーズに合わせたオプションでストレスフリーなファイナンシングをお楽しみいただき、車両購入においてさらに節約できます。",
     },
@@ -77,19 +76,18 @@ const WhyToChooseUs = () => {
             className="border p-3 border-black rounded-lg w-72 h-60 mx-auto flex flex-col items-start"
           >
             {card.icon}
-            <h3 className="text-xl font-semibold">
+            <h3 className="text-2xl font-semibold">
               {/* Split by comma (',') for title */}
               {local === "en"
                 ? card.title.split("/")[0] // English title (first part)
                 : card.title.split("/")[1] || card.title.split("/")[0]}{" "}
               {/* Fallback to first part (English) if Japanese is missing */}
             </h3>
-            <p className="text-[16px] font-medium text-justify mt-4">
+            <p className="text-lg font-medium text-justify mt-4">
               {/* Split by '/' for description */}
               {local === "en"
                 ? card.description.split("/")[0] // English description (first part)
-                : card.description.split("/")[1] ||
-                  card.description.split("/")[0]}{" "}
+                : card.description.split("/")[1] || card.description.split("/")[0]}{" "}
               {/* Fallback to English if Japanese is missing */}
             </p>
           </div>

@@ -1,5 +1,5 @@
-// /* eslint-disable @typescript-eslint/no-explicit-any */
-// 'use client';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
 // import React, { useEffect, useState } from "react";
 // import Navbar from "../Navbar";
@@ -250,8 +250,8 @@ type SearchType = {
   models: string[];
 };
 
-function HerosSection() {
-  const [searchData, setSearchData] = useState<SearchType | null>(null);
+function HeroSection() {
+  const [searchData, setSearchData] = useState<searchType>();
   const [currentSelectedPrice, setCurrentSelectedPrice] = useState({
     min: 300,
     max: 1000,
@@ -261,7 +261,6 @@ function HerosSection() {
   const [toggle, setToggle] = useState(false);
   const [locationAlt, setLocationAlt] = useState(false);
   const router = useRouter();
-  const dropdownRef = useRef<HTMLDivElement>(null); // Reference to the dropdown container
   const locale = useLocale();
 
   const displayPriceRangers = () => {
@@ -275,26 +274,44 @@ function HerosSection() {
     }));
   };
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      dropdownRef.current &&
-      !dropdownRef.current.contains(event.target as Node)
-    ) {
-      setToggle(false); // Close the dropdown if the click is outside
+  const displaylocationAlt = () => {
+    setLocationAlt(!locationAlt);
+  };
+
+  const fetchSearchData = async () => {
+    try {
+      const res = await axios.get("api/searchData/");
+      if (res.status === 200) {
+        setSearchData(res.data);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const redirectToSearchResultPage = () => {
-    const queryParams = new URLSearchParams();
-    if (currentSelectedMaker) queryParams.append("maker", currentSelectedMaker);
-    if (currentSelectedModel) queryParams.append("model", currentSelectedModel);
-    if (currentSelectedPrice.min >= 0)
-      queryParams.append("minPrice", currentSelectedPrice.min.toString());
-    if (currentSelectedPrice.max > 0)
-      queryParams.append("maxPrice", currentSelectedPrice.max.toString());
+    const queryParams = [];
 
-    const path = `/vehicleList?${queryParams.toString()}`;
-    console.log("Redirecting to:", path);
+    if (currentSelectedMaker !== "") {
+      queryParams.push(`maker=${currentSelectedMaker}`);
+    }
+
+    if (currentSelectedModel !== "") {
+      queryParams.push(`model=${currentSelectedModel}`);
+    }
+
+    if (currentSelectedPrice.min >= 0) {
+      queryParams.push(`minPrice=${currentSelectedPrice.min}`);
+    }
+
+    if (currentSelectedPrice.max <= 1000) {
+      queryParams.push(`maxPrice=${currentSelectedPrice.max}`);
+    }
+
+    const path = `/vehicleList${
+      queryParams.length > 0 ? "?" + queryParams.join("&") : ""
+    }`;
+
     router.push(path);
   };
 
@@ -313,13 +330,6 @@ function HerosSection() {
     fetchSearchData();
   }, []);
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   return (
     <div className="relative w-full min-h-[80vh] flex flex-col md:px-12 xl:px-56 mx-auto bg-hero-image pb-10 bg-cover object-center bg-center">
       <Navbar />
@@ -329,9 +339,7 @@ function HerosSection() {
             ? "Reliable Vehicle Marketplace"
             : "信頼できる車両マーケットプレイス。"}
         </h1>
-
-        <div className="flex flex-col md:flex-row flex-wrap md:flex-nowrap items-center md:items-end justify-between bg-white max-w-[770px] w-full rounded-2xl min-w-80 p-4 gap-4 text-[#1f1f1f] font-semibold text-lg">
-          {/* Makers Dropdown */}
+        <div className="flex  flex-col md:flex-row flex-wrap md:flex-nowrap items-center md:items-end justify-between bg-white max-w-[1070px] w-full rounded-2xl min-w-80 p-4 gap-4 text-[#1f1f1f] font-semibold text-lg">
           <div className="flex flex-col items-start flex-1 w-full">
             <label htmlFor="makers" className="text-sm mb-2">
               {locale === "en" ? "Makers" : "メーカー"}
@@ -384,19 +392,18 @@ function HerosSection() {
                   ? "All Models"
                   : "利用可能なメーカーはありません"}
               </option>
-
               {searchData && searchData.models.length > 0 ? (
                 searchData.models.map((model, index) => {
-                  const modelParts = model.split(",");
+                  const modelParts = model.split(",")
                   return (
                     <option value={model} key={index}>
-                      {locale === "en"
+                    {locale === "en"
                         ? modelParts[0]
                         : modelParts[1]?.length > 0
                         ? modelParts[1]
                         : modelParts[0]}
                     </option>
-                  );
+                  )
                 })
               ) : (
                 <option value="">
@@ -481,30 +488,32 @@ function HerosSection() {
         </div>
       </div>
 
-      <Link
-        href={"https://maps.app.goo.gl/iwuc6WUC8JdKwV2J6?g_st=iw"}
-        target="_blank"
-        rel="noopener noreferrer"
+      <button
+        onMouseEnter={displaylocationAlt}
+        onMouseLeave={displaylocationAlt}
+        onTouchStart={displaylocationAlt}
+        onTouchEnd={displaylocationAlt}
+        className=" gap-2 font-bold text-black text-sm flex items-center justify-center rounded-lg md:bg-white md:w-44 min-h-14 h-14 absolute bottom-2 right-5 "
       >
-        <button
-          onMouseEnter={() => setLocationAlt(true)}
-          onMouseLeave={() => setLocationAlt(false)}
-          onTouchStart={() => setLocationAlt(true)}
-          onTouchEnd={() => setLocationAlt(false)}
-          className="gap-2 font-bold text-black text-sm flex items-center justify-center rounded-lg md:bg-white md:w-44 min-h-14 h-14 absolute bottom-2 right-5"
-        >
-          <MapPin
-            size={20}
-            className="size-10 text-white cursor-pointer md:size-auto md:text-black"
-          />{" "}
-          <p className="hidden md:block">
-            {" "}
-            {locale === "en" ? "view on map" : "地図で表示"}
-          </p>
-        </button>
-      </Link>
+        <MapPin
+          size={20}
+          className="size-10 text-white cursor-pointer md:size-auto md:text-black "
+        />{" "}
+        <p className="hidden md:block">
+          {locale === "en" ? "view on map" : "地図で表示"}
+        </p>
+        {locationAlt && (
+          <div className="absolute min-w-[120px] -top-8 underline text-[#8f8f8f] py-1 px-2 rounded-md text-[12px] bg-[#0000006b] right-10">
+            <Link href={"https://www.vihanga.site"}>
+              {locale === "en"
+                ? "click to follow the link"
+                : "リンクをクリック"}
+            </Link>
+          </div>
+        )}
+      </button>
     </div>
   );
 }
 
-export default HerosSection;
+export default HeroSection;

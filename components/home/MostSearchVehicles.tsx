@@ -49,6 +49,7 @@ function MostHeroSection() {
     console.log(vehicles);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedType]);
+  //   {type.vehicleType}
 
   return (
     <section className="max-w-winb-max-1366 w-full mx-auto py-16 px-6 space-y-2">
