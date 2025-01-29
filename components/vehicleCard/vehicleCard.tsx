@@ -1,4 +1,5 @@
 import { ChevronRight, Fuel, Gem, LifeBuoy } from "lucide-react";
+import { useLocale } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -19,6 +20,8 @@ export type VehicleCardProps = {
 };
 
 const VehicleCard = ({ vehicle }: VehicleCardProps) => {
+  const locale = useLocale();
+
   return (
     <div className="relative flex flex-col md:flex-row bg-white shadow-md rounded-2xl p-5 max-w-[987px] w-full min-h-[300px] border border-gray-200 mb-6">
       {vehicle.previewUrl && (
@@ -37,10 +40,18 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
           {/* Vehicle Details */}
           <div className="flex flex-col flex-grow space-y-4">
             <h2 className="font-bold text-2xl text-gray-800">
-              {vehicle.title}
+              {locale === "en"
+                ? vehicle.title.split("/")[0] // English: Show the first part
+                : vehicle.title.split("/")[1]?.length > 0 // Non-English: Show the second part if it's non-empty
+                ? vehicle.title.split("/")[1]
+                : vehicle.title.split("/")[0]}
             </h2>
             <p className="text-gray-600 text-sm leading-relaxed">
-              {vehicle.description}
+              {locale === "en"
+                ? vehicle.description.split("/")[0] // English: Show the first part
+                : vehicle.description.split("/")[1]?.length > 0 // Non-English: Show the second part if it's non-empty
+                ? vehicle.description.split("/")[1]
+                : vehicle.description.split("/")[0]}
             </p>
 
             {/* Vehicle Info */}

@@ -198,7 +198,7 @@ const MoreDetails = () => {
           <div className="mt-[55px] flex justify-end">
             <button>
               <Link
-                href={`/contact?vehicleId=${vehicle.id}`}
+                href={`/contact?id=${vehicle.id}&title=${vehicle.title}`}
                 className="bg-winb-yellow lg:text-[16px] sm:text-[12px] xs:text-[12px] xxs:text-[12px] text-black font-medium px-4 py-2 rounded-[25px] hover:bg-yellow-300 transition duration-300"
               >
                 Request More Information

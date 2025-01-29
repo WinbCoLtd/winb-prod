@@ -4,15 +4,19 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Card from "./Card";
+import { useLocale } from "next-intl";
 
 function MostHeroSection() {
   const [types, setTypes] = useState<any[]>([]);
   const [selectedType, setSelectedType] = useState<string>("all");
   const [vehicles, setVehicles] = useState([]);
+  const locale = useLocale();
 
   const fetchVehicles = async () => {
     try {
-      const res = await axios.get(`api/vehicles/latestVehicles?category=${selectedType}`);
+      const res = await axios.get(
+        `api/vehicles/latestVehicles?category=${selectedType}`
+      );
       if (res.status === 200) {
         setVehicles(res.data);
       }
@@ -20,7 +24,7 @@ function MostHeroSection() {
       console.error("Error fetching vehicles:", error);
     }
   };
-  
+
   const fetchCategories = async () => {
     try {
       const res = await axios.get(`api/vehicles/categories`);
@@ -30,7 +34,7 @@ function MostHeroSection() {
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
-  };  
+  };
 
   const handleTypeChange = (type: string) => {
     setSelectedType(type);
@@ -43,7 +47,7 @@ function MostHeroSection() {
   useEffect(() => {
     fetchVehicles();
     console.log(vehicles);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedType]);
 
   return (
@@ -52,19 +56,37 @@ function MostHeroSection() {
       <h2 className="text-2xl font-medium text-black">最も検索された</h2>
 
       <div className="space-x-4">
+        <button
+          onClick={() => handleTypeChange("all")}
+          className={`text-[16px] text-[#00000057] font-medium hover:underline capitalize ${
+            selectedType === "all" ? "underline" : ""
+          }
+              ${selectedType === "all" ? "underline" : ""}`}
+        >
+          all
+        </button>
         {types.length > 0 ? (
-          types.map((type, index) => (
-            <button
-              key={index}
-              onClick={() => handleTypeChange(type.vehicleType)}
-              className={`text-[16px] text-[#00000057] font-medium hover:underline capitalize ${
-                selectedType === type.vehicleType ? "underline" : ""
-              }
-              ${selectedType === "all" && index === 0 ? "underline" : ""}`}
-            >
-              {type.vehicleType}
-            </button>
-          ))
+          types.map((type, index) => {
+            const typeParts = type.vehicleType.split("/"); // Split once and store the parts
+            const displayText =
+              locale === "en"
+                ? typeParts[0] // English: Show the first part
+                : typeParts[1]?.length > 0 // Non-English: Show the second part if it's non-empty
+                ? typeParts[1]
+                : typeParts[0];
+
+            return (
+              <button
+                key={index}
+                onClick={() => handleTypeChange(type.vehicleType)}
+                className={`text-[16px] text-[#00000057] font-medium hover:underline capitalize ${
+                  selectedType === type.vehicleType ? "underline" : ""
+                }`}
+              >
+                {displayText}
+              </button>
+            );
+          })
         ) : (
           <p>Loading categories...</p>
         )}

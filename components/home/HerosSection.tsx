@@ -243,6 +243,7 @@ import axios from "axios";
 import { ChevronDown, MapPin } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 
 type SearchType = {
   makers: string[];
@@ -261,6 +262,7 @@ function HerosSection() {
   const [locationAlt, setLocationAlt] = useState(false);
   const router = useRouter();
   const dropdownRef = useRef<HTMLDivElement>(null); // Reference to the dropdown container
+  const locale = useLocale();
 
   const displayPriceRangers = () => {
     setToggle(!toggle);
@@ -319,23 +321,20 @@ function HerosSection() {
   }, []);
 
   return (
-    <div className="relative w-full min-h-[80vh] flex flex-col bg-hero-image bg-cover bg-center">
-      {/* Navbar */}
-      <div className="bg-[#08001C67] border border-white rounded-[10px] absolute top-0 left-0 w-full z-10 min-h-32 flex items-center px-4 sm:px-6 md:px-8 lg:px-12 ">
-        <Navbar />
-      </div>
-
-      {/* Content */}
-      <div className="flex flex-col justify-center py-14 lg:py-56 items-center h-full flex-1 px-4 md:px-12 xl:px-56">
-        <h1 className="font-bold text-3xl lg:text-4xl md:text-4xl text-white text-center mb-10 lg:mb-20 relative -top-2">
-          信頼に基づいて構築され、安全性を重視し、品質を完璧にします!
+    <div className="relative w-full min-h-[80vh] flex flex-col md:px-12 xl:px-56 mx-auto bg-hero-image pb-10 bg-cover object-center bg-center">
+      <Navbar />
+      <div className="flex flex-col justify-center py-14 lg:py-56 items-center h-full flex-1 px-4">
+        <h1 className="font-bold text-3xl sm:text-5xl lg:text-4xl md:text-6xl text-white text-center mb-10 lg:mb-20">
+          {locale === "en"
+            ? "Reliable Vehicle Marketplace"
+            : "信頼できる車両マーケットプレイス。"}
         </h1>
 
         <div className="flex flex-col md:flex-row flex-wrap md:flex-nowrap items-center md:items-end justify-between bg-white max-w-[770px] w-full rounded-2xl min-w-80 p-4 gap-4 text-[#1f1f1f] font-semibold text-lg">
           {/* Makers Dropdown */}
           <div className="flex flex-col items-start flex-1 w-full">
             <label htmlFor="makers" className="text-sm mb-2">
-              Makers
+              {locale === "en" ? "Makers" : "メーカー"}
             </label>
             <select
               name="makers"
@@ -343,15 +342,28 @@ function HerosSection() {
               onChange={(e) => setCurrentSelectedMaker(e.target.value)}
               className="w-full border border-gray-300 rounded-md px-3 py-2"
             >
-              <option value="">All Makers</option>
-              {searchData ? (
-                searchData.makers.map((maker, index) => (
-                  <option value={maker} key={index}>
-                    {maker}
-                  </option>
-                ))
+              <option value="">
+                {locale === "en" ? "All Makers" : "すべてのメーカー"}
+              </option>
+              {searchData && searchData.makers.length > 0 ? (
+                searchData.makers.map((maker, index) => {
+                  const makerParts = maker.split(",");
+                  return (
+                    <option value={maker} key={index}>
+                      {locale === "en"
+                        ? makerParts[0]
+                        : makerParts[1]?.length > 0
+                        ? makerParts[1]
+                        : makerParts[0]}
+                    </option>
+                  );
+                })
               ) : (
-                <option value="">No available makers</option>
+                <option value="">
+                  {locale === "en"
+                    ? "No available makers"
+                    : "利用可能なメーカーはありません"}
+                </option>
               )}
             </select>
           </div>
@@ -359,7 +371,7 @@ function HerosSection() {
           {/* Models Dropdown */}
           <div className="flex flex-col items-start flex-1 w-full">
             <label htmlFor="models" className="text-sm mb-2">
-              Models
+              {locale === "en" ? "Models" : "モデル"}
             </label>
             <select
               name="models"
@@ -367,15 +379,29 @@ function HerosSection() {
               onChange={(e) => setCurrentSelectedModel(e.target.value)}
               className="w-full border border-gray-300 rounded-md px-3 py-2"
             >
-              <option value="">All Models</option>
-              {searchData ? (
-                searchData.models.map((model, index) => (
-                  <option value={model} key={index}>
-                    {model}
-                  </option>
-                ))
+              <option value="">
+                {locale == "en"
+                  ? "All Models"
+                  : "利用可能なメーカーはありません"}
+              </option>
+
+              {searchData && searchData.models.length > 0 ? (
+                searchData.models.map((model, index) => {
+                  const modelParts = model.split(",");
+                  return (
+                    <option value={model} key={index}>
+                      {locale === "en"
+                        ? modelParts[0]
+                        : modelParts[1]?.length > 0
+                        ? modelParts[1]
+                        : modelParts[0]}
+                    </option>
+                  );
+                })
               ) : (
-                <option value="">No available models</option>
+                <option value="">
+                  {locale == "en" ? "No available makers" : "すべてのモデル"}
+                </option>
               )}
             </select>
           </div>
@@ -386,21 +412,21 @@ function HerosSection() {
             ref={dropdownRef}
           >
             <label htmlFor="models" className="text-sm mb-2">
-              Price
+              {locale === "en" ? "Price" : "価格"}
             </label>
             <button
               type="button"
               onClick={displayPriceRangers}
               className="flex items-center cursor-default justify-between pl-2 min-h-[45px] border border-gray-300 rounded-md w-full"
             >
-              Select Price{" "}
+              {locale == "en" ? "Select Price" : "価格を選択"}{" "}
               <ChevronDown size={20} className="font-extrabold pr-1" />
             </button>
             {toggle && (
               <div className="w-64 shadow-md border flex flex-col items-center justify-start border-gray-300 h-auto py-4 px-3 bg-white rounded-md min-h-36 absolute top-20 left-0 right-0 gap-4">
                 <div className="w-full flex justify-between gap-1 items-center border border-gray-300 rounded-md p-2 text-lg font-light">
                   <label htmlFor="min" className="font-semibold">
-                    Min
+                    {locale == "en" ? "Min" : "最小 "}{" "}
                   </label>
                   <input
                     type="range"
@@ -421,7 +447,7 @@ function HerosSection() {
                 </div>
                 <div className="w-full flex justify-between gap-1 items-center border border-gray-300 rounded-md p-2 text-lg font-light">
                   <label htmlFor="max" className="font-semibold">
-                    Max
+                    {locale == "en" ? "Max" : " 最大 "}{" "}
                   </label>
                   <input
                     type="range"
@@ -450,7 +476,7 @@ function HerosSection() {
             className="rounded-md md:max-w-32 w-full bg-[#FCDB02] text-black font-bold px-6 py-2 h-12"
             onClick={redirectToSearchResultPage}
           >
-            Search
+            {locale === "en" ? "Search" : "検索"}
           </button>
         </div>
       </div>
@@ -471,7 +497,10 @@ function HerosSection() {
             size={20}
             className="size-10 text-white cursor-pointer md:size-auto md:text-black"
           />{" "}
-          <p className="hidden md:block">View on the map</p>
+          <p className="hidden md:block">
+            {" "}
+            {locale === "en" ? "view on map" : "地図で表示"}
+          </p>
         </button>
       </Link>
     </div>

@@ -53,14 +53,26 @@ export default function Navbar() {
     router.push(`/${newLocale}/${path}`);
   };
 
+  const navbarLinks = {
+    home: locale === "en" ? "Home" : "ホーム",
+
+    about: locale === "en" ? "About" : "アバウト",
+
+    vehicleList: locale === "en" ? "Vehicle List" : "車両一覧",
+
+    otherService: locale === "en" ? "Other Service" : "その他のサービス",
+
+    contact: locale === "en" ? "Contact" : "お問い合わせ",
+  };
+
   return (
     <nav className="z-50 p-4  bg-gray-100 w-full flex justify-between items-center bg-transparent text-xl text-slate-400 font-bold">
       <div className="flex flex-col items-center">
         <Image
           src="/home/logo1.jpg"
           alt="Logo"
-          width={96}
-          height={96}
+          width={60}
+          height={60}
           className="w-26 lg:w-26 md-w[20] h-auto mx-auto mb-6"
         />
         <Link
@@ -74,40 +86,20 @@ export default function Navbar() {
 
       {!isMobile && (
         <nav className="flex items-center justify-center gap-4 text-white">
-          <Link
-            href="/"
-            className="hover:underline"
-          
-          >
-            ホーム
+          <Link href="/" className="hover:underline">
+            {navbarLinks.home}
           </Link>
-          <Link
-            href="/companyProfile"
-            className="hover:underline"
-            
-          >
-            会社概要
+          <Link href="/companyProfile" className="hover:underline">
+            {navbarLinks.about}
           </Link>
-          <Link
-            href="/vehicleList"
-            className="hover:underline"
-            
-          >
-            車両一覧
+          <Link href="/vehicleList" className="hover:underline">
+            {navbarLinks.vehicleList}
           </Link>
-          <Link
-            href="/otherService"
-            className="hover:underline"
-           
-          >
-            その他のサービス
+          <Link href="/otherService" className="hover:underline">
+            {navbarLinks.otherService}
           </Link>
-          <Link
-            href="/contact"
-            className="hover:underline"
-            
-          >
-            お問い合わせ
+          <Link href="/contact" className="hover:underline">
+            {navbarLinks.contact}
           </Link>
         </nav>
       )}
@@ -145,7 +137,7 @@ export default function Navbar() {
           <Menu
             size={40}
             onClick={handleToggle}
-            className="mx-2 cursor-pointer"
+            className="mx-2 cursor-pointer text-white"
           />
         )}
       </div>

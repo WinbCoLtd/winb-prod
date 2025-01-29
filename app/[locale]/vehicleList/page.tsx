@@ -46,7 +46,9 @@ async function getVehicles(filters: any, search: string, currentPage: number) {
   try {
     const query = `/api/vehicles?search=${encodeURIComponent(
       search
-    )}&filters=${encodeURIComponent(JSON.stringify(filters))}&currentPage=${currentPage}`;
+    )}&filters=${encodeURIComponent(
+      JSON.stringify(filters)
+    )}&currentPage=${currentPage}`;
     console.log("API Query:", query);
 
     const res = await axios.get(query);
@@ -60,13 +62,19 @@ async function getVehicles(filters: any, search: string, currentPage: number) {
 // Main Details Component
 function Details() {
   const [filters, setFilters] = useState<{ [key: string]: string[] }>({});
-  const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
+  const [selectedFilters, setSelectedFilters] = useState<{
+    [key: string]: string[];
+  }>({});
   const [search, setSearch] = useState("");
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
 
-  const fetchVehicles = async (filters: any, search: string, currentPage: number) => {
+  const fetchVehicles = async (
+    filters: any,
+    search: string,
+    currentPage: number
+  ) => {
     setLoading(true);
     const data = await getVehicles(filters, search, currentPage);
     if (data) {
@@ -102,7 +110,7 @@ function Details() {
     };
 
     initializeData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleFilterChange = async (newFilters: any) => {
@@ -138,9 +146,13 @@ function Details() {
             initialSelectedFilters={selectedFilters}
           />
         </div>
-        <VehicleSection vehicles={vehicles} onSearchChange={handlesearchChange} filters={filters}
-            onApplyFilters={handleFilterChange}
-            initialSelectedFilters={selectedFilters} />
+        <VehicleSection
+          vehicles={vehicles}
+          onSearchChange={handlesearchChange}
+          filters={filters}
+          onApplyFilters={handleFilterChange}
+          initialSelectedFilters={selectedFilters}
+        />
       </div>
     </div>
   );
