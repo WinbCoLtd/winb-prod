@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { Menu } from "lucide-react";
 import { useLocale } from "next-intl";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 function debounce(func: (...args: any[]) => void, wait: number) {
   let timeout: NodeJS.Timeout;
@@ -49,7 +49,7 @@ export default function Navbar() {
 
   useEffect(() => {
     if (!isMobile) {
-      setIsToggled(false); 
+      setIsToggled(false);
     }
   }, [isMobile]);
 
@@ -62,13 +62,25 @@ export default function Navbar() {
     router.push(`/${newLocale}/${path}`);
   };
 
+  const navbarLinks = {
+    home: locale === "en" ? "Home" : "ホーム",
+
+    about: locale === "en" ? "About" : "アバウト",
+
+    vehicleList: locale === "en" ? "Vehicle List" : "車両一覧",
+
+    otherService: locale === "en" ? "Other Service" : "その他のサービス",
+
+    contact: locale === "en" ? "Contact" : "お問い合わせ",
+  };
+
   return (
     <nav className="p-4 bg-gray-100 w-full flex justify-between items-center bg-transparent text-xl text-white">
       <Link href="/" locale={locale} className="font-extrabold text-3xl">
         WINB
       </Link>
       {!isMobile && (
-        <nav className="flex items-center justify-center gap-4">
+        <nav className="flex items-center justify-center gap-4 text-white">
           <Link href="/" className="hover:underline">
             {navbarLinks.home}
           </Link>

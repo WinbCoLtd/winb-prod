@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../Navbar";
 import axios from "axios";
 import { ChevronDown, MapPin } from "lucide-react";
@@ -9,26 +9,26 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 
-type searchType = {
-  makers: any[];
-  models: any[];
+type SearchType = {
+  makers: string[];
+  models: string[];
 };
 
 function HeroSection() {
-  const [searchData, setSearchData] = useState<searchType>();
+  const [searchData, setSearchData] = useState<SearchType>();
   const [currentSelectedPrice, setCurrentSelectedPrice] = useState({
-    min: 0,
+    min: 300,
     max: 1000,
   });
   const [currentSelectedMaker, setCurrentSelectedMaker] = useState<string>("");
   const [currentSelectedModel, setCurrentSelectedModel] = useState<string>("");
-  const [toggle, setIsToggled] = useState(false);
+  const [toggle, setToggle] = useState(false);
   const [locationAlt, setLocationAlt] = useState(false);
   const router = useRouter();
   const locale = useLocale();
-
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
   const displayPriceRangers = () => {
-    setIsToggled(!toggle);
+    setToggle(!toggle);
   };
 
   const handlePriceChange = (type: "min" | "max", value: number) => {
@@ -80,6 +80,17 @@ function HeroSection() {
   };
 
   useEffect(() => {
+    const fetchSearchData = async () => {
+      try {
+        const res = await axios.get("api/searchData/");
+        if (res.status === 200) {
+          setSearchData(res.data);
+          console.log(res.data);
+        }
+      } catch (error) {
+        console.error("Error fetching search data:", error);
+      }
+    };
     fetchSearchData();
   }, []);
 
@@ -128,6 +139,8 @@ function HeroSection() {
               )}
             </select>
           </div>
+
+          {/* Models Dropdown */}
           <div className="flex flex-col items-start flex-1 w-full">
             <label htmlFor="models" className="text-sm mb-2">
               {locale === "en" ? "Models" : "モデル"}
@@ -145,16 +158,16 @@ function HeroSection() {
               </option>
               {searchData && searchData.models.length > 0 ? (
                 searchData.models.map((model, index) => {
-                  const modelParts = model.split(",")
+                  const modelParts = model.split(",");
                   return (
                     <option value={model} key={index}>
-                    {locale === "en"
+                      {locale === "en"
                         ? modelParts[0]
                         : modelParts[1]?.length > 0
                         ? modelParts[1]
                         : modelParts[0]}
                     </option>
-                  )
+                  );
                 })
               ) : (
                 <option value="">
@@ -163,7 +176,12 @@ function HeroSection() {
               )}
             </select>
           </div>
-          <div className="flex flex-col items-start flex-1 relative  justify-between min-w-40 w-full">
+
+          {/* Price Selection */}
+          <div
+            className="flex flex-col items-start flex-1 relative justify-between min-w-40 w-full"
+            ref={dropdownRef}
+          >
             <label htmlFor="models" className="text-sm mb-2">
               {locale === "en" ? "Price" : "価格"}
             </label>
@@ -189,9 +207,9 @@ function HeroSection() {
                     max={999}
                     defaultValue={currentSelectedPrice.min}
                     className="w-full"
-                    onChange={(e) => {
-                      handlePriceChange("min", Number(e.target.value));
-                    }}
+                    onChange={(e) =>
+                      handlePriceChange("min", Number(e.target.value))
+                    }
                   />
                   <small className="font-normal">
                     {currentSelectedPrice.min}
@@ -210,12 +228,12 @@ function HeroSection() {
                     max={999}
                     defaultValue={currentSelectedPrice.max}
                     className="w-full"
-                    onChange={(e) => {
-                      handlePriceChange("max", Number(e.target.value));
-                    }}
+                    onChange={(e) =>
+                      handlePriceChange("max", Number(e.target.value))
+                    }
                   />
                   <small className="font-normal">
-                    {currentSelectedPrice.max}{" "}
+                    {currentSelectedPrice.max}
                   </small>
                   <small>¥</small>
                 </div>
@@ -223,6 +241,7 @@ function HeroSection() {
             )}
           </div>
 
+          {/* Search Button */}
           <button
             type="button"
             className="rounded-md md:max-w-32 w-full bg-[#FCDB02] text-black font-bold px-6 py-2 h-12"
@@ -244,15 +263,11 @@ function HeroSection() {
           size={20}
           className="size-10 text-white cursor-pointer md:size-auto md:text-black "
         />{" "}
-        <p className="hidden md:block">
-          {locale === "en" ? "view on map" : "地図で表示"}
-        </p>
+        <p className="hidden md:block">View on the map</p>
         {locationAlt && (
           <div className="absolute min-w-[120px] -top-8 underline text-[#8f8f8f] py-1 px-2 rounded-md text-[12px] bg-[#0000006b] right-10">
             <Link href={"https://www.vihanga.site"}>
-              {locale === "en"
-                ? "click to follow the link"
-                : "リンクをクリック"}
+              click to follow the link
             </Link>
           </div>
         )}

@@ -6,6 +6,7 @@ import { Mail } from "lucide-react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
+import { useLocale } from "next-intl";
 
 interface FormData {
   name: string;
@@ -28,6 +29,7 @@ export default function Inquiry() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const searchParam = useSearchParams();
+  const locale = useLocale();
 
   useEffect(() => {
     const id = searchParam.get("id");
@@ -54,14 +56,14 @@ export default function Inquiry() {
     setSuccess(false);
 
     try {
-      alert(formData.vehicleId + ' , ' + formData.title )
+      alert(formData.vehicleId + " , " + formData.title);
       const res = await axios.post("/api/contact", formData);
 
       if (res.status === 200) {
         setSuccess(true);
         setFormData({ name: "", email: "", phone: "", message: "" });
       }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error(err);
       setError("Failed to submit the inquiry. Please try again later.");
@@ -80,7 +82,7 @@ export default function Inquiry() {
         お問い合わせ <Mail size={40} />
       </h2>
 
-      <div className="max-w-winb-max-1366 p-[1px] bg-gradient-to-b from-[#1119B4] to-[#58056B] rounded-2xl">
+      <div className="max-w-winb-max-1366 p-[1px] bg-gradient-to-b from-[#1119B4] to-[#58056B] rounded-2xl mb-10">
         <div className="w-full bg-[#fefefe] border rounded-2xl flex justify-between items-center p-5">
           <Image
             src="/inquiry/contact.png"
@@ -95,7 +97,7 @@ export default function Inquiry() {
                 className="lg:text-[18px] text-black font-semibold mb-2"
                 htmlFor="name"
               >
-                Name
+                {locale === "en" ? "Name" : "名前"}
               </label>
               <input
                 type="text"
@@ -114,7 +116,7 @@ export default function Inquiry() {
                   className="lg:text-[18px] text-black font-semibold mb-2"
                   htmlFor="title"
                 >
-                  Vehicle Name
+                  {locale === "en" ? "Vehicle Name" : "車両名"}
                 </label>
                 <input
                   type="text"
@@ -133,7 +135,7 @@ export default function Inquiry() {
                   className="lg:text-[18px] text-black font-semibold mb-2"
                   htmlFor="email"
                 >
-                  Email Address
+                  {locale === "en" ? "Email Address" : "電子メールアドレス"}
                 </label>
                 <input
                   type="email"
@@ -151,7 +153,7 @@ export default function Inquiry() {
                   className="lg:text-[18px] text-black font-semibold mb-2"
                   htmlFor="phone"
                 >
-                  Phone Number
+                  {locale === "en" ? "Phone Number" : "電話番号"}
                 </label>
                 <input
                   type="tel"
@@ -170,7 +172,7 @@ export default function Inquiry() {
                 className="lg:text-[18px] text-black font-semibold mb-2"
                 htmlFor="message"
               >
-                Message
+                {locale === "en" ? " Message" : "メッセージ"}
               </label>
               <textarea
                 id="message"
@@ -187,7 +189,7 @@ export default function Inquiry() {
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-yellow-400 w-full text-lg md:text-base text-[#1b1b1b] cursor-pointer font-bold px-6 py-3 rounded-xl hover:bg-yellow-300 transition duration-300"
+                className="bg-yellow-400 w-[50px]] text-lg md:text-base text-[#1b1b1b] cursor-pointer font-bold px-6 py-3 rounded-xl hover:bg-yellow-300 transition duration-300"
               >
                 {loading ? "Submitting..." : "Submit Inquiry"}
               </button>
@@ -195,7 +197,9 @@ export default function Inquiry() {
 
             {success && (
               <p className="text-green-600 text-center font-medium mt-4">
-                Inquiry submitted successfully!
+                {locale === "en"
+                  ? "Inquiry submitted successfully!"
+                  : "お問い合わせが正常に送信されました。"}
               </p>
             )}
 

@@ -1,12 +1,13 @@
-import Link from 'next/link';
-import Image from 'next/image';
+import Link from "next/link";
+import Image from "next/image";
 
 function SearchVehicle() {
   const vehicles = [
     {
       id: 1,
       name: "Vehicle#1",
-      description: "A reliable and fuel-efficient sedan perfect for daily commuting. Well-maintained with a clean interior and exterior.",
+      description:
+        "A reliable and fuel-efficient sedan perfect for daily commuting. Well-maintained with a clean interior and exterior.",
       imageUrl: "/cardvehicle.png",
       fuelType: "Petrol",
       driveType: "AWD",
@@ -15,7 +16,8 @@ function SearchVehicle() {
     {
       id: 2,
       name: "Vehicle#2",
-      description: "A spacious SUV with advanced safety features. Great for family trips and off-road adventures.",
+      description:
+        "A spacious SUV with advanced safety features. Great for family trips and off-road adventures.",
       imageUrl: "/cardvehicle.png",
       fuelType: "Diesel",
       driveType: "FWD",
@@ -24,7 +26,8 @@ function SearchVehicle() {
     {
       id: 3,
       name: "Vehicle#3",
-      description: "A luxury sports car with a sleek design and high performance for driving enthusiasts.",
+      description:
+        "A luxury sports car with a sleek design and high performance for driving enthusiasts.",
       imageUrl: "/cardvehicle.png",
       fuelType: "Electric",
       driveType: "AWD",
@@ -64,7 +67,7 @@ function SearchVehicle() {
               <Image
                 src={vehicle.imageUrl}
                 alt={vehicle.name}
-                width={306} 
+                width={306}
                 height={230}
                 className="w-full h-full object-cover border border-winb-ashborder rounded-[15px]"
               />
@@ -72,7 +75,9 @@ function SearchVehicle() {
 
             <div className="w-full md:w-2/3 md:pl-4 mt-4 md:mt-0">
               <div>
-                <h2 className="text-lg md:text-[24px] font-bold text-black">{vehicle.name}</h2>
+                <h2 className="text-lg md:text-[24px] font-bold text-black">
+                  {vehicle.name}
+                </h2>
               </div>
               <p className="text-sm md:text-[13px] font-medium text-gray-600 mt-[22px]">
                 {vehicle.description}
@@ -83,7 +88,7 @@ function SearchVehicle() {
                   <Image
                     src="/vehicleDetails/fuel-icon.png"
                     alt="Fuel"
-                    width={16} 
+                    width={16}
                     height={16}
                     className="mr-2"
                   />

@@ -50,7 +50,9 @@ async function getVehicles(filters: any, search: string, currentPage: number) {
   try {
     const query = `/api/vehicles?search=${encodeURIComponent(
       search
-    )}&filters=${encodeURIComponent(JSON.stringify(filters))}&currentPage=${currentPage}`;
+    )}&filters=${encodeURIComponent(
+      JSON.stringify(filters)
+    )}&currentPage=${currentPage}`;
     console.log("API Query:", query);
 
     const res = await axios.get(query);
@@ -81,14 +83,20 @@ async function translateText(text: string, sourceLang: string, targetLang: strin
 // Main Details Component
 function Details() {
   const [filters, setFilters] = useState<{ [key: string]: string[] }>({});
-  const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
+  const [selectedFilters, setSelectedFilters] = useState<{
+    [key: string]: string[];
+  }>({});
   const [search, setSearch] = useState("");
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentLang, setCurrentLang] = useState<"en" | "ja">("en"); // Language state
   const searchParams = useSearchParams();
 
-  const fetchVehicles = async (filters: any, search: string, currentPage: number) => {
+  const fetchVehicles = async (
+    filters: any,
+    search: string,
+    currentPage: number
+  ) => {
     setLoading(true);
     const data = await getVehicles(filters, search, currentPage);
     if (data) {
@@ -124,7 +132,7 @@ function Details() {
     };
 
     initializeData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleFilterChange = async (newFilters: any) => {
