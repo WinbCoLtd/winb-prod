@@ -52,19 +52,19 @@ function MostHeroSection() {
   //   {type.vehicleType}
 
   return (
-    <section className="max-w-winb-max-1366 w-full mx-auto py-16 px-6 space-y-2">
+    <section className="max-w-winb-max-1366 w-full mx-auto pt-16 pb-6 px-6 space-y-2">
       <h2 className="text-4xl font-semibold text-black">The Most Searched</h2>
       <h2 className="text-2xl font-medium text-black">最も検索された</h2>
 
       <div className="space-x-4">
         <button
           onClick={() => handleTypeChange("all")}
-          className={`text-[16px] text-[#00000057] font-medium hover:underline capitalize ${
+          className={`text-[18px] text-[#00000057] font-medium hover:underline capitalize ${
             selectedType === "all" ? "underline" : ""
           }
               ${selectedType === "all" ? "underline" : ""}`}
         >
-          all
+            {locale === "en" ? "All" : "全て"}
         </button>
         {types.length > 0 ? (
           types.map((type, index) => {
@@ -80,7 +80,7 @@ function MostHeroSection() {
               <button
                 key={index}
                 onClick={() => handleTypeChange(type.vehicleType)}
-                className={`text-[16px] text-[#00000057] font-medium hover:underline capitalize ${
+                className={`text-[18px] text-[#00000057] font-medium hover:underline capitalize ${
                   selectedType === type.vehicleType ? "underline" : ""
                 }`}
               >

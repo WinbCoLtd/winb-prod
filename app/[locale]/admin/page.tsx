@@ -11,12 +11,13 @@ import {
   faTimes,
   faUser,
   faUsersCog,
+  faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import jwt, { JwtPayload, JsonWebTokenError } from "jsonwebtoken";
 import { useRouter } from "next/navigation";
-
+import { useLocale } from "next-intl";
 interface ImageData {
   id: number;
   url: string;
@@ -61,6 +62,7 @@ interface Profile {
 }
 
 const Admin = () => {
+  const locale = useLocale();
   const [showVehicleForm, setShowVehicleForm] = useState(false);
   const [showProfileForm, setShowProfileForm] = useState(false);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
@@ -100,6 +102,7 @@ const Admin = () => {
   const [role, setRole] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -420,67 +423,90 @@ const Admin = () => {
       <div className=" bg-[#08001C67] w-full flex items-center justify-center border border-[#00CCEE] rounded-[10px] min-h-32 my-auto">
         <Navbar />
       </div>
+
       <div className="container mx-auto px-4 pb-10">
-        <h1 className="text-2xl font-bold mt-6">Admin Dashboard</h1>
+        <h1 className="text-2xl font-bold mt-6">
+          {locale === "en" ? "Admin Dashboard" : "管理者ダッシュボード"}
+        </h1>
 
         {role === "admin" && (
-          <div className="mt-6 bg-white shadow-md rounded-md p-4">
-            <h2 className="text-xl font-semibold mb-4">
-              <FontAwesomeIcon icon={faUsersCog} className="mr-2" /> User
-              Management
+          <div className="mt-6 bg-white shadow-md rounded-md p-4 w-full">
+            <h2 className="text-xl font-semibold mb-4 flex items-center">
+              <FontAwesomeIcon icon={faUsersCog} className="mr-2" />
+              {locale === "en" ? "User Management" : "ユーザー管理"}
             </h2>
+
             <button
               onClick={() => {
                 setSelectedUser(null);
                 setShowUserForm(true);
               }}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md mb-4"
+              className="px-4 py-2 bg-blue-600 text-white rounded-md mb-4 w-full sm:w-auto"
             >
-              <FontAwesomeIcon icon={faPlus} className="mr-2" /> Add New User
+              <FontAwesomeIcon icon={faPlus} className="mr-2" />
+              {locale === "en" ? "Add New User" : "新規ユーザーを追加"}
             </button>
-            <table className="w-full border-collapse border border-gray-300">
-              <thead>
-                <tr className="bg-gray-200 text-left">
-                  <th className="border border-gray-300 p-2">Name</th>
-                  <th className="border border-gray-300 p-2">Username</th>
-                  <th className="border border-gray-300 p-2">Admin</th>
-                  <th className="border border-gray-300 p-2">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.length > 0 &&
-                  users.map((user) => (
-                    <tr key={user.id} className="hover:bg-gray-100">
-                      <td className="border border-gray-300 p-2">
-                        {user.nameEn}
-                      </td>
-                      <td className="border border-gray-300 p-2">
-                        {user.username}
-                      </td>
-                      <td className="border border-gray-300 p-2">
-                        {user ? "Yes" : "No"}
-                      </td>
-                      <td className="border border-gray-300 p-2">
-                        <button
-                          onClick={() => {
-                            setSelectedUser(user);
-                            setShowUserForm(true);
-                          }}
-                          className="px-3 py-1 bg-yellow-400 text-white rounded-md mr-2"
-                        >
-                          <FontAwesomeIcon icon={faEdit} />
-                        </button>
-                        <button
-                          onClick={() => handleUserDelete(user.id)}
-                          className="px-3 py-1 bg-red-500 text-white rounded-md"
-                        >
-                          <FontAwesomeIcon icon={faTrash} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
+
+            {/* Responsive Table Wrapper */}
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse border border-gray-300">
+                <thead>
+                  <tr className="bg-gray-200 text-left">
+                    <th className="border border-gray-300 p-2">
+                      {locale === "en" ? "Name" : "名前"}
+                    </th>
+                    <th className="border border-gray-300 p-2">
+                      {locale === "en" ? "Username" : "ユーザー名"}
+                    </th>
+                    <th className="border border-gray-300 p-2">
+                      {locale === "en" ? "Admin" : "管理者"}
+                    </th>
+                    <th className="border border-gray-300 p-2">
+                      {locale === "en" ? "Actions" : "アクション"}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.length > 0 &&
+                    users.map((user) => (
+                      <tr key={user.id} className="hover:bg-gray-100">
+                        <td className="border border-gray-300 p-2">
+                          {locale === "en" ? user.nameEn : user.nameJa}
+                        </td>
+                        <td className="border border-gray-300 p-2">
+                          {locale === "en" ? user.username : `${user.username}`}
+                        </td>
+                        <td className="border border-gray-300 p-2">
+                          {user
+                            ? locale === "en"
+                              ? "Yes"
+                              : "はい"
+                            : locale === "en"
+                            ? "No"
+                            : "いいえ"}
+                        </td>
+                        <td className="border border-gray-300 p-2 flex flex-wrap gap-2">
+                          <button
+                            onClick={() => {
+                              setSelectedUser(user);
+                              setShowUserForm(true);
+                            }}
+                            className="px-3 py-1 bg-yellow-400 text-white rounded-md"
+                          >
+                            <FontAwesomeIcon icon={faEdit} />
+                          </button>
+                          <button
+                            onClick={() => handleUserDelete(user.id)}
+                            className="px-3 py-1 bg-red-500 text-white rounded-md"
+                          >
+                            <FontAwesomeIcon icon={faTrash} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
 
@@ -489,7 +515,13 @@ const Admin = () => {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
             <div className="bg-white p-6 rounded-md shadow-md w-full max-w-lg">
               <h2 className="text-xl font-semibold mb-4">
-                {selectedUser ? "Edit User" : "Add New User"}
+                {selectedUser
+                  ? locale === "en"
+                    ? "Edit User"
+                    : "ユーザーを編集"
+                  : locale === "en"
+                  ? "Add New User"
+                  : "新しいユーザーを追加"}
               </h2>
               {error && (
                 <p className="text-red-500 mb-4">
@@ -501,59 +533,98 @@ const Admin = () => {
                 </p>
               )}
               <div className="grid grid-cols-2 gap-4">
-                <input
-                  name="nameEn"
-                  value={selectedUser?.nameEn || ""}
-                  onChange={(e) =>
-                    setSelectedUser({
-                      ...(selectedUser || ({} as Profile)),
-                      nameEn: e.target.value,
-                    })
-                  }
-                  placeholder="Name (English)"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="nameJa"
-                  value={selectedUser?.nameJa || ""}
-                  onChange={(e) =>
-                    setSelectedUser({
-                      ...(selectedUser || ({} as Profile)),
-                      nameJa: e.target.value,
-                    })
-                  }
-                  placeholder="Name (Japanese)"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="username"
-                  value={selectedUser?.username || ""}
-                  onChange={(e) =>
-                    setSelectedUser({
-                      ...(selectedUser || ({} as Profile)),
-                      username: e.target.value,
-                    })
-                  }
-                  placeholder="username"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                  type="text"
-                />
-                {!selectedUser?.id && (
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="nameEn"
+                    className="text-gray-700 font-medium mb-1"
+                  >
+                    {locale === "en" ? "Name (English)" : "名前 (英語)"}
+                  </label>
                   <input
-                    name="stringPassword"
+                    id="nameEn"
+                    name="nameEn"
+                    value={selectedUser?.nameEn || ""}
                     onChange={(e) =>
                       setSelectedUser({
                         ...(selectedUser || ({} as Profile)),
-                        stringPassword: e.target.value,
+                        nameEn: e.target.value,
                       })
                     }
-                    placeholder="Password"
+                    placeholder="Name (English)"
                     className="border border-gray-300 p-2 rounded-md w-full"
-                    type="password"
                   />
+                </div>
+
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="nameJa"
+                    className="text-gray-700 font-medium mb-1"
+                  >
+                    {locale === "en" ? "Name (Japanese)" : "名前 (日本語)"}
+                  </label>
+                  <input
+                    id="nameJa"
+                    name="nameJa"
+                    value={selectedUser?.nameJa || ""}
+                    onChange={(e) =>
+                      setSelectedUser({
+                        ...(selectedUser || ({} as Profile)),
+                        nameJa: e.target.value,
+                      })
+                    }
+                    placeholder="Name (Japanese)"
+                    className="border border-gray-300 p-2 rounded-md w-full"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="username"
+                    className="text-gray-700 font-medium mb-1"
+                  >
+                    {locale === "en" ? "Username" : "ユーザー名"}
+                  </label>
+                  <input
+                    id="username"
+                    name="username"
+                    value={selectedUser?.username || ""}
+                    onChange={(e) =>
+                      setSelectedUser({
+                        ...(selectedUser || ({} as Profile)),
+                        username: e.target.value,
+                      })
+                    }
+                    placeholder="Username"
+                    className="border border-gray-300 p-2 rounded-md w-full"
+                    type="text"
+                  />
+                </div>
+
+                {!selectedUser?.id && (
+                  <div className="flex flex-col">
+                    <label
+                      htmlFor="stringPassword"
+                      className="text-gray-700 font-medium mb-1"
+                    >
+                      {locale === "en" ? "Password" : "パスワード"}
+                    </label>
+                    <input
+                      id="stringPassword"
+                      name="stringPassword"
+                      onChange={(e) =>
+                        setSelectedUser({
+                          ...(selectedUser || ({} as Profile)),
+                          stringPassword: e.target.value,
+                        })
+                      }
+                      placeholder="Password"
+                      className="border border-gray-300 p-2 rounded-md w-full"
+                      type="password"
+                    />
+                  </div>
                 )}
-               
               </div>
+
               <div className="flex justify-end mt-6">
                 <button
                   onClick={() => {
@@ -562,68 +633,74 @@ const Admin = () => {
                   }}
                   className="px-4 py-2 bg-gray-500 text-white rounded-md mr-2"
                 >
-                  Cancel
+                  {locale === "en" ? "Cancel" : "キャンセル"}
                 </button>
                 <button
                   onClick={handleUserUpdate}
                   className="px-4 py-2 bg-blue-500 text-white rounded-md"
                 >
-                  {selectedUser?.id ? "Update" : "Create"}
+                  {locale === "en"
+                    ? selectedUser?.id
+                      ? "Update"
+                      : "Create"
+                    : selectedUser?.id
+                    ? "更新"
+                    : "作成"}
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* Profile Management Section */}
-        <div className="mt-6 bg-white shadow-md rounded-md p-4">
-          <h2 className="text-xl font-semibold mb-4">
-            <FontAwesomeIcon icon={faUser} className="mr-2" /> Profile
-            Management
+        <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-md sm:w-3/4 md:w-2/3 mx-auto mt-10">
+          <h2 className="text-2xl font-semibold flex items-center mb-4">
+            <FontAwesomeIcon icon={faUser} className="mr-2 text-gray-700" />
+            {locale === "en" ? "Profile Management" : "プロフィール管理"}
           </h2>
-          <table className="w-full border-collapse border border-gray-300">
-            <thead>
-              <tr className="bg-gray-200 text-left">
-                <th className="border border-gray-300 p-2">Name</th>
-                <th className="border border-gray-300 p-2">Email</th>
-                <th className="border border-gray-300 p-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {profiles && (
-                <tr key={profiles.id} className="hover:bg-gray-100">
-                  <td className="border border-gray-300 p-2">
-                    {profiles.nameEn}
-                  </td>
-                  <td className="border border-gray-300 p-2">
-                    {profiles.username}
-                  </td>
-                  <td className="border border-gray-300 p-2">
-                    <button
-                      onClick={() => setShowProfileForm(true)}
-                      className="px-3 py-1 bg-yellow-400 text-white rounded-md mr-2"
-                    >
-                      <FontAwesomeIcon icon={faEdit} />
-                    </button>
-                    <button
-                      onClick={handleProfileDelete}
-                      className="px-3 py-1 bg-red-500 text-white rounded-md"
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                    <button onClick={() => handleLogout()}>Logout</button>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+          {profiles && (
+            <div className="bg-gray-100 p-4 rounded-md shadow-sm">
+              <p className="text-lg font-medium text-gray-800">
+                {locale === "en" ? profiles.nameEn : profiles.nameJa}
+              </p>
+              <p className="text-gray-600">
+                {locale === "en"
+                  ? profiles.username
+                  : `ユーザー名: ${profiles.username}`}
+              </p>
+              <div className="flex flex-wrap gap-2 justify-between mt-4">
+                <button
+                  onClick={() => setShowProfileForm(true)}
+                  className="px-3 py-2 bg-yellow-400 text-white rounded-md flex items-center justify-center w-full sm:w-auto"
+                >
+                  <FontAwesomeIcon icon={faEdit} className="mr-1" />
+                  {locale === "en" ? "Update" : "アップデート"}
+                </button>
+                <button
+                  onClick={handleProfileDelete}
+                  className="px-3 py-2 bg-red-500 text-white rounded-md flex items-center justify-center w-full sm:w-auto"
+                >
+                  <FontAwesomeIcon icon={faTrash} className="mr-1" />
+                  {locale === "en" ? "Delete" : "消去"}
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="px-3 py-2 bg-blue-500 text-white rounded-md flex items-center justify-center w-full sm:w-auto"
+                >
+                  <FontAwesomeIcon icon={faSignOutAlt} className="mr-1" />
+                  {locale === "en" ? "Logout" : "ログアウト"}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Edit Profile Popup */}
         {showProfileForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
             <div className="bg-white p-6 rounded-md shadow-md w-full max-w-lg">
-              <h2 className="text-xl font-semibold mb-4">Edit Profile</h2>
+              <h2 className="text-xl font-semibold mb-4">
+                {locale === "en" ? "Edit Profile" : "プロフィールを編集"}
+              </h2>
               {error && (
                 <p className="text-red-500 mb-4">
                   <FontAwesomeIcon
@@ -634,46 +711,89 @@ const Admin = () => {
                 </p>
               )}
               <div className="grid grid-cols-2 gap-4">
-                <input
-                  name="nameEn"
-                  value={profiles.nameEn}
-                  onChange={(e) =>
-                    setProfiles({ ...profiles, nameEn: e.target.value })
-                  }
-                  placeholder="Name (English)"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="nameJa"
-                  value={profiles.nameJa}
-                  onChange={(e) =>
-                    setProfiles({ ...profiles, nameJa: e.target.value })
-                  }
-                  placeholder="Name (Japanese)"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-                <input
-                  name="username"
-                  value={profiles.username}
-                  onChange={(e) =>
-                    setProfiles({ ...profiles, username: e.target.value })
-                  }
-                  placeholder="Username"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="nameEn"
+                    className="text-gray-700 font-medium mb-1"
+                  >
+                    {locale === "en" ? "Name (English)" : "名前（英語)"}
+                  </label>
+                  <input
+                    id="nameEn"
+                    name="nameEn"
+                    value={profiles.nameEn}
+                    onChange={(e) =>
+                      setProfiles({ ...profiles, nameEn: e.target.value })
+                    }
+                    placeholder="Enter your name in English"
+                    className="border border-gray-300 p-2 rounded-md w-full"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="nameJa"
+                    className="text-gray-700 font-medium mb-1"
+                  >
+                    {locale === "en" ? "Name (Japanese)" : "名前（日本語)"}
+                  </label>
+                  <input
+                    id="nameJa"
+                    name="nameJa"
+                    value={profiles.nameJa}
+                    onChange={(e) =>
+                      setProfiles({ ...profiles, nameJa: e.target.value })
+                    }
+                    placeholder="Enter your name in Japanese"
+                    className="border border-gray-300 p-2 rounded-md w-full"
+                  />
+                </div>
+
+                <div className="col-span-2 flex flex-col">
+                  <label
+                    htmlFor="username"
+                    className="text-gray-700 font-medium mb-1"
+                  >
+                    {locale === "en" ? "Username" : "ユーザー名"}
+                  </label>
+                  <input
+                    id="username"
+                    name="username"
+                    value={profiles.username}
+                    onChange={(e) =>
+                      setProfiles({ ...profiles, username: e.target.value })
+                    }
+                    placeholder="Enter your username"
+                    className="border border-gray-300 p-2 rounded-md w-full"
+                  />
+                </div>
               </div>
+
               <div className="flex justify-end mt-6">
                 <button
                   onClick={() => setShowProfileForm(false)}
                   className="px-4 py-2 bg-gray-500 text-white rounded-md mr-2"
                 >
-                  Cancel
+                  {locale === "en" ? "Cancel" : "キャンセル"}
                 </button>
+
                 <button
+                  type="submit"
                   onClick={handleProfileUpdate}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                  disabled={isLoading}
+                  className={`px-4 py-2 bg-blue-500  rounded-md text-white font-semibold  hover:bg-blue-300 transition ${
+                    isLoading ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 >
-                  Update
+                  {locale === "en"
+                    ? loading
+                      ? "Submitting..."
+                      : "Update"
+                    : locale === "ja"
+                    ? loading
+                      ? "送信中..."
+                      : "アップデート"
+                    : "アップデート"}
                 </button>
               </div>
             </div>
@@ -681,7 +801,7 @@ const Admin = () => {
         )}
 
         {/* Vehicle Management Section */}
-        <div className="mt-6 flex justify-between items-center">
+        <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <button
             onClick={() => {
               setShowVehicleForm(true);
@@ -710,25 +830,36 @@ const Admin = () => {
                 previewUrl: "",
               });
             }}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md font-semibold"
+            className="px-4 py-2 bg-blue-500 text-white rounded-md font-semibold w-full sm:w-auto"
           >
-            <FontAwesomeIcon icon={faPlus} className="mr-2" /> Add New Vehicle
+            <FontAwesomeIcon icon={faPlus} className="mr-2" />
+            {locale === "en" ? "Add New Vehicle" : "新しい車両を追加"}
           </button>
         </div>
 
         {/* Vehicle Table */}
-        <div className="mt-6 bg-white shadow-md rounded-md p-4">
-          <h2 className="text-xl font-semibold mb-4">Vehicles</h2>
+        <div className="mt-6 bg-white shadow-md rounded-md p-4 overflow-x-auto">
+          <h2 className="text-xl font-semibold mb-4">
+            {locale === "en" ? "Vehicles" : "車両"}
+          </h2>
           {vehicles.length === 0 ? (
-            <p>No vehicles added yet.</p>
+            <p className="text-center">No vehicles added yet.</p>
           ) : (
-            <table className="w-full border-collapse border border-gray-300">
+            <table className="w-full border-collapse border border-gray-300 text-sm md:text-base">
               <thead>
                 <tr className="bg-gray-200 text-left">
-                  <th className="border border-gray-300 p-2">Title</th>
-                  <th className="border border-gray-300 p-2">Price</th>
-                  <th className="border border-gray-300 p-2">Model</th>
-                  <th className="border border-gray-300 p-2">Actions</th>
+                  <th className="border border-gray-300 p-2">
+                    {locale === "en" ? "Title" : "タイトル"}
+                  </th>
+                  <th className="border border-gray-300 p-2">
+                    {locale === "en" ? "Price" : "価格"}
+                  </th>
+                  <th className="border border-gray-300 p-2">
+                    {locale === "en" ? "Model" : "モデル"}
+                  </th>
+                  <th className="border border-gray-300 p-2">
+                    {locale === "en" ? "Actions" : "アクション"}
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -743,16 +874,16 @@ const Admin = () => {
                     <td className="border border-gray-300 p-2">
                       {vehicle.model}
                     </td>
-                    <td className="border border-gray-300 p-2">
+                    <td className="border border-gray-300 p-2 flex flex-col sm:flex-row gap-2">
                       <button
                         onClick={() => handleEdit(vehicle)}
-                        className="px-3 py-1 bg-yellow-400 text-white rounded-md mr-2"
+                        className="px-3 py-1 bg-yellow-400 text-white rounded-md flex items-center justify-center"
                       >
                         <FontAwesomeIcon icon={faEdit} />
                       </button>
                       <button
                         onClick={() => handleDelete(vehicle.id)}
-                        className="px-3 py-1 bg-red-500 text-white rounded-md"
+                        className="px-3 py-1 bg-red-500 text-white rounded-md flex items-center justify-center"
                       >
                         <FontAwesomeIcon icon={faTrash} />
                       </button>
@@ -769,7 +900,13 @@ const Admin = () => {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
             <div className="bg-white p-6 rounded-md shadow-md w-full max-w-4xl max-h-[90vh] overflow-y-auto">
               <h2 className="text-xl font-semibold mb-4">
-                {isEditing ? "Edit Vehicle" : "Add New Vehicle"}
+                {locale === "en"
+                  ? isEditing
+                    ? "Edit Vehicle"
+                    : "Add New Vehicle"
+                  : isEditing
+                  ? "車両の編集"
+                  : "新しい車両の追加"}
               </h2>
               {error && (
                 <p className="text-red-500 mb-4">
@@ -786,7 +923,7 @@ const Admin = () => {
                     className="text-slate-600 font-semibold mb-5"
                     htmlFor="title"
                   >
-                    Title
+                    {locale === "en" ? "Title" : "タイトル"}
                   </label>
                   <input
                     name="title"
@@ -801,7 +938,7 @@ const Admin = () => {
                     className="text-slate-600 font-semibold mb-5"
                     htmlFor="price"
                   >
-                    Price
+                    {locale === "en" ? "Price" : "価格"}
                   </label>
                   <input
                     name="price"
@@ -817,7 +954,7 @@ const Admin = () => {
                     className="text-slate-600 font-semibold mb-5"
                     htmlFor="model"
                   >
-                    Model
+                    {locale === "en" ? "Model" : "モデル"}
                   </label>
                   <input
                     name="model"
@@ -832,7 +969,7 @@ const Admin = () => {
                     className="text-slate-600 font-semibold mb-5"
                     htmlFor="maker"
                   >
-                    Maker
+                    {locale === "en" ? "Maker" : "作成者"}
                   </label>
                   <input
                     name="maker"
@@ -847,7 +984,7 @@ const Admin = () => {
                     className="text-slate-600 font-semibold mb-5"
                     htmlFor="vehicleType"
                   >
-                    Vehicle Type
+                    {locale === "en" ? "Vehicle Type" : "車両タイプ"}
                   </label>
                   <input
                     name="vehicleType"
@@ -862,7 +999,7 @@ const Admin = () => {
                     className="text-slate-600 font-semibold mb-5"
                     htmlFor="fuel"
                   >
-                    Fuel Type
+                    {locale === "en" ? "Fuel Type" : "燃料タイプ"}
                   </label>
                   <input
                     name="fuel"
@@ -877,7 +1014,7 @@ const Admin = () => {
                     className="text-slate-600 font-semibold mb-5"
                     htmlFor="drive"
                   >
-                    Drive Type
+                    {locale === "en" ? "Drive Type" : "ドライブタイプ"}
                   </label>
                   <input
                     name="drive"
@@ -892,7 +1029,7 @@ const Admin = () => {
                     className="text-slate-600 font-semibold mb-5"
                     htmlFor="condition"
                   >
-                    Condition
+                    {locale === "en" ? "Condition" : "状態"}
                   </label>
                   <input
                     name="condition"
@@ -907,7 +1044,7 @@ const Admin = () => {
                     className="text-slate-600 font-semibold mb-5"
                     htmlFor="color"
                   >
-                    Color
+                    {locale === "en" ? "Color" : "色"}
                   </label>
                   <input
                     name="color"
@@ -922,7 +1059,7 @@ const Admin = () => {
                     className="text-slate-600 font-semibold mb-5"
                     htmlFor="grade"
                   >
-                    Grade
+                    {locale === "en" ? "Grade" : "成績"}
                   </label>
                   <input
                     name="grade"
@@ -937,7 +1074,7 @@ const Admin = () => {
                     className="text-slate-600font-semibold mb-5"
                     htmlFor="chassieNumber"
                   >
-                    Chassie Number
+                    {locale === "en" ? "Chassie Number" : "シャーシ番号"}
                   </label>
                   <input
                     name="chassieNumber"
@@ -952,7 +1089,7 @@ const Admin = () => {
                     className="text-slate-600 font-semibold mb-5"
                     htmlFor="Shaken"
                   >
-                    Shaken
+                    {locale === "en" ? "Shaken" : "シェーケン"}
                   </label>
                   <input
                     name="Shaken"
@@ -967,7 +1104,7 @@ const Admin = () => {
                     className="text-slate-600 font-semibold mb-5"
                     htmlFor="manufactureYear"
                   >
-                    Manufacture Year
+                    {locale === "en" ? "Manufacture Year" : "製造年"}
                   </label>
                   <input
                     name="manufactureYear"
@@ -983,7 +1120,7 @@ const Admin = () => {
                     className="text-slate-600 font-semibold mb-5"
                     htmlFor="mileage"
                   >
-                    Mileage
+                    {locale === "en" ? "Mileage" : "走行距離"}
                   </label>
                   <input
                     name="mileage"
@@ -999,7 +1136,7 @@ const Admin = () => {
                     className="text-slate-600 font-semibold mb-5"
                     htmlFor="maxPassengers"
                   >
-                    Max Passengers
+                    {locale === "en" ? "Max Passengers" : "最大乗客数"}
                   </label>
                   <input
                     name="maxPassengers"
@@ -1009,33 +1146,12 @@ const Admin = () => {
                     className="border border-gray-300 p-2 rounded-md w-full"
                   />
                 </div>
-
-                {/* <div className="flex gap-4">
-                  <div className="flex items-center gap-2">
-                    <input
-                      name="isAvailable"
-                      type="checkbox"
-                      checked={formData.isAvailable || false}
-                      onChange={handleInputChange}
-                      className="border border-gray-300 p-2 rounded-md"
-                    />
-                    <label>Is Available</label>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <input
-                      name="isPublished"
-                      type="checkbox"
-                      checked={formData.isPublished || false}
-                      onChange={handleInputChange}
-                      className="border border-gray-300 p-2 rounded-md"
-                    />
-                    <label>Is Published</label>
-                  </div>
-                </div> */}
               </div>
               <div className="mt-4">
                 <label className="block font-medium mb-2">
-                  Primary Screenshot:
+                  {locale === "en"
+                    ? "Primary Screenshot:"
+                    : "主なスクリーンショット:"}
                 </label>
                 {formData.previewUrl && !screenShot && (
                   <div className="relative inline-block">
@@ -1077,7 +1193,7 @@ const Admin = () => {
               </div>
               <div className="mt-4">
                 <label className="block font-medium mb-2">
-                  Additional Images:
+                  {locale === "en" ? "Additional Images:" : "追加画像:"}
                 </label>
                 <div
                   {...getRootProps()}
@@ -1087,7 +1203,11 @@ const Admin = () => {
                 >
                   <input {...getInputProps()} />
                   {isDragActive ? (
-                    <p>Drop the files here...</p>
+                    <p>
+                      {locale === "en"
+                        ? "Drop the files here..."
+                        : "ここにファイルをドロップ..."}
+                    </p>
                   ) : (
                     <div className="flex items-center justify-center text-center">
                       <FontAwesomeIcon
@@ -1095,7 +1215,9 @@ const Admin = () => {
                         className="mr-2 text-2xl text-gray-500"
                       />
                       <p className="text-red-600 font-bold">
-                        Drag and drop some files here, or click to select files
+                        {locale === "en"
+                          ? "Drag and drop some files here, or click to select files"
+                          : "ここにファイルをドラッグアンドドロップするか、クリックしてファイルを選択してください"}
                       </p>
                     </div>
                   )}
@@ -1138,13 +1260,19 @@ const Admin = () => {
                   onClick={() => setShowVehicleForm(false)}
                   className="px-4 py-2 bg-gray-500 text-white rounded-md mr-2"
                 >
-                  Cancel
+                  {locale === "en" ? "Cancel" : "キャンセル"}
                 </button>
                 <button
                   onClick={handleSubmit}
                   className="px-4 py-2 bg-blue-500 text-white rounded-md"
                 >
-                  {isEditing ? "Update" : "Submit"}
+                  {locale === "en"
+                    ? isEditing
+                      ? "Update"
+                      : "Submit"
+                    : isEditing
+                    ? "更新"
+                    : "送信"}
                 </button>
               </div>
             </div>

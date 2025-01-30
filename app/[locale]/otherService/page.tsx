@@ -1,12 +1,33 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { ChevronRight } from "lucide-react";
 import { useLocale } from "next-intl";
+import { PulseLoader } from "react-spinners";
 
 const OtherService = () => {
   const locale = useLocale();
+
+  const [loading, setLoading] = useState(true);
+
+  // Simulating loading state for demonstration
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000); // Adjust this timer as needed
+    return () => clearTimeout(timer); // Cleanup on component unmount
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <PulseLoader color="#2563eb" size={20} />
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full flex flex-col max-w-[1366px] mx-auto px-4 py-2">
@@ -14,13 +35,13 @@ const OtherService = () => {
         <Navbar />
       </div>
 
-      <div className="mt-12 relative bg-black lg:h-[677px]">
+      <div className="mt-12 relative bg-black">
         <Image
           src="/otherService/carrier.png"
           alt="Need Assistance"
           width={1166}
           height={777}
-          className="w-full h-[450px] lg:h-[677px] object-cover"
+          className="w-full h-[450px] lg:h-[677px]  object-cover"
         />
 
         <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-between px-4 text-white bg-black bg-opacity-60">
@@ -40,7 +61,7 @@ const OtherService = () => {
 
           <div className="mb-[80px] mt-5 text-right">
             <Link href="/otherInquiry">
-              <button className="bg-winb-yellow text-black text-[14px]  px-4 py-2 rounded-[25px] font-semibold hover:bg-yellow-600 w-auto max-w-[200px] flex items-center justify-center gap-2 ml-auto">
+              <button className="bg-winb-yellow text-black text-[14px]  px-4 py-0.5 rounded-[25px] font-semibold hover:bg-yellow-600 w-auto max-w-[200px] flex items-center justify-center gap-2 ml-auto">
                 <span>
                   {" "}
                   {locale === "en"
@@ -63,7 +84,7 @@ const OtherService = () => {
         <p className="mt-4 text-[16px] md:text-[18px] lg:text-[20px] text-gray-800 font-semibold text-center">
           {locale === "en"
             ? "  We are with you...........!"
-            : "私たちはあなたと共にあります......！"}
+            : "私たちはあなたと共にあります......!"}
         </p>
         <p className="text-[16px] md:text-[18px] lg:text-[20px] text-red-500 font-bold leading-relaxed mt-24 xxs:mt-10 text-left">
           {locale === "en"

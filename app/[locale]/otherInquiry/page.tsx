@@ -4,8 +4,9 @@ import Navbar from "@/components/Navbar";
 import axios from "axios";
 import { Mail } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Importing useEffect here
 import { useLocale } from "next-intl";
+import { PulseLoader } from "react-spinners";
 
 interface FormData {
   name: string;
@@ -56,6 +57,22 @@ export default function OtherInquiry() {
       setLoading(false);
     }
   };
+
+  // Simulating loading state for demonstration
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000); // Adjust this timer as needed
+    return () => clearTimeout(timer); // Cleanup on component unmount
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <PulseLoader color="#2563eb" size={20} />
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-[87vh] w-full max-w-[1366px] mx-auto px-2 pb-10">
@@ -120,7 +137,6 @@ export default function OtherInquiry() {
                   htmlFor="email"
                 >
                   {locale === "en" ? "Email Address" : "電子メールアドレス"}{" "}
-                  Email Address
                 </label>
                 <input
                   type="email"
@@ -176,7 +192,15 @@ export default function OtherInquiry() {
                 disabled={loading}
                 className="bg-yellow-400 text-lg md:text-base text-[#1b1b1b] cursor-pointer font-bold px-6 py-3 rounded-xl hover:bg-yellow-300 transition duration-300"
               >
-                {loading ? "Submitting..." : "Submit Inquiry"}
+                {locale === "en"
+                  ? loading
+                    ? "Submitting..."
+                    : "Submit Inquiry"
+                  : locale === "ja"
+                  ? loading
+                    ? "送信中..."
+                    : "お問い合わせを送信"
+                  : "お問い合わせを送信"}
               </button>
             </div>
 
