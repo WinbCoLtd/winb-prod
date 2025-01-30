@@ -142,7 +142,7 @@ const MoreDetails = () => {
               {carouselImages.map((image) => (
                 <SwiperSlide key={image.id}>
                   <div
-                    className="w-[110px] lg:w-[110px] md:w-[100px]  h-[110px] lg:h-[110px] md:h-[100px] bg-gray-300 rounded-lg overflow-hidden cursor-pointer items-center"
+                    className="w-[110px] lg:w-[110px] md:w-[100px] h-[110px] lg:h-[110px] md:h-[100px] bg-gray-300 rounded-lg overflow-hidden cursor-pointer items-center"
                     onClick={() => setCurrentPreview(image.url)}
                   >
                     <Image
@@ -150,7 +150,7 @@ const MoreDetails = () => {
                       alt={`Small View ${image.id}`}
                       width={110}
                       height={110}
-                      className="w-full  h-full object-cover"
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 </SwiperSlide>
@@ -160,15 +160,15 @@ const MoreDetails = () => {
         </div>
 
         {/* Vehicle Details */}
-        <div className="mt-6 md:mt-0 md:ml-8 flex flex-col justify-start w-full md:w-[500px]">
-          <h2 className="text-[40px] lg:text-[40px] md:text-[20px]  text-black font-bold mb-4">
+        <div className="mt-20 md:mt-0 md:ml-8 flex flex-col justify-start w-full md:w-[500px]">
+          <h2 className="text-[40px] lg:text-[40px] md:text-[20px] text-black font-bold mb-4">
             {vehicle.title}
           </h2>
-          <p className="text-[24px] lg:text-[30px] md:text-[24px]  text-black font-medium mb-4 ">
+          <p className="text-[24px] lg:text-[30px] md:text-[24px] text-black font-medium mb-4">
             {vehicle.description}
           </p>
 
-          <div className="text-[24px] lg:text-[30px] md:text-[24px] mt-[46px] grid lg:grid-cols-2 md:grid-cols-3 gap-4 items-center">
+          <div className="text-[30px] lg:text-[30px] md:text-[24px] mt-[46px] grid lg:grid-cols-2 md:grid-cols-3 gap-4 items-center">
             {[
               { label: "Price", value: `¥ ${vehicle.price}` },
               { label: "Model", value: vehicle.model },
@@ -188,7 +188,7 @@ const MoreDetails = () => {
               { label: "Condition", value: vehicle.condition },
             ].map(({ label, value }, index) => (
               <div key={index} className="flex items-center">
-                <p className="text-[16px] lg:text-[18px] md:text-[16px]  text-black font-semibold">
+                <p className="text-[20px] lg:text-[18px] md:text-[20px] text-black font-semibold">
                   {label}: {value}
                 </p>
               </div>
@@ -199,7 +199,7 @@ const MoreDetails = () => {
             <button>
               <Link
                 href={`/contact?id=${vehicle.id}&title=${vehicle.title}`}
-                className="bg-winb-yellow lg:text-[16px] sm:text-[12px] xs:text-[12px] xxs:text-[12px] text-black font-medium px-4 py-2 rounded-[25px] hover:bg-yellow-300 transition duration-300"
+                className="bg-winb-yellow text-[20px] lg:text-[18px] md:text-[20px] text-black font-medium px-4 py-2 rounded-[25px] hover:bg-yellow-300 transition duration-300"
               >
                 Request More Information
               </Link>

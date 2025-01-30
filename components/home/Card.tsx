@@ -36,7 +36,7 @@ export default function Card({ vehicle }: { vehicle: Ifields }) {
   };
 
   return (
-    <div key={vehicle.id} className="relative border border-[#00000032] p-5 rounded-lg shadow-sm max-w-[400px] w-full">
+    <div key={vehicle.id} className="mx-auto md:mx-0 relative border border-[#00000032] p-5 rounded-lg shadow-sm max-w-[400px] w-full">
       <Image
         src={vehicle.previewUrl}
         alt={vehicle.title}
@@ -46,7 +46,7 @@ export default function Card({ vehicle }: { vehicle: Ifields }) {
       />
 
       {/* Title: Split by comma */}
-      <h4 className="mt-7 text-xl font-semibold">
+      <h4 className="mt-7 text-xl font-semibold ">
         {locale === 'en'
           ? getLocalizedValue(vehicle.title, 0) // English title (first part before comma)
           : getLocalizedValue(vehicle.title, 1)}  {/* Japanese title (second part) or fallback to English */}
@@ -72,7 +72,7 @@ export default function Card({ vehicle }: { vehicle: Ifields }) {
       </p>
 
       <button type="button" className="absolute bottom-2 right-2 bg-transparent p-2">
-        <Link href={`/vehicles/${vehicle.id}`}>
+        <Link href={`/searchVehicle/${vehicle.id}`}>
           <ChevronRight size={24} />
         </Link>
       </button>

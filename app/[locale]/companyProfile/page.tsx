@@ -1,9 +1,29 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
-import React from "react";
 import { useLocale } from "next-intl";
+import { PulseLoader } from "react-spinners";
 
 const Profile = () => {
   const locale = useLocale();
+  const [loading, setLoading] = useState(true);
+
+  // Simulating loading state for demonstration
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000); // Adjust this timer as needed
+    return () => clearTimeout(timer); // Cleanup on component unmount
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <PulseLoader color="#2563eb" size={20} />
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full flex flex-col max-w-[1366px] mx-auto px-4 py-2">
@@ -12,7 +32,7 @@ const Profile = () => {
       </div>
 
       <div className="min-h-[783px] mb-9 relative w-full flex flex-col mt-16 sm:mt-8 sm:p-4 md:p-8 bg-company-profile bg-cover bg-center object-center bg-no-repeat items-center justify-center">
-        <h1 className="text-black font-semibold lg:text-[36px] md:text-[32px] sm:text-[28px] xxs:text-[24px] leading-tight text-center">
+        <h1 className="text-black font-semibold text-[36px] lg:text-[36px] md:text-[32px] sm:text-[28px] xxs:text-[24px] leading-tight text-center">
           {locale === "en" ? "Company Overview" : "会社概要"}
         </h1>
 
@@ -20,12 +40,12 @@ const Profile = () => {
           <p>
             {locale === "en"
               ? `Welcome to WIN-B! Founded in [Year], WIN-B has become known as a platform that enables easy and efficient vehicle buying and selling. As a trusted name in the automotive industry, we provide a seamless experience for both sellers and buyers, ensuring the best service and satisfaction.`
-              : `WIN-Bへようこそ！[Year]に設立されたWIN-Bは、簡単かつ効率的に車両を売買できるプラットフォームとして知られるようになりました。自動車業界で信頼される名前として、私たちは売り手と買い手の両方にシームレスな体験を提供し、最高のサービスと満足を保証します。`}
+              : `WIN-Bへようこそ![Year]に設立されたWIN-Bは、簡単かつ効率的に車両を売買できるプラットフォームとして知られるようになりました。自動車業界で信頼される名前として、私たちは売り手と買い手の両方にシームレスな体験を提供し、最高のサービスと満足を保証します。`}
           </p>
           <p>
             {locale === "en"
               ? `Our Mission: WIN-B's mission is to simplify the vehicle buying and selling process and provide the best options in the market. We are dedicated to offering a comprehensive platform that caters to a variety of vehicle preferences and requirements.`
-              : `私たちの使命：WIN-Bの使命は、車両の売買プロセスを簡素化し、市場で最高のオプションを提供することです。さまざまな車両の好みや要件に応える包括的なプラットフォームを提供することに専念しています。`}
+              : `私たちの使命:WIN-Bの使命は、車両の売買プロセスを簡素化し、市場で最高のオプションを提供することです。さまざまな車両の好みや要件に応える包括的なプラットフォームを提供することに専念しています。`}
           </p>
           <p>
             {locale === "en"

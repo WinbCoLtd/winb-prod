@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useLocale } from "next-intl";
+import { PulseLoader } from "react-spinners";
 
 interface FormData {
   name: string;
@@ -56,7 +57,6 @@ export default function Inquiry() {
     setSuccess(false);
 
     try {
-      alert(formData.vehicleId + " , " + formData.title);
       const res = await axios.post("/api/contact", formData);
 
       if (res.status === 200) {
@@ -71,6 +71,22 @@ export default function Inquiry() {
       setLoading(false);
     }
   };
+
+  // Simulating loading state for demonstration
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000); // Adjust this timer as needed
+    return () => clearTimeout(timer); // Cleanup on component unmount
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <PulseLoader color="#2563eb" size={20} />
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-[87vh] w-full max-w-[1366px] mx-auto px-2 pb-10">
@@ -189,9 +205,17 @@ export default function Inquiry() {
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-yellow-400 w-[50px]] text-lg md:text-base text-[#1b1b1b] cursor-pointer font-bold px-6 py-3 rounded-xl hover:bg-yellow-300 transition duration-300"
+                className="bg-yellow-400 text-lg md:text-base text-[#1b1b1b] cursor-pointer font-bold px-6 py-3 rounded-xl hover:bg-yellow-300 transition duration-300"
               >
-                {loading ? "Submitting..." : "Submit Inquiry"}
+                {locale === "en"
+                  ? loading
+                    ? "Submitting..."
+                    : "Submit Inquiry"
+                  : locale === "ja"
+                  ? loading
+                    ? "送信中..."
+                    : "お問い合わせを送信"
+                  : "お問い合わせを送信"}
               </button>
             </div>
 

@@ -16,25 +16,25 @@ const Footer = () => {
       <div className="flex gap-10 mb-4 sm:gap-6 xs:gap-4">
         <a
           href="#"
-          className="text-white lg:text-2xl sm:text-xl xs:text-xl xxs:text-lg hover:text-blue-400"
+          className="text-white text-2xl lg:text-2xl md:text-2xl hover:text-blue-400"
         >
           <FontAwesomeIcon icon={faTwitter} />
         </a>
         <a
           href="#"
-          className="text-white lg:text-2xl sm:text-xl xs:text-xl xxs:text-lg hover:text-blue-400"
+          className="text-white text-2xl lg:text-2xl md:text-2xl  hover:text-blue-400"
         >
           <FontAwesomeIcon icon={faFacebook} />
         </a>
         <a
           href="#"
-          className="text-white lg:text-2xl sm:text-xl xs:text-xl xxs:text-lg hover:text-blue-400"
+          className="text-white text-2xl lg:text-2xl md:text-2xl hover:text-blue-400"
         >
           <FontAwesomeIcon icon={faLinkedin} />
         </a>
         <a
           href="#"
-          className="text-white lg:text-2xl sm:text-xl xs:text-xl xxs:text-lg hover:text-blue-400"
+          className="text-white text-2xl lg:text-2xl md:text-2xl hover:text-blue-400"
         >
           <FontAwesomeIcon icon={faInstagram} />
         </a>
@@ -47,7 +47,10 @@ const Footer = () => {
       </p>
 
       <p className="text-winb-ash font-semibold lg:text-[18px] sm:text-[16px] xs:text-[14px] xxs:text-[14px] text-center">
-        &copy; 2025 WIN-B Company. All rights reserved.
+        &copy;{" "}
+        {locale === "en"
+          ? "2025 WIN-B Company. All rights reserved."
+          : "2025 WIN-B株式会社。全著作権所有。"}
       </p>
       <p className="text-slate-700 font-semibold lg:text-[18px] sm:text-[16px] xs:text-[14px] xxs:text-[14px] text-center">
         <Link href={"https://www.equolabs.com/"}>

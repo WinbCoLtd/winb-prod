@@ -55,12 +55,17 @@ const Filterbar = ({
   const handleFilterSelect = (name: string, value: string) => {
     setLocalSelectedFilters((prev) => {
       const prevValues = prev[name] || [];
-      return {
-        ...prev,
-        [name]: prevValues.includes(value)
-          ? prevValues.filter((item) => item !== value)
-          : [...prevValues, value],
-      };
+      if (prevValues.includes(value)) {
+        return {
+          ...prev,
+          [name]: prevValues.filter((item) => item !== value),
+        };
+      } else {
+        return {
+          ...prev,
+          [name]: [...prevValues, value],
+        };
+      }
     });
   };
 
@@ -85,19 +90,18 @@ const Filterbar = ({
       </h2>
       <button
         type="button"
-        className="w-full bg-slate-500 text-white py-2 rounded-lg font-medium mb-12  hover:bg-slate-400 transition"
+        className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium mb-4 hover:bg-blue-700 transition"
         onClick={applyFilters}
       >
-        {locale === "en" ? "Apply Filters" : "フィルターを適用する"}
+        Apply Filters
       </button>
+
       {Object.keys(filters).length > 0 ? (
         Object.keys(filters).map((filterKey) => (
           <div className="w-full mb-6" key={filterKey}>
             <div className="w-full flex items-center mb-2 text-gray-800">
               <span className="mr-2">{icons[filterKey] || null}</span>
-              <h3 className="text-[16px] font-semibold capitalize">
-                {filterKey}
-              </h3>
+              <h3 className="text-lg font-semibold capitalize">{filterKey}</h3>
             </div>
             <div className="w-full grid grid-cols-3 gap-2">
               {filters[filterKey].map((item) => {
@@ -119,7 +123,7 @@ const Filterbar = ({
                     >
                       <input
                         type="checkbox"
-                        id={`${filterKey}-${cond}`}
+                        id={${filterKey}-${cond}}
                         name={cond}
                         value={cond}
                         checked={
@@ -140,7 +144,7 @@ const Filterbar = ({
                     >
                       <input
                         type="checkbox"
-                        id={`${filterKey}-${splitValue}`}
+                        id={${filterKey}-${splitValue}}
                         name={splitValue}
                         value={splitValue}
                         checked={
