@@ -52,6 +52,7 @@ const Filterbar = ({
   }>(initialSelectedFilters);
   const locale = useLocale();
   const [clicked, setClicked] = useState(false)
+  console.log(clicked)
 
   const handleFilterSelect = (name: string, value: string) => {
     setLocalSelectedFilters((prev) => {

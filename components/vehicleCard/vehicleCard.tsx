@@ -110,7 +110,7 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
             </div>
 
             {/* More Info Button */}
-            <div className="flex justify-center mt-auto">
+            <div className="flex justify-start">
               <Link href={`/searchVehicle/${vehicle.id}`}>
                 <button
                   type="button"
