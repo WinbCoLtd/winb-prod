@@ -95,7 +95,7 @@ export default function Inquiry() {
       </div>
 
       <h2 className="text-3xl flex items-center text-black font-bold mt-[36px] mb-[36px] gap-2">
-        お問い合わせ <Mail size={40} />
+        {locale === "en" ? "Inquiry" : "お問い合わせ"} <Mail size={40} />
       </h2>
 
       <div className="max-w-winb-max-1366 p-[1px] bg-gradient-to-b from-[#1119B4] to-[#58056B] rounded-2xl mb-10">

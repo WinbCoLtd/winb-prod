@@ -15,25 +15,25 @@ const Footer = () => {
     <footer className="mt-7 bg-[#c9d2e9]  text-white w-full py-8 flex flex-col items-center justify-center">
       <div className="flex gap-10 mb-4 sm:gap-6 xs:gap-4">
         <a
-          href="#"
+          href="/"
           className="text-white text-2xl lg:text-2xl md:text-2xl hover:text-blue-400"
         >
           <FontAwesomeIcon icon={faTwitter} />
         </a>
         <a
-          href="#"
+          href="/"
           className="text-white text-2xl lg:text-2xl md:text-2xl  hover:text-blue-400"
         >
           <FontAwesomeIcon icon={faFacebook} />
         </a>
         <a
-          href="#"
+          href="/"
           className="text-white text-2xl lg:text-2xl md:text-2xl hover:text-blue-400"
         >
           <FontAwesomeIcon icon={faLinkedin} />
         </a>
         <a
-          href="#"
+          href="/"
           className="text-white text-2xl lg:text-2xl md:text-2xl hover:text-blue-400"
         >
           <FontAwesomeIcon icon={faInstagram} />
