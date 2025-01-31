@@ -9,15 +9,14 @@ import {
   faEdit,
   faTrash,
   faTimes,
-  faUser,
-  faUsersCog,
-  faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import Image from "next/image";
+import AdminProfile from "@/components/admin/Profile";
+import UserManagement from "@/components/admin/UserManagement";
 
 interface ImageData {
   id: number;
@@ -52,22 +51,10 @@ interface Vehicle {
   images: ImageData[];
 }
 
-interface Profile {
-  id: number;
-  nameEn: string;
-  nameJa: string;
-  username: string;
-  stringPassword?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 const Admin = () => {
   const locale = useLocale();
   const [showVehicleForm, setShowVehicleForm] = useState(false);
-  const [showProfileForm, setShowProfileForm] = useState(false);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [profiles, setProfiles] = useState({} as Profile);
   const [files, setFiles] = useState<File[]>([]);
   const [screenShot, setScreenShot] = useState<File | null>(null);
   const [retainedUrls, setRetainedUrls] = useState<string[]>([]);
@@ -97,15 +84,13 @@ const Admin = () => {
   const [error, setError] = useState<string>("");
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [token, setToken] = useState<string>("");
-  const [selectedUser, setSelectedUser] = useState<Profile | null>(null);
-  const [users, setUsers] = useState<Profile[]>([]);
-  const [showUserForm, setShowUserForm] = useState(false);
   const [role, setRole] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [clicked, setClicked] = useState(false);
-  console.log(loading);
+  console.log(role, loading);
+  
 
   useEffect(() => {
     setIsLoading(true);
@@ -118,90 +103,10 @@ const Admin = () => {
     } else {
       setToken(token);
       setRole(roles as string);
-      console.log(token);
-      fetchProfiles();
-      console.log(profiles);
-      fetchUsers();
       setIsLoading(false);
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  // Add this new fetch function
-  const fetchUsers = async () => {
-    try {
-      setClicked(true);
-      const response = await axios.get("/api/users", {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-      if (response.status === 200) {
-        setUsers(response.data.users);
-        console.log(response.data.users);
-      } else {
-        setError(response.data.error || "Failed to fetch users.");
-      }
-      setClicked(false);
-    } catch (err) {
-      setClicked(false);
-      console.error("Error fetching users:", err);
-      setError("An unexpected error occurred. Please try again.");
-    }
-  };
-
-  // Add these new handler functions
-  const handleUserUpdate = async () => {
-    setClicked(true);
-    try {
-      const endpoint = selectedUser?.id
-        ? `/api/users/update?id=${selectedUser.id}`
-        : "/api/users/register";
-      const method = selectedUser?.id ? "put" : "post";
-
-      const response = await axios[method](endpoint, selectedUser, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.status == 201) {
-        setShowUserForm(false);
-        setSelectedUser(null);
-        fetchUsers();
-        setError("");
-      } else {
-        setError(response.data.error || "Failed to update user.");
-      }
-      setClicked(false);
-    } catch (err) {
-      setClicked(false);
-      console.error("Error updating user:", err);
-      setError("An unexpected error occurred. Please try again.");
-    }
-  };
-
-  const handleUserDelete = async (id: number) => {
-    setClicked(true);
-    try {
-      const response = await axios.delete(`/api/users/authRemove?id=${id}`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.status == 201) {
-        setUsers(users.filter((user) => user.id !== id));
-      } else {
-        setError(response.data.error || "Failed to delete user.");
-      }
-      setClicked(false);
-    } catch (err) {
-      setClicked(false);
-      console.error("Error deleting user:", err);
-      setError("An unexpected error occurred. Please try again.");
-    }
-  };
+  }, [router]);
 
   const fetchVehicles = async () => {
     setClicked(true);
@@ -216,28 +121,6 @@ const Admin = () => {
     } catch (err) {
       setClicked(false);
       console.error("Error fetching vehicles:", err);
-      setError("An unexpected error occurred. Please try again.");
-    }
-  };
-
-  const fetchProfiles = async () => {
-    setClicked(true);
-    try {
-      const id = await localStorage.getItem("id");
-      const response = await axios.get(`/api/profile?id=${id}`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-      if (response.status === 200) {
-        setProfiles(response.data);
-      } else {
-        setError(response.data.error || "Failed to fetch profiles.");
-      }
-      setClicked(false);
-    } catch (err) {
-      setClicked(false);
-      console.error("Error fetching profiles:", err);
       setError("An unexpected error occurred. Please try again.");
     }
   };
@@ -285,8 +168,10 @@ const Admin = () => {
     }
 
     const formDataObj = new FormData();
+    
+    // Append all fields except ID
     Object.entries(formData).forEach(([key, value]) => {
-      if (value !== null && value !== undefined) {
+      if (key !== "id" && value !== null && value !== undefined) {
         formDataObj.append(key, value.toString());
       }
     });
@@ -300,13 +185,13 @@ const Admin = () => {
 
     try {
       const endpoint = isEditing
-        ? `/api/vehicles/update/`
+        ? `/api/vehicles/update?id=${formData.id}`
         : "/api/vehicles/add";
       const method = isEditing ? "put" : "post";
 
       const response = await axios[method](endpoint, formDataObj, {
         headers: {
-          authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
@@ -359,8 +244,8 @@ const Admin = () => {
       if (res.status === 200) {
         const vehicleData = res.data;
         setFormData(vehicleData);
-        setScreenShot(null); // Reset screenshot file
-        setFiles([]); // Reset new files
+        setScreenShot(null);
+        setFiles([]);
         setRetainedUrls(vehicleData.images.map((img: ImageData) => img.url));
         setIsEditing(true);
         setShowVehicleForm(true);
@@ -380,7 +265,7 @@ const Admin = () => {
     try {
       const response = await axios.delete(`/api/vehicles/delete?id=${id}`, {
         headers: {
-          authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -397,65 +282,11 @@ const Admin = () => {
     }
   };
 
-  const handleProfileUpdate = async () => {
-    setClicked(true);
-    try {
-      const response = await axios.put(`/api/auth/authUpdate`, profiles, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.status === 201) {
-        setShowProfileForm(false);
-        setError("");
-        fetchProfiles();
-      } else {
-        setError(response.data.error || "Failed to update profile.");
-      }
-      setClicked(false);
-    } catch (err) {
-      setClicked(false);
-      console.error("Error updating profile:", err);
-      setError("An unexpected error occurred. Please try again.");
-    }
-  };
-
-  const handleProfileDelete = async () => {
-    setClicked(true);
-    try {
-      const response = await axios.delete(`/api/profile/delete`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.data.success) {
-        setProfiles({} as Profile);
-        setError("");
-        // Redirect or handle the deletion appropriately
-      } else {
-        setError(response.data.error || "Failed to delete profile.");
-      }
-      setClicked(false);
-    } catch (err) {
-      setClicked(false);
-      console.error("Error deleting profile:", err);
-      setError("An unexpected error occurred. Please try again.");
-    }
-  };
-
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
   if (isLoading) {
     return <h1>Loading.....</h1>;
   }
-
-  const handleLogout = () => {
-    setClicked(true);
-    localStorage.clear();
-    setClicked(false);
-    router.push("/auth/login");
-  };
 
   return (
     <div className="px-5 py-5 min-h-screen bg-gray-100">
@@ -463,391 +294,14 @@ const Admin = () => {
         <Navbar />
       </div>
 
-      <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-md sm:w-3/4 md:w-2/3 mx-auto mt-10">
-        <h2 className="text-2xl font-semibold flex items-center mb-4">
-          <FontAwesomeIcon icon={faUser} className="mr-2 text-gray-700" />
-          {locale === "en" ? "Profile Management" : "プロフィール管理"}
-        </h2>
-        {profiles && (
-          <div className="bg-gray-100 p-4 rounded-md shadow-sm">
-            <p className="text-lg font-medium text-gray-800">
-              {locale === "en" ? profiles.nameEn : profiles.nameJa}
-            </p>
-            <p className="text-gray-600">
-              {locale === "en"
-                ? profiles.username
-                : `ユーザー名: ${profiles.username}`}
-            </p>
-            <div className="flex flex-wrap gap-2 justify-between mt-4">
-              <button
-                onClick={() => setShowProfileForm(true)}
-                className="px-3 py-2 bg-yellow-400 text-white rounded-md flex items-center justify-center w-full sm:w-auto"
-              >
-                <FontAwesomeIcon icon={faEdit} className="mr-1" />
-                {locale === "en" ? "Update" : "アップデート"}
-              </button>
-              <button
-                onClick={handleProfileDelete}
-                disabled={clicked}
-                className={`px-3 py-1 bg-red-500 text-white rounded-md flex items-center justify-center ${clicked ? "bg-red-300 rotate-90" : "rotate-0"}`}
-              >
-                <FontAwesomeIcon icon={faTrash} className="mr-1" />
-                {locale === "en" ? "Delete" : "消去"}
-              </button>
-              <button
-                onClick={handleLogout}
-                disabled={clicked}
-                className={`px-3 py-1 bg-blue-500 text-white rounded-md flex items-center justify-center ${clicked ? "bg-blue-300 rotate-90" : "rotate-0"}`}
-              >
-                <FontAwesomeIcon icon={faSignOutAlt} className="mr-1" />
-                {locale === "en" ? "Logout" : "ログアウト"}
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Edit Profile Popup */}
-      {showProfileForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-md shadow-md w-full max-w-lg">
-            <h2 className="text-xl font-semibold mb-4">
-              {locale === "en" ? "Edit Profile" : "プロフィールを編集"}
-            </h2>
-            {error && (
-              <p className="text-red-500 mb-4">
-                <FontAwesomeIcon icon={faExclamationCircle} className="mr-2" />
-                {error}
-              </p>
-            )}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col">
-                <label
-                  htmlFor="nameEn"
-                  className="text-gray-700 font-medium mb-1"
-                >
-                  {locale === "en" ? "Name (English)" : "名前（英語)"}
-                </label>
-                <input
-                  id="nameEn"
-                  name="nameEn"
-                  value={profiles.nameEn}
-                  onChange={(e) =>
-                    setProfiles({ ...profiles, nameEn: e.target.value })
-                  }
-                  placeholder="Enter your name in English"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-              </div>
-
-              <div className="flex flex-col">
-                <label
-                  htmlFor="nameJa"
-                  className="text-gray-700 font-medium mb-1"
-                >
-                  {locale === "en" ? "Name (Japanese)" : "名前（日本語)"}
-                </label>
-                <input
-                  id="nameJa"
-                  name="nameJa"
-                  value={profiles.nameJa}
-                  onChange={(e) =>
-                    setProfiles({ ...profiles, nameJa: e.target.value })
-                  }
-                  placeholder="Enter your name in Japanese"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-              </div>
-
-              <div className="col-span-2 flex flex-col">
-                <label
-                  htmlFor="username"
-                  className="text-gray-700 font-medium mb-1"
-                >
-                  {locale === "en" ? "Username" : "ユーザー名"}
-                </label>
-                <input
-                  id="username"
-                  name="username"
-                  value={profiles.username}
-                  onChange={(e) =>
-                    setProfiles({ ...profiles, username: e.target.value })
-                  }
-                  placeholder="Enter your username"
-                  className="border border-gray-300 p-2 rounded-md w-full"
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-end mt-6">
-              <button
-                onClick={() => setShowProfileForm(false)}
-                className="px-4 py-2 bg-gray-500 text-white rounded-md mr-2"
-              >
-                {locale === "en" ? "Cancel" : "キャンセル"}
-              </button>
-
-              <button
-                type="submit"
-                onClick={handleProfileUpdate}
-                disabled={clicked}
-                className={`px-4 py-2 bg-blue-500  rounded-md text-white font-semibold  hover:bg-blue-300 transition ${
-                  isLoading ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-              >
-                {locale === "en"
-                  ? clicked
-                    ? "Submitting..."
-                    : "Update"
-                  : locale === "ja"
-                  ? clicked
-                    ? "送信中..."
-                    : "アップデート"
-                  : "アップデート"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <AdminProfile />
 
       <div className="container mx-auto px-4 pb-10">
         <h1 className="text-2xl font-bold mt-6">
           {locale === "en" ? "Admin Dashboard" : "管理者ダッシュボード"}
         </h1>
 
-        {role === "admin" && (
-          <div className="mt-6 bg-white shadow-md rounded-md p-4 w-full">
-            <h2 className="text-xl font-semibold mb-4 flex items-center">
-              <FontAwesomeIcon icon={faUsersCog} className="mr-2" />
-              {locale === "en" ? "User Management" : "ユーザー管理"}
-            </h2>
-
-            <button
-              onClick={() => {
-                setSelectedUser(null);
-                setShowUserForm(true);
-              }}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md mb-4 w-full sm:w-auto"
-            >
-              <FontAwesomeIcon icon={faPlus} className="mr-2" />
-              {locale === "en" ? "Add New User" : "新規ユーザーを追加"}
-            </button>
-
-            {/* Responsive Table Wrapper */}
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse border border-gray-300">
-                <thead>
-                  <tr className="bg-gray-200 text-left">
-                    <th className="border border-gray-300 p-2">
-                      {locale === "en" ? "Name" : "名前"}
-                    </th>
-                    <th className="border border-gray-300 p-2">
-                      {locale === "en" ? "Username" : "ユーザー名"}
-                    </th>
-                    <th className="border border-gray-300 p-2">
-                      {locale === "en" ? "Admin" : "管理者"}
-                    </th>
-                    <th className="border border-gray-300 p-2">
-                      {locale === "en" ? "Actions" : "アクション"}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.length > 0 &&
-                    users.map((user) => (
-                      <tr key={user.id} className="hover:bg-gray-100">
-                        <td className="border border-gray-300 p-2">
-                          {locale === "en" ? user.nameEn : user.nameJa}
-                        </td>
-                        <td className="border border-gray-300 p-2">
-                          {locale === "en" ? user.username : `${user.username}`}
-                        </td>
-                        <td className="border border-gray-300 p-2">
-                          {user
-                            ? locale === "en"
-                              ? "Yes"
-                              : "はい"
-                            : locale === "en"
-                            ? "No"
-                            : "いいえ"}
-                        </td>
-                        <td className="border border-gray-300 p-2 flex flex-wrap gap-2">
-                          <button
-                            disabled={clicked}
-                            onClick={() => {
-                              setSelectedUser(user);
-                              setShowUserForm(true);
-                            }}
-                            className={`px-3 py-1 bg-yellow-500 text-white rounded-md flex items-center justify-center ${clicked ? "bg-yellow-200 rotate-90" : "rotate-0"}`}
-                          >
-                            <FontAwesomeIcon icon={faEdit} />
-                          </button>
-                          <button
-                            disabled={clicked}
-                            onClick={() => handleUserDelete(user.id)}
-                            className={`px-3 py-1 bg-red-500 text-white rounded-md flex items-center justify-center ${clicked ? "bg-red-300 rotate-90" : "rotate-0"}`}
-                          >
-                            <FontAwesomeIcon icon={faTrash} />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        {/* User Form Popup */}
-        {showUserForm && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-6 rounded-md shadow-md w-full max-w-lg">
-              <h2 className="text-xl font-semibold mb-4">
-                {selectedUser
-                  ? locale === "en"
-                    ? "Edit User"
-                    : "ユーザーを編集"
-                  : locale === "en"
-                  ? "Add New User"
-                  : "新しいユーザーを追加"}
-              </h2>
-              {error && (
-                <p className="text-red-500 mb-4">
-                  <FontAwesomeIcon
-                    icon={faExclamationCircle}
-                    className="mr-2"
-                  />
-                  {error}
-                </p>
-              )}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col">
-                  <label
-                    htmlFor="nameEn"
-                    className="text-gray-700 font-medium mb-1"
-                  >
-                    {locale === "en" ? "Name (English)" : "名前 (英語)"}
-                  </label>
-                  <input
-                    id="nameEn"
-                    name="nameEn"
-                    value={selectedUser?.nameEn || ""}
-                    onChange={(e) =>
-                      setSelectedUser({
-                        ...(selectedUser || ({} as Profile)),
-                        nameEn: e.target.value,
-                      })
-                    }
-                    placeholder="Name (English)"
-                    className="border border-gray-300 p-2 rounded-md w-full"
-                  />
-                </div>
-
-                <div className="flex flex-col">
-                  <label
-                    htmlFor="nameJa"
-                    className="text-gray-700 font-medium mb-1"
-                  >
-                    {locale === "en" ? "Name (Japanese)" : "名前 (日本語)"}
-                  </label>
-                  <input
-                    id="nameJa"
-                    name="nameJa"
-                    value={selectedUser?.nameJa || ""}
-                    onChange={(e) =>
-                      setSelectedUser({
-                        ...(selectedUser || ({} as Profile)),
-                        nameJa: e.target.value,
-                      })
-                    }
-                    placeholder="Name (Japanese)"
-                    className="border border-gray-300 p-2 rounded-md w-full"
-                  />
-                </div>
-
-                <div className="flex flex-col">
-                  <label
-                    htmlFor="username"
-                    className="text-gray-700 font-medium mb-1"
-                  >
-                    {locale === "en" ? "Username" : "ユーザー名"}
-                  </label>
-                  <input
-                    id="username"
-                    name="username"
-                    value={selectedUser?.username || ""}
-                    onChange={(e) =>
-                      setSelectedUser({
-                        ...(selectedUser || ({} as Profile)),
-                        username: e.target.value,
-                      })
-                    }
-                    placeholder="Username"
-                    className="border border-gray-300 p-2 rounded-md w-full"
-                    type="text"
-                  />
-                </div>
-
-                {!selectedUser?.id && (
-                  <div className="flex flex-col">
-                    <label
-                      htmlFor="stringPassword"
-                      className="text-gray-700 font-medium mb-1"
-                    >
-                      {locale === "en" ? "Password" : "パスワード"}
-                    </label>
-                    <input
-                      id="stringPassword"
-                      name="stringPassword"
-                      onChange={(e) =>
-                        setSelectedUser({
-                          ...(selectedUser || ({} as Profile)),
-                          stringPassword: e.target.value,
-                        })
-                      }
-                      placeholder="Password"
-                      className="border border-gray-300 p-2 rounded-md w-full"
-                      type="password"
-                    />
-                  </div>
-                )}
-              </div>
-
-              <div className="flex justify-end mt-6">
-                <button
-                  onClick={() => {
-                    setShowUserForm(false);
-                    setSelectedUser(null);
-                  }}
-                  className="px-4 py-2 bg-gray-500 text-white rounded-md mr-2"
-                >
-                  {locale === "en" ? "Cancel" : "キャンセル"}
-                </button>
-                <button
-                  disabled={clicked}
-                  onClick={handleUserUpdate}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                >
-                  {locale === "en"
-                    ? selectedUser?.id
-                      ? clicked
-                        ? "Updating..."
-                        : "Update"
-                      : clicked
-                      ? "Creating..."
-                      : "Create"
-                    : selectedUser?.id
-                    ? clicked
-                      ? "更新中..."
-                      : "更新"
-                    : clicked
-                    ? "作成中..."
-                    : "作成"}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        <UserManagement />
 
         {/* Vehicle Management Section */}
         <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
@@ -912,45 +366,47 @@ const Admin = () => {
                 </tr>
               </thead>
               <tbody>
-                {vehicles.map((vehicle) => {
-                  return (
-                    <tr key={vehicle.id} className="hover:bg-gray-100">
-                      <td className="border border-gray-300 p-2">
-                        {locale === "en"
-                          ? vehicle.title.split("/")[0]
-                          : vehicle.title.split("/")[1]}
-                      </td>
-                      <td className="border border-gray-300 p-2">
-                        ${vehicle.price}
-                      </td>
-                      <td className="border border-gray-300 p-2">
-                        {locale === "en"
-                          ? vehicle.model.split("/")[0]
-                          : vehicle.model.split("/")[1]}
-                      </td>
-                      <td className="border border-gray-300 p-2 flex flex-col sm:flex-row gap-2">
-                        <button
-                          onClick={() => handleEdit(vehicle)}
-                          disabled={clicked}
-                          className={`px-3 py-1 bg-yellow-500 text-white rounded-md flex items-center justify-center ${
-                            clicked ? "bg-yellow-200 rotate-90" : "rotate-0"
-                          }`}
-                        >
-                          <FontAwesomeIcon icon={faEdit} />
-                        </button>
-                        <button
-                          disabled={clicked}
-                          onClick={() => handleDelete(vehicle.id)}
-                          className={`px-3 py-1 bg-red-500 text-white rounded-md flex items-center justify-center ${
-                            clicked ? "bg-red-300 rotate-90" : "rotate-0"
-                          }`}
-                        >
-                          <FontAwesomeIcon icon={faTrash} />
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {vehicles.map((vehicle) => (
+                  <tr key={vehicle.id} className="hover:bg-gray-100">
+                    <td className="border border-gray-300 p-2">
+                      {locale === "en"
+                        ? vehicle.title.split("/")[0]
+                        : vehicle.title.split("/")[1]}
+                    </td>
+                    <td className="border border-gray-300 p-2">
+                      ${vehicle.price}
+                    </td>
+                    <td className="border border-gray-300 p-2">
+                      {locale === "en"
+                        ? vehicle.model.split("/")[0]
+                        : vehicle.model.split("/")[1]}
+                    </td>
+                    <td className="border border-gray-300 p-2 flex flex-col sm:flex-row gap-2">
+                      <button
+                        onClick={() => {handleEdit(vehicle)
+                          formData.id = vehicle.id;
+                        }}
+                        disabled={clicked}
+                        className={`px-3 py-1 bg-yellow-500 text-white rounded-md flex items-center justify-center ${
+                          clicked ? "bg-yellow-200 rotate-90" : "rotate-0"
+                        }`}
+                      >
+                        <FontAwesomeIcon icon={faEdit} />
+                      </button>
+                      <button
+                        disabled={clicked}
+                        onClick={() => handleDelete(vehicle.id)
+                          
+                        }
+                        className={`px-3 py-1 bg-red-500 text-white rounded-md flex items-center justify-center ${
+                          clicked ? "bg-red-300 rotate-90" : "rotate-0"
+                        }`}
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           )}
@@ -989,6 +445,21 @@ const Admin = () => {
                   <input
                     name="title"
                     value={formData.title}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 p-2 rounded-md w-full"
+                  />
+                </div>
+                {/* test */}
+                <div className="flex flex-col">
+                  <label
+                    className="text-slate-600 font-semibold mb-5"
+                    htmlFor="title"
+                  >
+                    {locale === "en" ? "id" : "タイトル"}
+                  </label>
+                  <input
+                    name="title"
+                    value={formData.id}
                     onChange={handleInputChange}
                     className="border border-gray-300 p-2 rounded-md w-full"
                   />

@@ -29,7 +29,7 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
           {/* Vehicle Image */}
           <div className="flex-shrink-0">
             <Image
-              src={`http://localhost:3000${vehicle.previewUrl}`}
+              src={`${vehicle.previewUrl}`}
               alt={vehicle.title}
               width={306}
               height={250}
