@@ -42,7 +42,7 @@ export default function Card({ vehicle }: { vehicle: Ifields }) {
         alt={vehicle.title}
         width={342}
         height={255}
-        className="w-full h-[255px] object-cover rounded-lg object-center"
+        className="w-full h-[395px] object-cover rounded-lg object-center"
       />
 
       {/* Title: Split by comma */}

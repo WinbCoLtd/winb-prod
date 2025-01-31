@@ -8,6 +8,8 @@ import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useLocale } from "next-intl";
 import { PulseLoader } from "react-spinners";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface FormData {
   name: string;
@@ -21,14 +23,12 @@ interface FormData {
 export default function Inquiry() {
   const [formData, setFormData] = useState<FormData>({
     name: "",
-    email: "",
+    email: "winb.coltd@gmail.com",
     phone: "",
     message: "",
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
   const searchParam = useSearchParams();
   const locale = useLocale();
 
@@ -53,43 +53,25 @@ export default function Inquiry() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
-    setSuccess(false);
 
     try {
       const res = await axios.post("/api/contact", formData);
 
       if (res.status === 200) {
-        setSuccess(true);
+        toast.success("Inquiry submitted successfully!");
         setFormData({ name: "", email: "", phone: "", message: "" });
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      console.error(err);
-      setError("Failed to submit the inquiry. Please try again later.");
+    } catch (err) {
+      toast.error("Failed to submit the inquiry. Please try again later.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Simulating loading state for demonstration
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000); // Adjust this timer as needed
-    return () => clearTimeout(timer); // Cleanup on component unmount
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <PulseLoader color="#2563eb" size={20} />
-      </div>
-    );
-  }
-
   return (
     <div className="relative min-h-[87vh] w-full max-w-[1366px] mx-auto px-2 pb-10">
+      <ToastContainer position="top-right" autoClose={3000} />
+      
       <div className="bg-[#08001C67] w-full flex items-center justify-center border border-[#00CCEE] rounded-[10px] min-h-32 mt-2 my-auto">
         <Navbar />
       </div>
@@ -109,10 +91,7 @@ export default function Inquiry() {
           />
           <form onSubmit={handleSubmit} className="w-full lg:w-2/3 space-y-6">
             <div className="flex flex-col">
-              <label
-                className="lg:text-[18px] text-black font-semibold mb-2"
-                htmlFor="name"
-              >
+              <label className="lg:text-[18px] text-black font-semibold mb-2" htmlFor="name">
                 {locale === "en" ? "Name" : "名前"}
               </label>
               <input
@@ -128,10 +107,7 @@ export default function Inquiry() {
 
             {formData.title && (
               <div className="flex flex-col">
-                <label
-                  className="lg:text-[18px] text-black font-semibold mb-2"
-                  htmlFor="title"
-                >
+                <label className="lg:text-[18px] text-black font-semibold mb-2" htmlFor="title">
                   {locale === "en" ? "Vehicle Name" : "車両名"}
                 </label>
                 <input
@@ -147,10 +123,7 @@ export default function Inquiry() {
 
             <div className="flex flex-col md:flex-row md:space-x-6">
               <div className="flex flex-col w-full md:w-1/2">
-                <label
-                  className="lg:text-[18px] text-black font-semibold mb-2"
-                  htmlFor="email"
-                >
+                <label className="lg:text-[18px] text-black font-semibold mb-2" htmlFor="email">
                   {locale === "en" ? "Email Address" : "電子メールアドレス"}
                 </label>
                 <input
@@ -165,10 +138,7 @@ export default function Inquiry() {
               </div>
 
               <div className="flex flex-col w-full md:w-1/2">
-                <label
-                  className="lg:text-[18px] text-black font-semibold mb-2"
-                  htmlFor="phone"
-                >
+                <label className="lg:text-[18px] text-black font-semibold mb-2" htmlFor="phone">
                   {locale === "en" ? "Phone Number" : "電話番号"}
                 </label>
                 <input
@@ -184,11 +154,8 @@ export default function Inquiry() {
             </div>
 
             <div className="flex flex-col">
-              <label
-                className="lg:text-[18px] text-black font-semibold mb-2"
-                htmlFor="message"
-              >
-                {locale === "en" ? " Message" : "メッセージ"}
+              <label className="lg:text-[18px] text-black font-semibold mb-2" htmlFor="message">
+                {locale === "en" ? "Message" : "メッセージ"}
               </label>
               <textarea
                 id="message"
@@ -218,20 +185,6 @@ export default function Inquiry() {
                   : "お問い合わせを送信"}
               </button>
             </div>
-
-            {success && (
-              <p className="text-green-600 text-center font-medium mt-4">
-                {locale === "en"
-                  ? "Inquiry submitted successfully!"
-                  : "お問い合わせが正常に送信されました。"}
-              </p>
-            )}
-
-            {error && (
-              <p className="text-red-600 text-center font-medium mt-4">
-                {error}
-              </p>
-            )}
           </form>
         </div>
       </div>
