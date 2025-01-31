@@ -17,6 +17,7 @@ import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
+import Image from "next/image";
 interface ImageData {
   id: number;
   url: string;
@@ -123,6 +124,7 @@ const Admin = () => {
       setIsLoading(false);
       setLoading(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // Add this new fetch function
   const fetchUsers = async () => {
@@ -485,7 +487,7 @@ const Admin = () => {
               <button
                 onClick={handleProfileDelete}
                 disabled={clicked}
-                className="px-3 py-2 bg-red-500 text-white rounded-md flex items-center justify-center w-full sm:w-auto"
+                className={`px-3 py-1 bg-red-500 text-white rounded-md flex items-center justify-center ${clicked ? "bg-red-300 rotate-90" : "rotate-0"}`}
               >
                 <FontAwesomeIcon icon={faTrash} className="mr-1" />
                 {locale === "en" ? "Delete" : "消去"}
@@ -493,7 +495,7 @@ const Admin = () => {
               <button
                 onClick={handleLogout}
                 disabled={clicked}
-                className="px-3 py-2 bg-blue-500 text-white rounded-md flex items-center justify-center w-full sm:w-auto"
+                className={`px-3 py-1 bg-blue-500 text-white rounded-md flex items-center justify-center ${clicked ? "bg-blue-300 rotate-90" : "rotate-0"}`}
               >
                 <FontAwesomeIcon icon={faSignOutAlt} className="mr-1" />
                 {locale === "en" ? "Logout" : "ログアウト"}
@@ -674,14 +676,14 @@ const Admin = () => {
                               setSelectedUser(user);
                               setShowUserForm(true);
                             }}
-                            className="px-3 py-1 bg-yellow-400 text-white rounded-md"
+                            className={`px-3 py-1 bg-yellow-500 text-white rounded-md flex items-center justify-center ${clicked ? "bg-yellow-200 rotate-90" : "rotate-0"}`}
                           >
                             <FontAwesomeIcon icon={faEdit} />
                           </button>
                           <button
                             disabled={clicked}
                             onClick={() => handleUserDelete(user.id)}
-                            className="px-3 py-1 bg-red-500 text-white rounded-md"
+                            className={`px-3 py-1 bg-red-500 text-white rounded-md flex items-center justify-center ${clicked ? "bg-red-300 rotate-90" : "rotate-0"}`}
                           >
                             <FontAwesomeIcon icon={faTrash} />
                           </button>
@@ -826,10 +828,18 @@ const Admin = () => {
                 >
                   {locale === "en"
                     ? selectedUser?.id
-                      ? "Update"
+                      ? clicked
+                        ? "Updating..."
+                        : "Update"
+                      : clicked
+                      ? "Creating..."
                       : "Create"
                     : selectedUser?.id
-                    ? "更新"
+                    ? clicked
+                      ? "更新中..."
+                      : "更新"
+                    : clicked
+                    ? "作成中..."
                     : "作成"}
                 </button>
               </div>
@@ -920,14 +930,18 @@ const Admin = () => {
                         <button
                           onClick={() => handleEdit(vehicle)}
                           disabled={clicked}
-                          className="px-3 py-1 bg-yellow-400 text-white rounded-md flex items-center justify-center"
+                          className={`px-3 py-1 bg-yellow-500 text-white rounded-md flex items-center justify-center ${
+                            clicked ? "bg-yellow-200 rotate-90" : "rotate-0"
+                          }`}
                         >
                           <FontAwesomeIcon icon={faEdit} />
                         </button>
                         <button
                           disabled={clicked}
                           onClick={() => handleDelete(vehicle.id)}
-                          className="px-3 py-1 bg-red-500 text-white rounded-md flex items-center justify-center"
+                          className={`px-3 py-1 bg-red-500 text-white rounded-md flex items-center justify-center ${
+                            clicked ? "bg-red-300 rotate-90" : "rotate-0"
+                          }`}
                         >
                           <FontAwesomeIcon icon={faTrash} />
                         </button>
@@ -1214,7 +1228,9 @@ const Admin = () => {
                 </label>
                 {formData.previewUrl && !screenShot && (
                   <div className="relative inline-block">
-                    <img
+                    <Image
+                      width={96}
+                      height={96}
                       src={`http://localhost:3000${formData.previewUrl}`}
                       alt="Screenshot Preview"
                       className="w-24 h-24 object-cover rounded-md"
@@ -1231,7 +1247,9 @@ const Admin = () => {
                 )}
                 {screenShot && (
                   <div className="relative inline-block">
-                    <img
+                    <Image
+                      width={96}
+                      height={96}
                       src={URL.createObjectURL(screenShot)}
                       alt="Screenshot Preview"
                       className="w-24 h-24 object-cover rounded-md"
@@ -1284,7 +1302,9 @@ const Admin = () => {
                 <div className="flex flex-wrap gap-2 mt-4">
                   {retainedUrls.map((url, index) => (
                     <div key={index} className="relative">
-                      <img
+                      <Image
+                        width={96}
+                        height={96}
                         src={`http://localhost:3000${url}`}
                         alt={`Preview ${index}`}
                         className="w-24 h-24 object-cover rounded-md"
@@ -1299,7 +1319,9 @@ const Admin = () => {
                   ))}
                   {files.map((file, index) => (
                     <div key={index} className="relative">
-                      <img
+                      <Image
+                        width={96}
+                        height={96}
                         src={URL.createObjectURL(file)}
                         alt={`Preview ${index}`}
                         className="w-24 h-24 object-cover rounded-md"

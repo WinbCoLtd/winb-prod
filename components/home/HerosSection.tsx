@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../Navbar";
 import axios from "axios";
 import { ChevronDown, MapPin } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 
@@ -27,6 +26,7 @@ function HeroSection() {
   const router = useRouter();
   const locale = useLocale();
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const [clicked, setClicked] = useState(false)
 
   // Function to toggle price dropdown visibility
   const displayPriceRangers = () => {
@@ -73,6 +73,7 @@ function HeroSection() {
   };
 
   const redirectToSearchResultPage = () => {
+    setClicked(true)
     const queryParams = [];
 
     if (currentSelectedMaker !== "") {
@@ -96,6 +97,7 @@ function HeroSection() {
     }`;
 
     router.push(path);
+    setClicked(false)
   };
 
   useEffect(() => {
@@ -256,7 +258,7 @@ function HeroSection() {
             className="rounded-md md:max-w-32 w-full bg-[#FCDB02] text-black font-bold px-6 py-2 h-12"
             onClick={redirectToSearchResultPage}
           >
-            {locale === "en" ? "Search" : "検索"}
+            {clicked ? locale === "en" ? "Search" : "検索" : locale === "en" ? "Searching" : "検索検"}
           </button>
         </div>
       </div>
