@@ -14,30 +14,30 @@ const Footer = () => {
   return (
     <footer className="mt-7 bg-[#c9d2e9]  text-white w-full py-8 flex flex-col items-center justify-center">
       <div className="flex gap-10 mb-4 sm:gap-6 xs:gap-4">
-        <a
-          href="#"
+        <Link
+          href="/"
           className="text-white text-2xl lg:text-2xl md:text-2xl hover:text-blue-400"
         >
           <FontAwesomeIcon icon={faTwitter} />
-        </a>
-        <a
-          href="#"
+        </Link>
+        <Link
+          href="/"
           className="text-white text-2xl lg:text-2xl md:text-2xl  hover:text-blue-400"
         >
           <FontAwesomeIcon icon={faFacebook} />
-        </a>
-        <a
-          href="#"
+        </Link>
+        <Link
+          href="/"
           className="text-white text-2xl lg:text-2xl md:text-2xl hover:text-blue-400"
         >
           <FontAwesomeIcon icon={faLinkedin} />
-        </a>
-        <a
-          href="#"
+        </Link>
+        <Link
+          href="/"
           className="text-white text-2xl lg:text-2xl md:text-2xl hover:text-blue-400"
         >
           <FontAwesomeIcon icon={faInstagram} />
-        </a>
+        </Link>
       </div>
 
       <p className="text-winb-ash font-semibold lg:text-[16px] sm:text-[14px] xs:text-[12px] xxs:text-[12px] text-center mb-4">

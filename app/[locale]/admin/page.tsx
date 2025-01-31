@@ -333,7 +333,7 @@ const Admin = () => {
                 previewUrl: "",
               });
             }}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md font-semibold w-full sm:w-auto"
+            className="px-4 py-2 bg-blue-600 text-white rounded-md font-semibold w-full sm:w-auto"
           >
             <FontAwesomeIcon icon={faPlus} className="mr-2" />
             {locale === "en" ? "Add New Vehicle" : "新しい車両を追加"}
@@ -388,7 +388,7 @@ const Admin = () => {
                         }}
                         disabled={clicked}
                         className={`px-3 py-1 bg-yellow-500 text-white rounded-md flex items-center justify-center ${
-                          clicked ? "bg-yellow-200 rotate-90" : "rotate-0"
+                          clicked ? "bg-yellow-200" : "rotate-0"
                         }`}
                       >
                         <FontAwesomeIcon icon={faEdit} />
@@ -399,7 +399,7 @@ const Admin = () => {
                           
                         }
                         className={`px-3 py-1 bg-red-500 text-white rounded-md flex items-center justify-center ${
-                          clicked ? "bg-red-300 rotate-90" : "rotate-0"
+                          clicked ? "bg-red-300" : "rotate-0"
                         }`}
                       >
                         <FontAwesomeIcon icon={faTrash} />
@@ -845,3 +845,6 @@ const Admin = () => {
 };
 
 export default Admin;
+
+
+

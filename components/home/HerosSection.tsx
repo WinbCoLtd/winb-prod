@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
@@ -13,11 +12,7 @@ type SearchType = {
   models: string[];
 };
 
-const bgImages = [
-  "bg-hero-image",
-  "bg-hero-image2",
-  "bg-hero-image3",
-]
+const bgImages = ["bg-hero-image", "bg-hero-image2", "bg-hero-image3"];
 
 function HeroSection() {
   const [searchData, setSearchData] = useState<SearchType>();
@@ -32,19 +27,19 @@ function HeroSection() {
   const router = useRouter();
   const locale = useLocale();
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const [clicked, setClicked] = useState(false)
-    const [bg, setBg] = useState({bg: bgImages[0], index: 0})
-  
-    useEffect(() => {
-      const interval = setInterval(() => {
-        setBg((prev) => {
-          const newIndex = (prev.index + 1) % bgImages.length;
-          return { bg: bgImages[newIndex], index: newIndex };
-        });
-      }, 4000); 
-  
-      return () => clearInterval(interval); 
-    }, []);
+  const [clicked, setClicked] = useState(false);
+  const [bg, setBg] = useState({ bg: bgImages[0], index: 0 });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBg((prev) => {
+        const newIndex = (prev.index + 1) % bgImages.length;
+        return { bg: bgImages[newIndex], index: newIndex };
+      });
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Function to toggle price dropdown visibility
   const displayPriceRangers = () => {
@@ -91,7 +86,7 @@ function HeroSection() {
   };
 
   const redirectToSearchResultPage = () => {
-    setClicked(true)
+    setClicked(true);
     const queryParams = [];
 
     if (currentSelectedMaker !== "") {
@@ -115,25 +110,37 @@ function HeroSection() {
     }`;
 
     router.push(path);
-    setClicked(false)
+    setClicked(false);
   };
 
   useEffect(() => {
     fetchSearchData();
   }, []);
-  
 
   return (
-    <div className={`relative w-full min-h-[80vh] flex flex-col md:px-12 xl:px-56 mx-auto pb-10 bg-cover object-center bg-center max-h-[768px] transition-all duration-1000 ${bg.bg}`}>
+    <div
+      className={`relative w-full min-h-[80vh] flex flex-col md:px-12 xl:px-56 mx-auto pb-10 bg-cover object-center bg-center max-h-[768px] transition-all duration-1000 ${bg.bg}`}
+    >
+      {/* Overlay with background color */}
+      <div
+        className="absolute top-0 left-0 w-full h-full bg-black opacity-50 z-1"
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.5)", // Custom overlay background color
+        }}
+      />
+
+      {/* Optional background color overlay */}
+      <div className="absolute top-0 left-0 w-full h-full bg-[#000000] opacity-40 z-0" />
+
       <Navbar />
-      <div className="flex flex-col justify-start py-14  items-center px-4">
-        <h1 className="font-bold text-3xl sm:text-5xl lg:text-6xl md:text-6xl text-white text-center mb-10 lg:mb-20">
+      <div className="flex flex-col justify-start py-14 items-center px-4 relative z-10">
+        <h1 className="font-bold text-3xl sm:text-5xl lg:text-6xl md:text-6xl text-white text-center mb-10 lg:mb-20 transition-transform duration-300 ease-in-out hover:scale-105">
           {locale === "en"
             ? "Reliable Vehicle Marketplace"
             : "信頼できる車両マーケットプレイス。"}
         </h1>
 
-        <div className="flex  flex-col md:flex-row flex-wrap md:flex-nowrap items-center md:items-end justify-between bg-white max-w-[1070px] w-full rounded-2xl min-w-80 p-4 gap-4 text-[#1f1f1f] font-semibold text-lg">
+        <div className="flex flex-col md:flex-row flex-wrap md:flex-nowrap items-center md:items-end justify-between bg-white max-w-[1070px] w-full rounded-2xl min-w-80 p-4 gap-4 text-[#1f1f1f] font-semibold text-lg">
           <div className="flex flex-col items-start flex-1 w-full">
             <label htmlFor="makers" className="text-xl mb-2">
               {locale === "en" ? "Makers" : "メーカー"}
@@ -144,7 +151,7 @@ function HeroSection() {
               onChange={(e) => setCurrentSelectedMaker(e.target.value)}
               className=" w-full  border border-gray-300 rounded-md px-3 py-2  "
             >
-              <option value=""  className="text-sm">
+              <option value="" className="text-xl">
                 {locale === "en" ? "All Makers" : "すべてのメーカー"}
               </option>
               {searchData && searchData.makers.length > 0 ? (
@@ -262,10 +269,8 @@ function HeroSection() {
                       handlePriceChange("max", Number(e.target.value))
                     }
                   />
-                  <small className="font-normal">
-                    {currentSelectedPrice.max}
-                  </small>
-                  <small>¥</small>
+                  <small>{currentSelectedPrice.max} </small>
+                  <small> ¥</small>
                 </div>
               </div>
             )}
@@ -274,10 +279,16 @@ function HeroSection() {
           {/* Search Button */}
           <button
             type="button"
-            className="rounded-md md:max-w-32 w-full bg-[#FCDB02] text-black font-bold px-6 py-2 h-12"
+            className="rounded-md md:max-w-32 w-[150px] bg-[#FCDB02] text-black font-bold px-6 py-2 h-12"
             onClick={redirectToSearchResultPage}
           >
-            {clicked ? locale === "en" ? "Search" : "検索" : locale === "en" ? "Searching" : "検索検"}
+            {clicked
+              ? locale === "en"
+                ? "Search"
+                : "検索"
+              : locale === "en"
+              ? "Search"
+              : "検索検"}
           </button>
         </div>
       </div>
@@ -297,7 +308,7 @@ function HeroSection() {
       >
         <MapPin
           size={20}
-          className="size-10 text-white cursor-pointer md:size-auto md:text-black"
+          className="z-10 size-10 text-black cursor-pointer md:size-auto md:text-black"
         />
         <p className="hidden md:block">
           {locale === "en" ? "View on map" : "地図で表示"}

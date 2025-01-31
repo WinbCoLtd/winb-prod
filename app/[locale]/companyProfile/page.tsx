@@ -31,15 +31,15 @@ const Profile = () => {
         <Navbar />
       </div>
 
-      <div className="min-h-[783px] mb-9 relative w-full flex flex-col mt-16 sm:mt-8 sm:p-4 md:p-8 bg-company-profile bg-cover bg-center object-center bg-no-repeat items-center justify-center">
-        <h1 className="text-black font-semibold text-[36px] lg:text-[36px] md:text-[32px] sm:text-[28px] xxs:text-[24px] leading-tight text-center">
+      <div className="min-h-[783px] mb-9 relative w-full flex flex-col mt-16 sm:mt-8 sm:p-4 md:p-8 bg-company-profile bg-cover bg-center object-center bg-no-repeat items-center justify-center rounded-[25px]">
+        <h1 className="text-black mt-3 font-semibold text-[36px] lg:text-[36px] md:text-[32px] sm:text-[28px] xxs:text-[24px] leading-tight text-center">
           {locale === "en" ? "Company Overview" : "会社概要"}
         </h1>
 
-        <div className="max-w-[1029px] font-semibold text-xl text-[#000743] text-center mt-8">
+        <div className="max-w-[1029px] font-semibold text-xl text-[#000743] text-center mt-8 px-3 py-3">
           <p>
             {locale === "en"
-              ? `Welcome to WIN-B! Founded in [Year], WIN-B has become known as a platform that enables easy and efficient vehicle buying and selling. As a trusted name in the automotive industry, we provide a seamless experience for both sellers and buyers, ensuring the best service and satisfaction.`
+              ? `Welcome to WIN-B! Founded in 2025, WIN-B has become known as a platform that enables easy and efficient vehicle buying and selling. As a trusted name in the automotive industry, we provide a seamless experience for both sellers and buyers, ensuring the best service and satisfaction.`
               : `WIN-Bへようこそ![Year]に設立されたWIN-Bは、簡単かつ効率的に車両を売買できるプラットフォームとして知られるようになりました。自動車業界で信頼される名前として、私たちは売り手と買い手の両方にシームレスな体験を提供し、最高のサービスと満足を保証します。`}
           </p>
           <p>
@@ -62,7 +62,7 @@ const Profile = () => {
               ? `Advanced search functionality to find the perfect vehicle based on criteria such as manufacturer, model, condition, and location.`
               : `製造元、モデル、状態、場所など、さまざまな基準に基づいて完璧な車両を見つけるための高度な検索機能。`}
           </p>
-          <p className="lg:text-[18px] sm:text-[14px] xs:text-[14px] xxs:text-[14px] font-semibold">
+          <p>
             {locale === "en"
               ? `Detailed vehicle listings with photos, specifications, and features. A dedicated management team that ensures the accuracy and quality of vehicle details. A user-friendly platform for buyers to easily inquire about or email vehicle information.`
               : `写真、仕様、特徴を含む詳細な車両リスト。車両の詳細の正確性と品質を保証する専用の管理チーム。買い手が簡単に車両についての問い合わせやメールを送ることができるユーザーフレンドリーなプラットフォーム。`}

@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// /* eslint-disable @typescript-eslint/no-unused-vars */
+// /* eslint-disable prefer-const */
+// /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import {
@@ -51,6 +52,7 @@ const Filterbar = ({
   }>(initialSelectedFilters);
   const locale = useLocale();
   const [clicked, setClicked] = useState(false)
+  console.log(clicked)
 
   const handleFilterSelect = (name: string, value: string) => {
     setLocalSelectedFilters((prev) => {
@@ -69,6 +71,16 @@ const Filterbar = ({
     });
   };
 
+  const handleDeselectFilter = (name: string, value: string) => {
+    setLocalSelectedFilters((prev) => {
+      const prevValues = prev[name] || [];
+      return {
+        ...prev,
+        [name]: prevValues.filter((item) => item !== value),
+      };
+    });
+  };
+
   const applyFilters = () => {
     setClicked(true)
     const cleanedFilters = Object.fromEntries(
@@ -82,45 +94,61 @@ const Filterbar = ({
   };
 
   return (
-    <div className="relative max-w-[560px] min-w-[320px] max-h-screen lg:max-h-max overflow-y-auto lg:h-auto w-full bg-white rounded-xl p-6 border border-gray-200 shadow-md">
-      <button type="button" className="bg-black font-medium" onClick={close}>
+    <div className="mt-[190px] lg:mt-[65px] md:mt-[135px] relative max-w-[560px] min-w-[320px] max-h-screen lg:max-h-max overflow-y-auto lg:h-auto  w-full bg-white rounded-xl p-6 border border-gray-200 shadow-md">
+      <button type="button" className="font-medium" onClick={close}>
         {" "}
-        <X size={40} />{" "}
+        <X size={30} />{" "}
       </button>
       <h2 className="text-xl font-semibold mb-4 text-gray-800">
-        Filter Vehicles
+        {locale === "en" ? "Filter Vehicles" : "車両をフィルタリング"}
       </h2>
       <button
         type="button"
         className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium mb-4 hover:bg-blue-700 transition"
         onClick={applyFilters}
       >
-        { clicked ? "Apply Filters" : "Applying Filters"}
+        {locale === "en" ? "Apply Filters" : "フィルターを適用する"}
       </button>
 
       {Object.keys(filters).length > 0 ? (
         Object.keys(filters).map((filterKey) => (
           <div className="w-full mb-6" key={filterKey}>
             <div className="w-full flex items-center mb-2 text-gray-800">
-              <span className="mr-2">{icons[filterKey] || null}</span>
+              <span className="mr-2">{icons[filterKey] || null} </span>
               <h3 className="text-lg font-semibold capitalize">{filterKey}</h3>
             </div>
             <div className="w-full grid grid-cols-3 gap-2">
-              {filters[filterKey].map((item) => {
+              {Array.from(new Set(filters[filterKey])).map((item) => {
                 let splitValue: string | undefined;
                 const parts = item.toString().split("/");
 
                 if (locale === "en") {
-                  splitValue = parts[0]; 
+                  splitValue = parts[0];
                 } else {
-                  splitValue = parts[1] || parts[0]; 
+                  splitValue = parts[1] || parts[0];
                 }
 
                 if (splitValue.includes(",")) {
-                  const conditions = splitValue.split(",");
+                  const conditions = Array.from(new Set(splitValue.split(",")));
                   return conditions.map((cond: any) => (
+                    // <label
+                    //   className="flex items-center cursor-pointer bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 hover:bg-gray-200 transition"
+                    //   key={cond}
+                    // >
+                    //  <input
+                    //     type="checkbox"
+                    //     id={`${filterKey}-${cond}`}
+                    //     name={cond}
+                    //     value={cond}
+                    //     checked={localSelectedFilters[filterKey]?.includes(cond) || false}
+                    //     className="mr-2 accent-blue-600"
+                    //     onChange={() => handleFilterSelect(filterKey, cond)}
+                    //   />
+                    //   {cond}
+                    // </label>
+
                     <label
-                      className="flex items-center cursor-pointer bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 hover:bg-gray-200 transition"
+                      className="text-winb-text-dark-blue bg-white border border-winb-formblue rounded-[15px] px-2 py-2 hover:bg-gray-200 transition flex items-center justify-center cursor-pointer   "
                       key={cond}
                     >
                       <input
@@ -131,8 +159,8 @@ const Filterbar = ({
                         checked={
                           localSelectedFilters[filterKey]?.includes(cond) ||
                           false
-                        } // Use local state
-                        className="mr-2 accent-blue-600"
+                        }
+                        className="hidden peer"
                         onChange={() => handleFilterSelect(filterKey, cond)}
                       />
                       {cond}
@@ -141,7 +169,13 @@ const Filterbar = ({
                 } else {
                   return (
                     <label
-                      className="flex items-center cursor-pointer bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 hover:bg-gray-200 transition"
+                      className={`flex items-center justify-center cursor-pointer px-2 py-2 border rounded-[15px] transition
+                      ${
+                        localSelectedFilters[filterKey]?.includes(splitValue)
+                          ? "bg-yellow-200 text-winb-text-dark-blue border-winb-formblue"
+                          : "bg-white text-winb-text-dark-blue hover:bg-gray-200 border-winb-formblue"
+                      }
+                    `}
                       key={splitValue}
                     >
                       <input
@@ -153,14 +187,43 @@ const Filterbar = ({
                           localSelectedFilters[filterKey]?.includes(
                             splitValue
                           ) || false
-                        } // Use local state
-                        className="mr-2 accent-blue-600"
+                        }
+                        className="hidden" // Hide the checkbox
                         onChange={() =>
                           handleFilterSelect(filterKey, splitValue)
                         }
                       />
                       {splitValue}
+                      {localSelectedFilters[filterKey]?.includes(
+                        splitValue
+                      ) && (
+                        <button
+                          className="text-red-500 hover:text-red-700 cursor-pointer ml-2"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleDeselectFilter(filterKey, splitValue);
+                          }}
+                        >
+                          <X size={16} />
+                        </button>
+                      )}
                     </label>
+
+                    // <label
+                    //   className="flex items-center cursor-pointer bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 hover:bg-gray-200 transition"
+                    //   key={splitValue}
+                    // >
+                    //  <input
+                    //     type="checkbox"
+                    //     id={`${filterKey}-${splitValue}`}
+                    //     name={splitValue}
+                    //     value={splitValue}
+                    //     checked={localSelectedFilters[filterKey]?.includes(splitValue) || false}
+                    //     className="mr-2 accent-blue-600"
+                    //     onChange={() => handleFilterSelect(filterKey, splitValue)}
+                    //   />
+                    //   {splitValue}
+                    // </label>
                   );
                 }
               })}
@@ -177,3 +240,4 @@ const Filterbar = ({
 };
 
 export default Filterbar;
+

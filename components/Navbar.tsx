@@ -33,7 +33,7 @@ export default function Navbar() {
   const localeToggleText = locale === "en" ? "日本語" : "English";
 
   useEffect(() => {
-    setIsMobile(() => window.innerWidth <= 768)
+    setIsMobile(() => window.innerWidth <= 768);
   }, []);
 
   useEffect(() => {
@@ -64,41 +64,53 @@ export default function Navbar() {
     router.push(`/${newLocale}/${path}`);
   };
 
-  
   return (
-    <nav className="z-50 p-4 bg-gray-100 w-full flex justify-between items-center bg-transparent text-xl text-white">
-      <Link href="/" locale={locale} className="font-extrabold text-2xl">
-      <Image
-           src="/home/logo1.jpg"
-           alt="Logo"
-           width={60}
-           height={60}
-           className="w-28 h-auto mx-auto mb-6"
-         />
-         株式会社 WIN-B
-       </Link>
+    <nav className="z-50 p-4 bg-gray-100 w-full flex justify-between items-center bg-transparent text-[21px] text-white ">
+      <Link
+        href="/"
+        locale={locale}
+        className="font-extrabold text-2xl flex flex-col items-center"
+      >
+        <Image
+          src="/home/logo1.jpg"
+          alt="Logo"
+          width={60}
+          height={60}
+          className="w-24 h-auto mx-auto mb-2"
+        />
+
+        <span>
+        <span className="text-white text-[20px]">株式会社 </span>
+          <span className="text-[#FCDB02] text-[20px]">W</span>
+          <span className="text-white text-[20px]">IN-</span>
+          <span className="text-[#FCDB02] text-[20px]">B</span>
+        </span>
+      </Link>
+
       {!isMobile && (
-        <nav className="flex items-center justify-center gap-4 text-white">
-          <Link href="/" className="hover:underline">
+        <nav className="flex items-center justify-center gap-4 text-white font-bold">
+          <Link href="/" className="transition-transform duration-300 ease-in-out hover:scale-110 hover:text-yellow-200">
             {navbarLinks.home}
           </Link>
-          <Link href="/companyProfile" className="hover:underline">
+          <Link href="/companyProfile" className="transition-transform duration-300 ease-in-out hover:scale-110 hover:text-yellow-200">
             {navbarLinks.about}
           </Link>
-          <Link href="/vehicleList" className="hover:underline">
+          <Link href="/vehicleList" className=" transition-transform duration-300 ease-in-out hover:scale-110 hover:text-yellow-200">
             {navbarLinks.vehicleList}
           </Link>
-          <Link href="/otherService" className="hover:underline">
+          <Link href="/otherService" className="transition-transform duration-300 ease-in-out hover:scale-110 hover:text-yellow-200">
             {navbarLinks.otherService}
           </Link>
-          <Link href="/contact" className="hover:underline">
+          <Link href="/contact" className="transition-transform duration-300 ease-in-out hover:scale-110 hover:text-yellow-200">
             {navbarLinks.contact}
           </Link>
         </nav>
       )}
       {isMobile && (
         <nav
-          className={`absolute top-32 bg-[#000000de] rounded-2xl p-5 right-5 flex-col items-center justify-center gap-4 ${toggle ? "flex" : "hidden"}`}
+          className={`absolute top-32 bg-[#000000de] rounded-2xl p-5 right-5 flex-col items-center justify-center gap-4 ${
+            toggle ? "flex" : "hidden"
+          }`}
         >
           <Link href="/" className="hover:underline">
             {navbarLinks.home}
@@ -125,10 +137,13 @@ export default function Navbar() {
           {localeToggleText}
         </button>
         {isMobile && (
-          <Menu size={40} onClick={handleToggle} className="mx-2 cursor-pointer" />
+          <Menu
+            size={40}
+            onClick={handleToggle}
+            className="mx-2 cursor-pointer"
+          />
         )}
       </div>
     </nav>
   );
 }
-

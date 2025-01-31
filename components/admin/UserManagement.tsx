@@ -82,6 +82,7 @@ const UserManagement = () => {
       if (response.status == 201) {
         setSelectedUser(null);
         fetchUsers();
+        setShowUserForm(false);
       } else {
         console.log(response.data.error || "Failed to update user.");
       }
@@ -177,9 +178,10 @@ const UserManagement = () => {
                           onClick={() => {
                             setSelectedUser(user);
                             setShowUserForm(true);
+                            console.log('clicked')
                           }}
                           className={`px-3 py-1 bg-yellow-500 text-white rounded-md flex items-center justify-center ${
-                            clicked ? "bg-yellow-200 rotate-90" : "rotate-0"
+                            clicked ? "bg-yellow-200" : "rotate-0"
                           }`}
                         >
                           <FontAwesomeIcon icon={faEdit} />
@@ -203,7 +205,7 @@ const UserManagement = () => {
       )}
 
       {showUserForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+        <div className="z-50 fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-md shadow-md w-full max-w-lg">
             <h2 className="text-xl font-semibold mb-4">
               {selectedUser

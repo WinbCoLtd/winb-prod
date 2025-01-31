@@ -48,7 +48,7 @@ const Register = () => {
             <input
               type="text"
               name="email"
-              placeholder="Enter your email"
+              placeholder="Enter your username"
               value={formData.email}
               onChange={handleChange}
               required
