@@ -2,19 +2,16 @@
 import { Autherize } from "@/helpers/auth";
 import { prisma } from "@/prisma/prisma";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from 'cloudinary';
 
-// Configure Cloudinary
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
   secure: true
-})
+});
 
-// Helper function for Cloudinary uploads
 const uploadToCloudinary = async (file: File, folder: string) => {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
@@ -30,7 +27,6 @@ const uploadToCloudinary = async (file: File, folder: string) => {
   });
 };
 
-// Helper function to delete Cloudinary assets
 const deleteFromCloudinary = async (url: string) => {
   const publicId = url.split('/').slice(-2).join('/').split('.')[0];
   if (publicId) {
@@ -43,18 +39,22 @@ export async function PUT(req: NextRequest) {
   const token = headerList.get("authorization")?.split(" ")[1] || "";
 
   try {
-    // Authorization check
     const auth = await Autherize(token);
-    if (!auth) return redirect("/auth");
+    if (!auth) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
 
     const formdata = await req.formData();
-    const vehicleId = Number(formdata.get("id"));
+    const vehicleId = Number(new URL(req.url).searchParams.get("id"));
 
     if (!vehicleId) {
-      return NextResponse.json({
-        success: false,
-        error: "Vehicle ID is required for updating.",
-      });
+      return NextResponse.json(
+        { success: false, error: "Vehicle ID is required" },
+        { status: 400 }
+      );
     }
 
     // Fetch existing data
@@ -62,6 +62,13 @@ export async function PUT(req: NextRequest) {
       prisma.vehicle.findUnique({ where: { id: vehicleId } }),
       prisma.vehicleImages.findMany({ where: { vehicleId } })
     ]);
+
+    if (!existingImages) {
+      return NextResponse.json({
+        success: false,
+        error: "Images not found.",
+      });
+    }
 
     if (!existingVehicle) {
       return NextResponse.json({
@@ -75,22 +82,31 @@ export async function PUT(req: NextRequest) {
       formdata.get("retainedUrls")?.toString() || "[]"
     ) as string[];
 
+    if ( !retainedUrls ) {
+      return NextResponse.json({
+        success: false,
+        error: "Retain url not found",
+      });
+    }
+
     // Identify images to remove
     const imagesToDelete = existingImages.filter(
       img => !retainedUrls.includes(img.url) && img.url !== existingVehicle.previewUrl
     );
 
     // Clean up deleted images
-    await Promise.all([
-      ...imagesToDelete.map(img => deleteFromCloudinary(img.url)),
-      prisma.vehicleImages.deleteMany({
-        where: { id: { in: imagesToDelete.map(img => img.id) } }
-      })
-    ]);
+    if ( imagesToDelete && imagesToDelete.length > 0 ) {
+      await Promise.all([
+        ...imagesToDelete.map(img => deleteFromCloudinary(img.url)),
+        prisma.vehicleImages.deleteMany({
+          where: { id: { in: imagesToDelete.map(img => img.id) } }
+        })
+      ]);
+    }
 
     // Handle primary image update
     const previewImageFile = formdata.get("screenShot") as File | null;
-    let previewUrl = existingVehicle.previewUrl;
+    let previewUrl;
 
     if (previewImageFile) {
       // Upload new primary image
@@ -106,14 +122,25 @@ export async function PUT(req: NextRequest) {
       }
     }
 
+    let newFileUrls: any[] = [];
     // Handle new carousel images
     const files = formdata.getAll("file") as File[];
-    const newFileUrls = await Promise.all(
-      files.map(file => 
-        uploadToCloudinary(file, `vehicles/${vehicleId}/carousel`)
-          .then(res => res.secure_url)
-      )
-    );
+    if (files && files.length > 0) {
+      try {
+        newFileUrls = await Promise.all(
+          files.map(async (file) => {
+            const result = await uploadToCloudinary(file, `vehicles/${vehicleId}/carousel`);
+            return result.secure_url;
+          })
+        );
+      } catch (uploadError) {
+        console.error("File upload failed:", uploadError);
+        return NextResponse.json(
+          { success: false, error: "Failed to upload carousel images" },
+          { status: 500 }
+        );
+      }
+    }
 
     // Prepare updated vehicle data
     const formFields = [
@@ -125,9 +152,19 @@ export async function PUT(req: NextRequest) {
     const updatedData = formFields.reduce((acc: Record<string, any>, field) => {
       const value = formdata.get(field);
       if (value !== null) {
-        acc[field] = field === 'manufactureYear' && value 
-          ? new Date(value.toString())
-          : Number(value) || value.toString();
+        // Handle numeric fields explicitly
+        const numericFields = ['price', 'mileage', 'maxPassengers'];
+        if (numericFields.includes(field)) {
+          acc[field] = Number(value) || 0;
+        }
+        // Handle date field
+        else if (field === 'manufactureYear') {
+          acc[field] = new Date(value.toString());
+        }
+        // All other fields
+        else {
+          acc[field] = value.toString();
+        }
       }
       return acc;
     }, {});
@@ -166,11 +203,14 @@ export async function PUT(req: NextRequest) {
       }
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("Update vehicle error:", error);
-    return NextResponse.json({
-      success: false,
-      error: error instanceof Error ? error.message : "An unexpected error occurred",
-    });
+    return NextResponse.json(
+      { 
+        success: false,
+        error: error?.message || "An unexpected error occurred"
+      },
+      { status: 500 }
+    );
   }
 }

@@ -29,7 +29,7 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
           {/* Vehicle Image */}
           <div className="flex justify-center items-center">
             <Image
-              src={`http://localhost:3000${vehicle.previewUrl}`}
+              src={`${vehicle.previewUrl}`}
               alt={vehicle.title}
               width={306}
               height={250}
