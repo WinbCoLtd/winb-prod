@@ -18,6 +18,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import Image from "next/image";
+
 interface ImageData {
   id: number;
   url: string;
@@ -455,6 +456,7 @@ const Admin = () => {
     setClicked(false);
     router.push("/auth/login");
   };
+
   return (
     <div className="px-5 py-5 min-h-screen bg-gray-100">
       <div className=" bg-[#08001C67] w-full flex items-center justify-center border border-[#00CCEE] rounded-[10px] min-h-32 my-auto">
@@ -1231,7 +1233,7 @@ const Admin = () => {
                     <Image
                       width={96}
                       height={96}
-                      src={`http://localhost:3000${formData.previewUrl}`}
+                      src={`${formData.previewUrl}`}
                       alt="Screenshot Preview"
                       className="w-24 h-24 object-cover rounded-md"
                     />
@@ -1305,7 +1307,7 @@ const Admin = () => {
                       <Image
                         width={96}
                         height={96}
-                        src={`http://localhost:3000${url}`}
+                        src={`${url}`}
                         alt={`Preview ${index}`}
                         className="w-24 h-24 object-cover rounded-md"
                       />

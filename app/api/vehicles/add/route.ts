@@ -1,11 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Autherize } from "@/helpers/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
-import path from "path";
-import fs from "fs";
 import { prisma } from "@/prisma/prisma";
+import  { v2 as cloudinary } from 'cloudinary';
 
+cloudinary.config({
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true
+})
 export interface Ifields {
   title: string;
   description: string;
@@ -39,10 +45,6 @@ export async function POST(req: NextRequest) {
     console.error("Authorization error:", error);
     return NextResponse.json({ success: false, error: "Authorization failed" });
   }
-
-  let transaction;
-  const createdFiles: string[] = [];
-  const createdDirectories: string[] = [];
 
   try {
     const formdata = await req.formData();
@@ -81,8 +83,34 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    // Upload images to Cloudinary
+    const uploadImageToCloudinary = async (file: File) => {
+      const arrayBuffer = await file.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      
+      return new Promise<any>((resolve, reject) => {
+        cloudinary.uploader.upload_stream(
+          { resource_type: 'auto' },
+          (error, result) => {
+            if (error) reject(error);
+            if (result) resolve(result);
+          }
+        ).end(buffer);
+      });
+    };
+
+    // Upload primary screenshot
+    const screenShotResult = await uploadImageToCloudinary(screenShot);
+    const screenShotUrl = screenShotResult.secure_url;
+
+    // Upload additional images
+    const additionalImagesResults = await Promise.all(
+      files.map(file => uploadImageToCloudinary(file))
+    );
+    const additionalImageUrls = additionalImagesResults.map(res => res.secure_url);
+
     // Start a transaction
-    transaction = await prisma.$transaction(async (prismaTransaction) => {
+    const transaction = await prisma.$transaction(async (prismaTransaction) => {
       const insertVehicle = await prismaTransaction.vehicle.create({
         data: {
           title: formDataObject.title as string,
@@ -101,78 +129,44 @@ export async function POST(req: NextRequest) {
           manufactureYear: formDataObject.manufactureYear as Date,
           mileage: formDataObject.mileage as number,
           maxPassengers: formDataObject.maxPassengers as number,
-          imageCount: 0,
+          imageCount: additionalImageUrls.length + 1,
           isAvailable: true,
           isPublished: true,
-          previewUrl: "",
+          previewUrl: screenShotUrl,
         },
       });
 
-      const rootUploadPath = path.join(process.cwd(), "public", "uploads", `${insertVehicle.id}`);
-      if (!fs.existsSync(rootUploadPath)) {
-        fs.mkdirSync(rootUploadPath, { recursive: true });
-        createdDirectories.push(rootUploadPath);
-      }
-
-      const primaryImageFilePath = path.join(rootUploadPath, screenShot.name);
-      const primaryBuffer = Buffer.from(await screenShot.arrayBuffer());
-
-      fs.writeFileSync(primaryImageFilePath, primaryBuffer);
-      createdFiles.push(primaryImageFilePath);
-
-      const finalScreenPathToSave = `/uploads/${insertVehicle.id}/${screenShot.name}`;
-
-      const uploadPath = path.join(process.cwd(), "public", "uploads", `${insertVehicle.id}`, "carouselImg");
-      if (!fs.existsSync(uploadPath)) {
-        fs.mkdirSync(uploadPath, { recursive: true });
-        createdDirectories.push(uploadPath);
-      }
-
-      const fileUrls: string[] = [];
-
-      for (const file of files) {
-        const filePath = path.join(uploadPath, file.name);
-        const buffer = Buffer.from(await file.arrayBuffer());
-        fs.writeFileSync(filePath, buffer);
-        fileUrls.push(`/uploads/${insertVehicle.id}/carouselImg/${file.name}`);
-        createdFiles.push(filePath);
-      }
-
-      fileUrls.unshift(finalScreenPathToSave);
-
-      for (const file of fileUrls) {
-        await prismaTransaction.vehicleImages.create({
-          data: { url: file, vehicleId: insertVehicle.id },
-        });
-      }
-
-      await prismaTransaction.vehicle.update({
-        where: { id: insertVehicle.id },
+      // Create image records
+      await prismaTransaction.vehicleImages.create({
         data: {
-          imageCount: fileUrls.length,
-          previewUrl: fileUrls[0],
-        },
+          url: screenShotUrl,
+          vehicleId: insertVehicle.id,
+          isPrimary: true
+        }
       });
 
-      return { insertVehicle, fileUrls };
+      await Promise.all(
+        additionalImageUrls.map(url => 
+          prismaTransaction.vehicleImages.create({
+            data: {
+              url,
+              vehicleId: insertVehicle.id,
+              isPrimary: false
+            }
+          })
+        )
+      );
+
+      return { insertVehicle, imageUrls: [screenShotUrl, ...additionalImageUrls] };
     });
 
-    return NextResponse.json({ success: true, files: transaction.fileUrls });
+    return NextResponse.json({ 
+      success: true, 
+      vehicleId: transaction.insertVehicle.id,
+      imageUrls: transaction.imageUrls
+    });
   } catch (error) {
     console.error("Error occurred:", error);
-
-    // Rollback file system changes
-    for (const file of createdFiles) {
-      if (fs.existsSync(file)) {
-        fs.unlinkSync(file);
-      }
-    }
-
-    for (const dir of createdDirectories.reverse()) {
-      if (fs.existsSync(dir)) {
-        fs.rmdirSync(dir, { recursive: true });
-      }
-    }
 
     return NextResponse.json({ success: false, error: "An unexpected error occurred" });
   }
