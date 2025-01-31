@@ -35,7 +35,7 @@ const OtherService = () => {
         <Navbar />
       </div>
 
-      <div className="mt-12 relative bg-black">
+      <div className="mt-12 relative bg-black overflow-hidden rounded-xl">
         <Image
           src="/otherService/carrier.png"
           alt="Need Assistance"
@@ -61,7 +61,7 @@ const OtherService = () => {
 
           <div className="mb-[80px] mt-5 text-right">
             <Link href="/otherInquiry">
-              <button className="bg-winb-yellow text-black text-[14px]  px-4 py-0.5 rounded-[25px] font-semibold hover:bg-yellow-600 w-auto max-w-[200px] flex items-center justify-center gap-2 ml-auto">
+              <button className="bg-winb-yellow text-black text-[16px]  px-4 py-3 rounded-[25px] font-semibold hover:bg-yellow-600 w-auto max-w-[280px] flex items-center justify-center gap-2 ml-auto">
                 <span>
                   {" "}
                   {locale === "en"

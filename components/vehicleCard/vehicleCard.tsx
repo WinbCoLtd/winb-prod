@@ -27,7 +27,7 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
       {vehicle.previewUrl && (
         <div className="flex flex-col md:flex-row gap-5 w-full">
           {/* Vehicle Image */}
-          <div className="flex-shrink-0">
+          <div className="flex justify-center items-center">
             <Image
               src={`http://localhost:3000${vehicle.previewUrl}`}
               alt={vehicle.title}
@@ -62,7 +62,9 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
                 <div className="text-sm">
                   <p className="text-gray-500">Fuel Type</p>
                   <span className="text-gray-800 font-medium">
-                    {locale === 'en' ? vehicle.fuel.split('/')[0] : vehicle.fuel.split('/')[1]}
+                    {locale === "en"
+                      ? vehicle.fuel.split("/")[0]
+                      : vehicle.fuel.split("/")[1]}
                   </span>
                 </div>
               </div>
@@ -73,7 +75,9 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
                 <div className="text-sm">
                   <p className="text-gray-500">Drive Type</p>
                   <span className="text-gray-800 font-medium">
-                  {locale === 'en' ? vehicle.drive.split('/')[0] : vehicle.drive.split('/')[1]}
+                    {locale === "en"
+                      ? vehicle.drive.split("/")[0]
+                      : vehicle.drive.split("/")[1]}
                   </span>
                 </div>
               </div>
@@ -97,7 +101,9 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
                 <div className="text-sm">
                   <p className="text-gray-500">Condition</p>
                   <span className="text-gray-800 font-medium">
-                    {locale === 'en' ? vehicle.condition.split('/')[0] : vehicle.condition.split('/')[0]}
+                    {locale === "en"
+                      ? vehicle.condition.split("/")[0]
+                      : vehicle.condition.split("/")[0]}
                   </span>
                 </div>
               </div>

@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
@@ -255,10 +254,10 @@ function HeroSection() {
           {/* Search Button */}
           <button
             type="button"
-            className="rounded-md md:max-w-32 w-full bg-[#FCDB02] text-black font-bold px-6 py-2 h-12"
+            className="rounded-md md:max-w-32 w-[150px] bg-[#FCDB02] text-black font-bold px-6 py-2 h-12"
             onClick={redirectToSearchResultPage}
           >
-            {clicked ? locale === "en" ? "Search" : "検索" : locale === "en" ? "Searching" : "検索検"}
+            {clicked ? locale === "en" ? "Search" : "検索" : locale === "en" ? "Search" : "検索検"}
           </button>
         </div>
       </div>
@@ -278,7 +277,7 @@ function HeroSection() {
       >
         <MapPin
           size={20}
-          className="size-10 text-white cursor-pointer md:size-auto md:text-black"
+          className="size-10 text-black cursor-pointer md:size-auto md:text-black"
         />
         <p className="hidden md:block">
           {locale === "en" ? "View on map" : "地図で表示"}
