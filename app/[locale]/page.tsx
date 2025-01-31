@@ -9,9 +9,12 @@ import CTA from "@/components/home/CTA";
 import Feedback from "@/components/home/Feedback";
 import { PulseLoader } from "react-spinners";
 
+
+
 export default function Home() {
   const [loading, setLoading] = useState(true);
 
+  
   // Simulating loading state for demonstration
   useEffect(() => {
     const timer = setTimeout(() => {
