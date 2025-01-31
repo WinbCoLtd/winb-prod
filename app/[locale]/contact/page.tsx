@@ -61,6 +61,8 @@ export default function Inquiry() {
         setFormData({ name: "", email: "", phone: "", message: "" });
       }
     } catch (err) {
+      console.log(err);
+      
       toast.error("Failed to submit the inquiry. Please try again later.");
     } finally {
       setLoading(false);
