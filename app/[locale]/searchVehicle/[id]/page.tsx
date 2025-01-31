@@ -56,7 +56,7 @@ const MoreDetails = () => {
   const vid = typeof id === "string" ? parseInt(id) : null;
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [currentPreview, setCurrentPreview] = useState<string | null>(null);
-  const locale = useLocale();
+ const locale = useLocale();
 
   const fetchVehicle = async () => {
     setLoading(true);
@@ -163,14 +163,9 @@ const MoreDetails = () => {
 
         {/* Vehicle Details */}
         <div className="mt-20 md:mt-0 md:ml-8 flex flex-col justify-start w-full md:w-[500px]">
-          <h2 className="text-[40px] lg:text-[40px] md:text-[20px] text-black font-bold mb-4">
-            {
-              locale === "en"
-              ? vehicle.title[0] // English: Show the first part
-              : vehicle.title[1]?.length > 0 // Non-English: Show the second part if it's non-empty
-              ? vehicle.title[1]
-              : vehicle.title[0]
-            }
+          <h2 className="text-[30px] lg:text-[30px] md:text-[20px] text-black font-bold mb-4">
+          {locale === "en" ? vehicle.title : "車両タイトル"}
+
           </h2>
           <p className="text-[24px] lg:text-[30px] md:text-[24px] text-black font-medium mb-4">
             {
@@ -182,64 +177,25 @@ const MoreDetails = () => {
               }
           </p>
 
-          <div className="text-[30px] lg:text-[30px] md:text-[24px] mt-[46px] grid lg:grid-cols-2 md:grid-cols-3 gap-4 items-center">
+          <div className="text-[24px] lg:text-[24px] md:text-[24px] mt-[46px] grid lg:grid-cols-2 md:grid-cols-3 gap-4 items-center">
             {[
-              { label: "Price", value: `¥ ${vehicle.price}` },
-              { label: "Model", value: locale === "en"
-                ? vehicle.model[0] 
-                : vehicle.model[1]?.length > 0 
-                ? vehicle.model[1]
-                : vehicle.model[0] },
-              { label: "Maker", value: locale === "en"
-                ? vehicle.maker[0] 
-                : vehicle.maker[1]?.length > 0 
-                ? vehicle.maker[1]
-                : vehicle.maker[0] },
-              { label: "Vehicle Type", value: locale === "en"
-                ? vehicle.vehicleType[0] 
-                : vehicle.vehicleType[1]?.length > 0 
-                ? vehicle.vehicleType[1]
-                : vehicle.vehicleType[0] },
-              { label: "Fuel Type", value: locale === "en"
-                ? vehicle.fuel[0] 
-                : vehicle.fuel[1]?.length > 0 
-                ? vehicle.fuel[1]
-                : vehicle.fuel[0] },
-              { label: "Drive Type", value: locale === "en"
-                ? vehicle.drive[0] 
-                : vehicle.drive[1]?.length > 0 
-                ? vehicle.drive[1]
-                : vehicle.drive[0] },
-              { label: "Color", value: locale === "en"
-                ? vehicle.color[0] 
-                : vehicle.color[1]?.length > 0 
-                ? vehicle.color[1]
-                : vehicle.color[0] },
-              { label: "Grade", value: locale === "en"
-                ? vehicle.grade[0] 
-                : vehicle.grade[1]?.length > 0 
-                ? vehicle.grade[1]
-                : vehicle.grade[0] },
-              { label: "Chassi Number", value: locale === "en"
-                ? vehicle.chassieNumber[0] 
-                : vehicle.chassieNumber[1]?.length > 0 
-                ? vehicle.chassieNumber[1]
-                : vehicle.chassieNumber[0] },
-              { label: "Shaken", value: locale === "en"
-                ? vehicle.Shaken[0] 
-                : vehicle.Shaken[1]?.length > 0 
-                ? vehicle.Shaken[1]
-                : vehicle.Shaken[0] },
+              { label: locale === "en" ? "Price" : "価格", value: `¥ ${vehicle.price}` },
+              { label: locale === "en" ? "Model" : "モデル", value: vehicle.model },
+              { label: locale === "en" ? "Maker" : "メーカー", value: vehicle.maker },
+              { label: locale === "en" ? "Maker" : "メーカー", value: vehicle.maker },
+              { label: locale === "en" ? "Vehicle Type"  : "車両タイプ", value: vehicle.vehicleType },
+              { label: locale === "en" ? "Fuel Type"  : "燃料の種類", value: vehicle.fuel },
+              { label: locale === "en" ? "Drive Type"  : "ドライブタイプ", value: vehicle.drive },
+              { label: locale === "en" ? "Color"  : "色", value: vehicle.color },
+              { label: locale === "en" ? "Grade"  : "学年", value: vehicle.grade },
+              { label: locale === "en" ? "Chassi Number"  : "車台番号", value: vehicle.chassieNumber },
+              { label: locale === "en" ? "Shaken" : "動揺した" , value: vehicle.Shaken },
               {
-                label: "Manufacture Year",
+                label: locale === "en" ? "Manufacture Year"  : "製造年",
                 value: new Date(vehicle.manufactureYear).getFullYear(),
               },
-              { label: "Milage", value: vehicle.mileage },
-              { label: "Condition", value: locale === "en"
-                ? vehicle.condition[0] 
-                : vehicle.condition[1]?.length > 0 
-                ? vehicle.condition[1]
-                : vehicle.condition[0] },
+              { label: locale === "en" ? "Milage" : "走行距離", value: vehicle.mileage },
+              { label: locale === "en" ? "Condition" : "状態", value: vehicle.condition },
             ].map(({ label, value }, index) => (
               <div key={index} className="flex items-center">
                 <p className="text-[20px] lg:text-[18px] md:text-[20px] text-black font-semibold">
@@ -252,8 +208,8 @@ const MoreDetails = () => {
           <div className="mt-[55px] flex justify-end">
             <button>
               <Link
-                href={`/contact?id=${vehicle.id}&title=${vehicle.title.split('/')[0]}`}
-                className="bg-winb-yellow text-[20px] lg:text-[18px] md:text-[20px] text-black font-medium px-4 py-2 rounded-[25px] hover:bg-yellow-300 transition duration-300"
+                href={`/contact?id=${vehicle.id}&title=${vehicle.title}`}
+                className="bg-winb-yellow text-[20px] lg:text-[18px] md:text-[20px] text-black font-medium px-4 py-4 rounded-[25px] hover:bg-yellow-300 transition duration-300"
               >
                 Request More Information
               </Link>

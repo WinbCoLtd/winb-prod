@@ -41,7 +41,7 @@ export type VehicleSectionProps = {
   };
 
   return (
-    <div className="max-w-[1100px] w-full h-auto mx-auto flex flex-col items-end space-y-4 relative">
+    <div className="max-w-[1100px]  w-full h-auto mx-auto flex flex-col items-end space-y-4 relative">
       <div className=" flex items-center gap-3">
         <Filter size={40} className=" lg:hidden" onClick={() => {setToggle(!toggle)}} />
         <div className="w-full md:w-[337px] h-[43px] mx-auto md:ml-[436px] p-4 flex items-center rounded-[50px] border-2 ">

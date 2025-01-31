@@ -31,7 +31,7 @@ const Profile = () => {
         <Navbar />
       </div>
 
-      <div className="min-h-[783px] mb-9 relative w-full flex flex-col mt-16 sm:mt-8 sm:p-4 md:p-8 bg-company-profile bg-cover bg-center object-center bg-no-repeat items-center justify-center">
+      <div className="min-h-[783px] mb-9 relative w-full flex flex-col mt-16 sm:mt-8 sm:p-4 md:p-8 bg-company-profile bg-cover bg-center object-center bg-no-repeat items-center justify-center rounded-[25px]">
         <h1 className="text-black font-semibold text-[36px] lg:text-[36px] md:text-[32px] sm:text-[28px] xxs:text-[24px] leading-tight text-center">
           {locale === "en" ? "Company Overview" : "会社概要"}
         </h1>
@@ -62,7 +62,7 @@ const Profile = () => {
               ? `Advanced search functionality to find the perfect vehicle based on criteria such as manufacturer, model, condition, and location.`
               : `製造元、モデル、状態、場所など、さまざまな基準に基づいて完璧な車両を見つけるための高度な検索機能。`}
           </p>
-          <p className="lg:text-[18px] sm:text-[14px] xs:text-[14px] xxs:text-[14px] font-semibold">
+          <p>
             {locale === "en"
               ? `Detailed vehicle listings with photos, specifications, and features. A dedicated management team that ensures the accuracy and quality of vehicle details. A user-friendly platform for buyers to easily inquire about or email vehicle information.`
               : `写真、仕様、特徴を含む詳細な車両リスト。車両の詳細の正確性と品質を保証する専用の管理チーム。買い手が簡単に車両についての問い合わせやメールを送ることができるユーザーフレンドリーなプラットフォーム。`}
