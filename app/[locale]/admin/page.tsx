@@ -102,12 +102,12 @@ const Admin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [clicked, setClicked] = useState(false)
-  console.log(loading)
+  const [clicked, setClicked] = useState(false);
+  console.log(loading);
 
   useEffect(() => {
     setIsLoading(true);
-    setLoading(true)
+    setLoading(true);
     fetchVehicles();
     const token = localStorage.getItem("token");
     const roles = localStorage.getItem("role");
@@ -121,13 +121,13 @@ const Admin = () => {
       console.log(profiles);
       fetchUsers();
       setIsLoading(false);
-      setLoading(false)
+      setLoading(false);
     }
   }, []);
   // Add this new fetch function
   const fetchUsers = async () => {
     try {
-      setClicked(true)
+      setClicked(true);
       const response = await axios.get("/api/users", {
         headers: {
           authorization: `Bearer ${token}`,
@@ -139,9 +139,9 @@ const Admin = () => {
       } else {
         setError(response.data.error || "Failed to fetch users.");
       }
-      setClicked(false)
+      setClicked(false);
     } catch (err) {
-      setClicked(false)
+      setClicked(false);
       console.error("Error fetching users:", err);
       setError("An unexpected error occurred. Please try again.");
     }
@@ -149,7 +149,7 @@ const Admin = () => {
 
   // Add these new handler functions
   const handleUserUpdate = async () => {
-    setClicked(true)
+    setClicked(true);
     try {
       const endpoint = selectedUser?.id
         ? `/api/users/update?id=${selectedUser.id}`
@@ -170,16 +170,16 @@ const Admin = () => {
       } else {
         setError(response.data.error || "Failed to update user.");
       }
-      setClicked(false)
+      setClicked(false);
     } catch (err) {
-      setClicked(false)
+      setClicked(false);
       console.error("Error updating user:", err);
       setError("An unexpected error occurred. Please try again.");
     }
   };
 
   const handleUserDelete = async (id: number) => {
-    setClicked(true)
+    setClicked(true);
     try {
       const response = await axios.delete(`/api/users/authRemove?id=${id}`, {
         headers: {
@@ -192,16 +192,16 @@ const Admin = () => {
       } else {
         setError(response.data.error || "Failed to delete user.");
       }
-      setClicked(false)
+      setClicked(false);
     } catch (err) {
-      setClicked(false)
+      setClicked(false);
       console.error("Error deleting user:", err);
       setError("An unexpected error occurred. Please try again.");
     }
   };
 
   const fetchVehicles = async () => {
-    setClicked(true)
+    setClicked(true);
     try {
       const response = await axios.get("/api/vehicles/");
       if (response.status === 200) {
@@ -209,16 +209,16 @@ const Admin = () => {
       } else {
         setError(response.data.error || "Failed to fetch vehicles.");
       }
-      setClicked(false)
+      setClicked(false);
     } catch (err) {
-      setClicked(false)
+      setClicked(false);
       console.error("Error fetching vehicles:", err);
       setError("An unexpected error occurred. Please try again.");
     }
   };
 
   const fetchProfiles = async () => {
-    setClicked(true)
+    setClicked(true);
     try {
       const id = await localStorage.getItem("id");
       const response = await axios.get(`/api/profile?id=${id}`, {
@@ -231,9 +231,9 @@ const Admin = () => {
       } else {
         setError(response.data.error || "Failed to fetch profiles.");
       }
-      setClicked(false)
+      setClicked(false);
     } catch (err) {
-      setClicked(false)
+      setClicked(false);
       console.error("Error fetching profiles:", err);
       setError("An unexpected error occurred. Please try again.");
     }
@@ -275,7 +275,7 @@ const Admin = () => {
   };
 
   const handleSubmit = async () => {
-    setClicked(true)
+    setClicked(true);
     if (!screenShot && !formData.previewUrl) {
       setError("Primary image (screenshot) is required.");
       return;
@@ -341,16 +341,16 @@ const Admin = () => {
       } else {
         setError(response.data.error || "Failed to add/update vehicle.");
       }
-      setClicked(false)
+      setClicked(false);
     } catch (err) {
-      setClicked(false)
+      setClicked(false);
       console.error("Error submitting form:", err);
       setError("An unexpected error occurred. Please try again.");
     }
   };
 
   const handleEdit = async (vehicle: Vehicle) => {
-    setClicked(true)
+    setClicked(true);
     try {
       const res = await axios.get(`/api/vehicles/readOne?id=${vehicle.id}`);
       if (res.status === 200) {
@@ -364,16 +364,16 @@ const Admin = () => {
       } else {
         setError("Failed to fetch vehicle data.");
       }
-      setClicked(false)
+      setClicked(false);
     } catch (err) {
-      setClicked(false)
+      setClicked(false);
       console.error("Error fetching vehicle data:", err);
       setError("An unexpected error occurred. Please try again.");
     }
   };
 
   const handleDelete = async (id: number) => {
-    setClicked(true)
+    setClicked(true);
     try {
       const response = await axios.delete(`/api/vehicles/delete?id=${id}`, {
         headers: {
@@ -386,16 +386,16 @@ const Admin = () => {
       } else {
         setError(response.data.error || "Failed to delete vehicle.");
       }
-      setClicked(false)
+      setClicked(false);
     } catch (err) {
-      setClicked(false)
+      setClicked(false);
       console.error("Error deleting vehicle:", err);
       setError("An unexpected error occurred. Please try again.");
     }
   };
 
   const handleProfileUpdate = async () => {
-    setClicked(true)
+    setClicked(true);
     try {
       const response = await axios.put(`/api/auth/authUpdate`, profiles, {
         headers: {
@@ -410,16 +410,16 @@ const Admin = () => {
       } else {
         setError(response.data.error || "Failed to update profile.");
       }
-      setClicked(false)
+      setClicked(false);
     } catch (err) {
-      setClicked(false)
+      setClicked(false);
       console.error("Error updating profile:", err);
       setError("An unexpected error occurred. Please try again.");
     }
   };
 
   const handleProfileDelete = async () => {
-    setClicked(true)
+    setClicked(true);
     try {
       const response = await axios.delete(`/api/profile/delete`, {
         headers: {
@@ -434,9 +434,9 @@ const Admin = () => {
       } else {
         setError(response.data.error || "Failed to delete profile.");
       }
-      setClicked(false)
+      setClicked(false);
     } catch (err) {
-      setClicked(false)
+      setClicked(false);
       console.error("Error deleting profile:", err);
       setError("An unexpected error occurred. Please try again.");
     }
@@ -448,9 +448,9 @@ const Admin = () => {
   }
 
   const handleLogout = () => {
-    setClicked(true)
+    setClicked(true);
     localStorage.clear();
-    setClicked(false)
+    setClicked(false);
     router.push("/auth/login");
   };
   return (
@@ -459,157 +459,152 @@ const Admin = () => {
         <Navbar />
       </div>
 
-      
       <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-md sm:w-3/4 md:w-2/3 mx-auto mt-10">
-          <h2 className="text-2xl font-semibold flex items-center mb-4">
-            <FontAwesomeIcon icon={faUser} className="mr-2 text-gray-700" />
-            {locale === "en" ? "Profile Management" : "プロフィール管理"}
-          </h2>
-          {profiles && (
-            <div className="bg-gray-100 p-4 rounded-md shadow-sm">
-              <p className="text-lg font-medium text-gray-800">
-                {locale === "en" ? profiles.nameEn : profiles.nameJa}
-              </p>
-              <p className="text-gray-600">
-                {locale === "en"
-                  ? profiles.username
-                  : `ユーザー名: ${profiles.username}`}
-              </p>
-              <div className="flex flex-wrap gap-2 justify-between mt-4">
-                <button
-                  onClick={() => setShowProfileForm(true)}
-
-                  className="px-3 py-2 bg-yellow-400 text-white rounded-md flex items-center justify-center w-full sm:w-auto"
-                >
-                  <FontAwesomeIcon icon={faEdit} className="mr-1" />
-                  {locale === "en" ? "Update" : "アップデート"}
-                </button>
-                <button
-                  onClick={handleProfileDelete}
-                  disabled={clicked}
-                  className="px-3 py-2 bg-red-500 text-white rounded-md flex items-center justify-center w-full sm:w-auto"
-                >
-                  <FontAwesomeIcon icon={faTrash} className="mr-1" />
-                  {locale === "en" ? "Delete" : "消去"}
-                </button>
-                <button
-                  onClick={handleLogout}
-                  disabled={clicked}
-                  className="px-3 py-2 bg-blue-500 text-white rounded-md flex items-center justify-center w-full sm:w-auto"
-                >
-                  <FontAwesomeIcon icon={faSignOutAlt} className="mr-1" />
-                  {locale === "en" ? "Logout" : "ログアウト"}
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Edit Profile Popup */}
-        {showProfileForm && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-6 rounded-md shadow-md w-full max-w-lg">
-              <h2 className="text-xl font-semibold mb-4">
-                {locale === "en" ? "Edit Profile" : "プロフィールを編集"}
-              </h2>
-              {error && (
-                <p className="text-red-500 mb-4">
-                  <FontAwesomeIcon
-                    icon={faExclamationCircle}
-                    className="mr-2"
-                  />
-                  {error}
-                </p>
-              )}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col">
-                  <label
-                    htmlFor="nameEn"
-                    className="text-gray-700 font-medium mb-1"
-                  >
-                    {locale === "en" ? "Name (English)" : "名前（英語)"}
-                  </label>
-                  <input
-                    id="nameEn"
-                    name="nameEn"
-                    value={profiles.nameEn}
-                    onChange={(e) =>
-                      setProfiles({ ...profiles, nameEn: e.target.value })
-                    }
-                    placeholder="Enter your name in English"
-                    className="border border-gray-300 p-2 rounded-md w-full"
-                  />
-                </div>
-
-                <div className="flex flex-col">
-                  <label
-                    htmlFor="nameJa"
-                    className="text-gray-700 font-medium mb-1"
-                  >
-                    {locale === "en" ? "Name (Japanese)" : "名前（日本語)"}
-                  </label>
-                  <input
-                    id="nameJa"
-                    name="nameJa"
-                    value={profiles.nameJa}
-                    onChange={(e) =>
-                      setProfiles({ ...profiles, nameJa: e.target.value })
-                    }
-                    placeholder="Enter your name in Japanese"
-                    className="border border-gray-300 p-2 rounded-md w-full"
-                  />
-                </div>
-
-                <div className="col-span-2 flex flex-col">
-                  <label
-                    htmlFor="username"
-                    className="text-gray-700 font-medium mb-1"
-                  >
-                    {locale === "en" ? "Username" : "ユーザー名"}
-                  </label>
-                  <input
-                    id="username"
-                    name="username"
-                    value={profiles.username}
-                    onChange={(e) =>
-                      setProfiles({ ...profiles, username: e.target.value })
-                    }
-                    placeholder="Enter your username"
-                    className="border border-gray-300 p-2 rounded-md w-full"
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-end mt-6">
-                <button
-                  onClick={() => setShowProfileForm(false)}
-                  className="px-4 py-2 bg-gray-500 text-white rounded-md mr-2"
-                >
-                  {locale === "en" ? "Cancel" : "キャンセル"}
-                </button>
-
-                <button
-                  type="submit"
-                  onClick={handleProfileUpdate}
-                  disabled={clicked}
-                  className={`px-4 py-2 bg-blue-500  rounded-md text-white font-semibold  hover:bg-blue-300 transition ${
-                    isLoading ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                >
-                  {locale === "en"
-                    ? clicked
-                      ? "Submitting..."
-                      : "Update"
-                    : locale === "ja"
-                    ? clicked
-                      ? "送信中..."
-                      : "アップデート"
-                    : "アップデート"}
-                </button>
-              </div>
+        <h2 className="text-2xl font-semibold flex items-center mb-4">
+          <FontAwesomeIcon icon={faUser} className="mr-2 text-gray-700" />
+          {locale === "en" ? "Profile Management" : "プロフィール管理"}
+        </h2>
+        {profiles && (
+          <div className="bg-gray-100 p-4 rounded-md shadow-sm">
+            <p className="text-lg font-medium text-gray-800">
+              {locale === "en" ? profiles.nameEn : profiles.nameJa}
+            </p>
+            <p className="text-gray-600">
+              {locale === "en"
+                ? profiles.username
+                : `ユーザー名: ${profiles.username}`}
+            </p>
+            <div className="flex flex-wrap gap-2 justify-between mt-4">
+              <button
+                onClick={() => setShowProfileForm(true)}
+                className="px-3 py-2 bg-yellow-400 text-white rounded-md flex items-center justify-center w-full sm:w-auto"
+              >
+                <FontAwesomeIcon icon={faEdit} className="mr-1" />
+                {locale === "en" ? "Update" : "アップデート"}
+              </button>
+              <button
+                onClick={handleProfileDelete}
+                disabled={clicked}
+                className="px-3 py-2 bg-red-500 text-white rounded-md flex items-center justify-center w-full sm:w-auto"
+              >
+                <FontAwesomeIcon icon={faTrash} className="mr-1" />
+                {locale === "en" ? "Delete" : "消去"}
+              </button>
+              <button
+                onClick={handleLogout}
+                disabled={clicked}
+                className="px-3 py-2 bg-blue-500 text-white rounded-md flex items-center justify-center w-full sm:w-auto"
+              >
+                <FontAwesomeIcon icon={faSignOutAlt} className="mr-1" />
+                {locale === "en" ? "Logout" : "ログアウト"}
+              </button>
             </div>
           </div>
         )}
+      </div>
+
+      {/* Edit Profile Popup */}
+      {showProfileForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-md shadow-md w-full max-w-lg">
+            <h2 className="text-xl font-semibold mb-4">
+              {locale === "en" ? "Edit Profile" : "プロフィールを編集"}
+            </h2>
+            {error && (
+              <p className="text-red-500 mb-4">
+                <FontAwesomeIcon icon={faExclamationCircle} className="mr-2" />
+                {error}
+              </p>
+            )}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col">
+                <label
+                  htmlFor="nameEn"
+                  className="text-gray-700 font-medium mb-1"
+                >
+                  {locale === "en" ? "Name (English)" : "名前（英語)"}
+                </label>
+                <input
+                  id="nameEn"
+                  name="nameEn"
+                  value={profiles.nameEn}
+                  onChange={(e) =>
+                    setProfiles({ ...profiles, nameEn: e.target.value })
+                  }
+                  placeholder="Enter your name in English"
+                  className="border border-gray-300 p-2 rounded-md w-full"
+                />
+              </div>
+
+              <div className="flex flex-col">
+                <label
+                  htmlFor="nameJa"
+                  className="text-gray-700 font-medium mb-1"
+                >
+                  {locale === "en" ? "Name (Japanese)" : "名前（日本語)"}
+                </label>
+                <input
+                  id="nameJa"
+                  name="nameJa"
+                  value={profiles.nameJa}
+                  onChange={(e) =>
+                    setProfiles({ ...profiles, nameJa: e.target.value })
+                  }
+                  placeholder="Enter your name in Japanese"
+                  className="border border-gray-300 p-2 rounded-md w-full"
+                />
+              </div>
+
+              <div className="col-span-2 flex flex-col">
+                <label
+                  htmlFor="username"
+                  className="text-gray-700 font-medium mb-1"
+                >
+                  {locale === "en" ? "Username" : "ユーザー名"}
+                </label>
+                <input
+                  id="username"
+                  name="username"
+                  value={profiles.username}
+                  onChange={(e) =>
+                    setProfiles({ ...profiles, username: e.target.value })
+                  }
+                  placeholder="Enter your username"
+                  className="border border-gray-300 p-2 rounded-md w-full"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end mt-6">
+              <button
+                onClick={() => setShowProfileForm(false)}
+                className="px-4 py-2 bg-gray-500 text-white rounded-md mr-2"
+              >
+                {locale === "en" ? "Cancel" : "キャンセル"}
+              </button>
+
+              <button
+                type="submit"
+                onClick={handleProfileUpdate}
+                disabled={clicked}
+                className={`px-4 py-2 bg-blue-500  rounded-md text-white font-semibold  hover:bg-blue-300 transition ${
+                  isLoading ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+              >
+                {locale === "en"
+                  ? clicked
+                    ? "Submitting..."
+                    : "Update"
+                  : locale === "ja"
+                  ? clicked
+                    ? "送信中..."
+                    : "アップデート"
+                  : "アップデート"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="container mx-auto px-4 pb-10">
         <h1 className="text-2xl font-bold mt-6">
@@ -674,7 +669,7 @@ const Admin = () => {
                         </td>
                         <td className="border border-gray-300 p-2 flex flex-wrap gap-2">
                           <button
-                          disabled={clicked}
+                            disabled={clicked}
                             onClick={() => {
                               setSelectedUser(user);
                               setShowUserForm(true);
@@ -684,7 +679,7 @@ const Admin = () => {
                             <FontAwesomeIcon icon={faEdit} />
                           </button>
                           <button
-                          disabled={clicked}
+                            disabled={clicked}
                             onClick={() => handleUserDelete(user.id)}
                             className="px-3 py-1 bg-red-500 text-white rounded-md"
                           >
@@ -842,7 +837,6 @@ const Admin = () => {
           </div>
         )}
 
-
         {/* Vehicle Management Section */}
         <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <button
@@ -906,18 +900,21 @@ const Admin = () => {
                 </tr>
               </thead>
               <tbody>
-                {
-                  vehicles.map((vehicle) => {
-                    return (
-                      <tr key={vehicle.id} className="hover:bg-gray-100">
+                {vehicles.map((vehicle) => {
+                  return (
+                    <tr key={vehicle.id} className="hover:bg-gray-100">
                       <td className="border border-gray-300 p-2">
-                        {locale === 'en' ? vehicle.title.split('/')[0] : vehicle.title.split('/')[1]}
+                        {locale === "en"
+                          ? vehicle.title.split("/")[0]
+                          : vehicle.title.split("/")[1]}
                       </td>
                       <td className="border border-gray-300 p-2">
                         ${vehicle.price}
                       </td>
                       <td className="border border-gray-300 p-2">
-                      {locale === 'en' ? vehicle.model.split('/')[0] : vehicle.model.split('/')[1]}
+                        {locale === "en"
+                          ? vehicle.model.split("/")[0]
+                          : vehicle.model.split("/")[1]}
                       </td>
                       <td className="border border-gray-300 p-2 flex flex-col sm:flex-row gap-2">
                         <button
@@ -928,7 +925,7 @@ const Admin = () => {
                           <FontAwesomeIcon icon={faEdit} />
                         </button>
                         <button
-                        disabled={clicked}
+                          disabled={clicked}
                           onClick={() => handleDelete(vehicle.id)}
                           className="px-3 py-1 bg-red-500 text-white rounded-md flex items-center justify-center"
                         >
@@ -936,9 +933,8 @@ const Admin = () => {
                         </button>
                       </td>
                     </tr>
-                    )
-                  })
-                }
+                  );
+                })}
               </tbody>
             </table>
           )}
@@ -1326,11 +1322,15 @@ const Admin = () => {
                   {locale === "en" ? "Cancel" : "キャンセル"}
                 </button>
                 <button
-                disabled={clicked}
+                  disabled={clicked}
                   onClick={handleSubmit}
                   className="px-4 py-2 bg-blue-500 text-white rounded-md"
                 >
-                  {locale === "en"
+                  {clicked
+                    ? locale === "en"
+                      ? "Processing..."
+                      : "処理中..."
+                    : locale === "en"
                     ? isEditing
                       ? "Update"
                       : "Submit"
