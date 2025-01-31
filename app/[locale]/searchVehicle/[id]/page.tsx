@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "@/components/Navbar";
 import { PulseLoader } from "react-spinners";
+import { useLocale } from "next-intl";
 
 // Define types for vehicle and images
 interface Vehicle {
@@ -55,6 +56,7 @@ const MoreDetails = () => {
   const vid = typeof id === "string" ? parseInt(id) : null;
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [currentPreview, setCurrentPreview] = useState<string | null>(null);
+  const locale = useLocale();
 
   const fetchVehicle = async () => {
     setLoading(true);
@@ -101,11 +103,10 @@ const MoreDetails = () => {
   ];
 
   return (
-    <div className="relative w-full flex flex-col max-w-[1366px] mx-auto">
+    <div className="relative w-full flex flex-col max-w-[1366px] mx-auto py-3 px-3 ">
       <div className="bg-[#08001C67] w-full flex items-center justify-center border border-[#00CCEE] rounded-[10px] min-h-32 my-auto">
         <Navbar />
       </div>
-
 
       <div className="mt-[110px] w-full h-auto bg-winb-ashcolor rounded-[15px] flex flex-col md:flex-row p-[39px]">
         <div className="flex flex-col w-full md:w-[612px]">
@@ -132,7 +133,7 @@ const MoreDetails = () => {
               breakpoints={{
                 640: { slidesPerView: 2 },
                 768: { slidesPerView: 3 },
-                1024: { slidesPerView: 4 },
+                1024: { slidesPerView: 3 },
               }}
               className="w-full"
               onSlideChange={(swiper) => {
@@ -143,7 +144,7 @@ const MoreDetails = () => {
               {carouselImages.map((image) => (
                 <SwiperSlide key={image.id}>
                   <div
-                    className="w-full lg:h-[110px] bg-gray-300 rounded-lg overflow-hidden cursor-pointer"
+                    className="w-[110px] lg:w-[110px] md:w-[100px] h-[110px] lg:h-[110px] md:h-[100px] bg-gray-300 rounded-lg overflow-hidden cursor-pointer items-center"
                     onClick={() => setCurrentPreview(image.url)}
                   >
                     <Image
@@ -161,22 +162,87 @@ const MoreDetails = () => {
         </div>
 
         {/* Vehicle Details */}
-        <div className="mt-6 md:mt-0 md:ml-8 flex flex-col justify-start w-full md:w-[500px]">
-          <h2 className="lg:text-[24px] sm:text-[20px] xxs:text[20px] text-black font-bold mb-4">
-            {vehicle.title}
+        <div className="mt-20 md:mt-0 md:ml-8 flex flex-col justify-start w-full md:w-[500px]">
+          <h2 className="text-[40px] lg:text-[40px] md:text-[20px] text-black font-bold mb-4">
+            {
+              locale === "en"
+              ? vehicle.title[0] // English: Show the first part
+              : vehicle.title[1]?.length > 0 // Non-English: Show the second part if it's non-empty
+              ? vehicle.title[1]
+              : vehicle.title[0]
+            }
           </h2>
-          <p className="lg:text-[16px] sm:text-[12px] xs:text-[12px] xxs:text-[12px] text-black font-medium mb-4">
-            {vehicle.description}
+          <p className="text-[24px] lg:text-[30px] md:text-[24px] text-black font-medium mb-4">
+            {
+                locale === "en"
+                ? vehicle.description[0] 
+                : vehicle.description[1]?.length > 0 
+                ? vehicle.description[1]
+                : vehicle.description[0]
+              }
           </p>
 
-          <div className="mt-[46px] grid lg:grid-cols-3 sm:grid-cols-3 xxs:grid-cols-3 md:grid-cols-4 gap-4 items-center">
+          <div className="text-[30px] lg:text-[30px] md:text-[24px] mt-[46px] grid lg:grid-cols-2 md:grid-cols-3 gap-4 items-center">
             {[
-              { label: "Fuel Type", value: vehicle.fuel },
-              { label: "Drive Type", value: vehicle.drive },
-              { label: "Condition", value: vehicle.condition },
+              { label: "Price", value: `¥ ${vehicle.price}` },
+              { label: "Model", value: locale === "en"
+                ? vehicle.model[0] 
+                : vehicle.model[1]?.length > 0 
+                ? vehicle.model[1]
+                : vehicle.model[0] },
+              { label: "Maker", value: locale === "en"
+                ? vehicle.maker[0] 
+                : vehicle.maker[1]?.length > 0 
+                ? vehicle.maker[1]
+                : vehicle.maker[0] },
+              { label: "Vehicle Type", value: locale === "en"
+                ? vehicle.vehicleType[0] 
+                : vehicle.vehicleType[1]?.length > 0 
+                ? vehicle.vehicleType[1]
+                : vehicle.vehicleType[0] },
+              { label: "Fuel Type", value: locale === "en"
+                ? vehicle.fuel[0] 
+                : vehicle.fuel[1]?.length > 0 
+                ? vehicle.fuel[1]
+                : vehicle.fuel[0] },
+              { label: "Drive Type", value: locale === "en"
+                ? vehicle.drive[0] 
+                : vehicle.drive[1]?.length > 0 
+                ? vehicle.drive[1]
+                : vehicle.drive[0] },
+              { label: "Color", value: locale === "en"
+                ? vehicle.color[0] 
+                : vehicle.color[1]?.length > 0 
+                ? vehicle.color[1]
+                : vehicle.color[0] },
+              { label: "Grade", value: locale === "en"
+                ? vehicle.grade[0] 
+                : vehicle.grade[1]?.length > 0 
+                ? vehicle.grade[1]
+                : vehicle.grade[0] },
+              { label: "Chassi Number", value: locale === "en"
+                ? vehicle.chassieNumber[0] 
+                : vehicle.chassieNumber[1]?.length > 0 
+                ? vehicle.chassieNumber[1]
+                : vehicle.chassieNumber[0] },
+              { label: "Shaken", value: locale === "en"
+                ? vehicle.Shaken[0] 
+                : vehicle.Shaken[1]?.length > 0 
+                ? vehicle.Shaken[1]
+                : vehicle.Shaken[0] },
+              {
+                label: "Manufacture Year",
+                value: new Date(vehicle.manufactureYear).getFullYear(),
+              },
+              { label: "Milage", value: vehicle.mileage },
+              { label: "Condition", value: locale === "en"
+                ? vehicle.condition[0] 
+                : vehicle.condition[1]?.length > 0 
+                ? vehicle.condition[1]
+                : vehicle.condition[0] },
             ].map(({ label, value }, index) => (
               <div key={index} className="flex items-center">
-                <p className="lg:text-[13px] sm:text-[11px] xxs:text-[9px] text-black font-semibold">
+                <p className="text-[20px] lg:text-[18px] md:text-[20px] text-black font-semibold">
                   {label}: {value}
                 </p>
               </div>
@@ -186,8 +252,8 @@ const MoreDetails = () => {
           <div className="mt-[55px] flex justify-end">
             <button>
               <Link
-                href={`/inquiry`}
-                className="bg-winb-yellow lg:text-[16px] sm:text-[12px] xs:text-[12px] xxs:text-[12px] text-black font-medium px-4 py-2 rounded-[25px] hover:bg-yellow-300 transition duration-300"
+                href={`/contact?id=${vehicle.id}&title=${vehicle.title.split('/')[0]}`}
+                className="bg-winb-yellow text-[20px] lg:text-[18px] md:text-[20px] text-black font-medium px-4 py-2 rounded-[25px] hover:bg-yellow-300 transition duration-300"
               >
                 Request More Information
               </Link>

@@ -5,6 +5,7 @@ import { useLocale } from "next-intl";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 function debounce(func: (...args: any[]) => void, wait: number) {
   let timeout: NodeJS.Timeout;
@@ -23,9 +24,10 @@ export default function Navbar() {
 
   const navbarLinks = {
     home: locale === "en" ? "Home" : "ホーム",
-    about: locale === "en" ? "About" : "アバウト",
+    about: locale === "en" ? "Company Profile" : "会社概要",
     vehicleList: locale === "en" ? "Vehicle List" : "車両一覧",
-    inquiry: locale === "en" ? "Inquiry" : "お問い合わせ",
+    otherService: locale === "en" ? "Other Service" : "その他サービス",
+    contact: locale === "en" ? "Contact" : "お問い合わせ",
   };
 
   const localeToggleText = locale === "en" ? "日本語" : "English";
@@ -49,7 +51,7 @@ export default function Navbar() {
 
   useEffect(() => {
     if (!isMobile) {
-      setIsToggled(false); 
+      setIsToggled(false);
     }
   }, [isMobile]);
 
@@ -62,13 +64,21 @@ export default function Navbar() {
     router.push(`/${newLocale}/${path}`);
   };
 
+  
   return (
-    <nav className="p-4 bg-gray-100 w-full flex justify-between items-center bg-transparent text-xl text-white">
-      <Link href="/" locale={locale} className="font-extrabold text-3xl">
-        WINB
-      </Link>
+    <nav className="z-50 p-4 bg-gray-100 w-full flex justify-between items-center bg-transparent text-xl text-white">
+      <Link href="/" locale={locale} className="font-extrabold text-2xl">
+      <Image
+           src="/home/logo1.jpg"
+           alt="Logo"
+           width={60}
+           height={60}
+           className="w-28 h-auto mx-auto mb-6"
+         />
+         株式会社 WIN-B
+       </Link>
       {!isMobile && (
-        <nav className="flex items-center justify-center gap-4">
+        <nav className="flex items-center justify-center gap-4 text-white">
           <Link href="/" className="hover:underline">
             {navbarLinks.home}
           </Link>
@@ -78,33 +88,39 @@ export default function Navbar() {
           <Link href="/vehicleList" className="hover:underline">
             {navbarLinks.vehicleList}
           </Link>
-          <Link href="/inquiry" className="hover:underline">
-            {navbarLinks.inquiry}
+          <Link href="/otherService" className="hover:underline">
+            {navbarLinks.otherService}
+          </Link>
+          <Link href="/contact" className="hover:underline">
+            {navbarLinks.contact}
           </Link>
         </nav>
       )}
       {isMobile && (
         <nav
-          className={`absolute top-20 bg-[#0000009c] rounded-2xl p-5 right-5 flex-col items-center justify-center gap-4 ${toggle ? "flex" : "hidden"}`}
+          className={`absolute top-32 bg-[#000000de] rounded-2xl p-5 right-5 flex-col items-center justify-center gap-4 ${toggle ? "flex" : "hidden"}`}
         >
           <Link href="/" className="hover:underline">
             {navbarLinks.home}
           </Link>
-          <Link href="/about" className="hover:underline">
+          <Link href="/companyProfile" className="hover:underline">
             {navbarLinks.about}
           </Link>
-          <Link href="/allVehicles" className="hover:underline">
+          <Link href="/vehicleList" className="hover:underline">
             {navbarLinks.vehicleList}
           </Link>
-          <Link href="/inquiry" className="hover:underline">
-            {navbarLinks.inquiry}
+          <Link href="/otherService" className="hover:underline">
+            {navbarLinks.otherService}
+          </Link>
+          <Link href="/contact" className="hover:underline">
+            {navbarLinks.contact}
           </Link>
         </nav>
       )}
       <div className="flex items-center">
         <button
           onClick={() => handleLocaleChange(locale === "en" ? "ja" : "en")}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-yellow-200 hover:bg-yellow-400 text-black font-bold py-2 px-4 rounded"
         >
           {localeToggleText}
         </button>
@@ -115,3 +131,4 @@ export default function Navbar() {
     </nav>
   );
 }
+

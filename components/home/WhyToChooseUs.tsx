@@ -69,21 +69,21 @@ const WhyToChooseUs = () => {
       <h2 className="font-semibold text-4xl text-center mb-2">Why Choose Us</h2>
       <p className="font-medium text-2xl text-center">なぜ私たちを選ぶのか</p>
 
-      <div className="mt-12 py-1 w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-11">
+      <div className="mt-12 py-1 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {cards.map((card, index) => (
           <div
             key={index}
             className="border p-3 border-black rounded-lg w-72 h-60 mx-auto flex flex-col items-start"
           >
             {card.icon}
-            <h3 className="text-2xl font-semibold">
+            <h3 className="min-h-[56px] text-xl font-semibold">
               {/* Split by comma (',') for title */}
               {local === "en"
                 ? card.title.split("/")[0] // English title (first part)
                 : card.title.split("/")[1] || card.title.split("/")[0]}{" "}
               {/* Fallback to first part (English) if Japanese is missing */}
             </h3>
-            <p className="text-lg font-medium text-justify mt-4">
+            <p className="text-[16px] font-medium text-justify mt-4">
               {/* Split by '/' for description */}
               {local === "en"
                 ? card.description.split("/")[0] // English description (first part)

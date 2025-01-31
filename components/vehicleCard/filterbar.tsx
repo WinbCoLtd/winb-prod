@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -51,6 +50,7 @@ const Filterbar = ({
     [key: string]: string[];
   }>(initialSelectedFilters);
   const locale = useLocale();
+  const [clicked, setClicked] = useState(false)
 
   const handleFilterSelect = (name: string, value: string) => {
     setLocalSelectedFilters((prev) => {
@@ -70,13 +70,15 @@ const Filterbar = ({
   };
 
   const applyFilters = () => {
+    setClicked(true)
     const cleanedFilters = Object.fromEntries(
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       Object.entries(localSelectedFilters).filter(
         ([_, values]) => values.length > 0
       )
     );
     onApplyFilters(cleanedFilters);
+    setClicked(false)
+
   };
 
   return (
@@ -93,7 +95,7 @@ const Filterbar = ({
         className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium mb-4 hover:bg-blue-700 transition"
         onClick={applyFilters}
       >
-        Apply Filters
+        { clicked ? "Apply Filters" : "Applying Filters"}
       </button>
 
       {Object.keys(filters).length > 0 ? (

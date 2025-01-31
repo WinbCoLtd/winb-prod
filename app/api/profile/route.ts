@@ -14,7 +14,13 @@ export async function GET( req: NextRequest) {
         });
 
         if (!adminProfile) {
-            return NextResponse.json("Your account is unavailable", { status: 403 });
+            const subAdminProfile = await prisma.subAdmin.findUnique({
+                where : { id: Number(id) }
+            })
+            if (!subAdminProfile){
+                return NextResponse.json("Your account is unavailable", { status: 403 });
+            }
+            return NextResponse.json(subAdminProfile, { status: 200 });
         }
 
         return NextResponse.json(adminProfile, { status: 200 });

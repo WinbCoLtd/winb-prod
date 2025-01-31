@@ -10,7 +10,7 @@ const DealSection = () => {
       <div className="max-w-winb-max-1366 mx-auto flex flex-col md:flex-row items-center justify-between space-y-8 md:space-y-0">
         {/* Image Section */}
         <Image
-          src="/vehicledummy.png"
+          src="/home/deal.jpg"
           alt="Vehicle Deal"
           width={591}
           height={557}
