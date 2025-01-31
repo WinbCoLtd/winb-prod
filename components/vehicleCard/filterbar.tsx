@@ -123,7 +123,7 @@ const Filterbar = ({
                     >
                       <input
                         type="checkbox"
-                        id={${filterKey}-${cond}}
+                        id={`${filterKey}-${cond}`}
                         name={cond}
                         value={cond}
                         checked={
@@ -144,7 +144,7 @@ const Filterbar = ({
                     >
                       <input
                         type="checkbox"
-                        id={${filterKey}-${splitValue}}
+                        id={`${filterKey}-${splitValue}`}
                         name={splitValue}
                         value={splitValue}
                         checked={

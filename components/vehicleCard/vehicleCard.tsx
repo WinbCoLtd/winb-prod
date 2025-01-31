@@ -62,7 +62,7 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
                 <div className="text-sm">
                   <p className="text-gray-500">Fuel Type</p>
                   <span className="text-gray-800 font-medium">
-                    {vehicle.fuel}
+                    {locale === 'en' ? vehicle.fuel.split('/')[0] : vehicle.fuel.split('/')[1]}
                   </span>
                 </div>
               </div>
@@ -73,7 +73,7 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
                 <div className="text-sm">
                   <p className="text-gray-500">Drive Type</p>
                   <span className="text-gray-800 font-medium">
-                    {vehicle.drive}
+                  {locale === 'en' ? vehicle.drive.split('/')[0] : vehicle.drive.split('/')[1]}
                   </span>
                 </div>
               </div>
@@ -97,7 +97,7 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
                 <div className="text-sm">
                   <p className="text-gray-500">Condition</p>
                   <span className="text-gray-800 font-medium">
-                    {vehicle.condition}
+                    {locale === 'en' ? vehicle.condition.split('/')[0] : vehicle.condition.split('/')[0]}
                   </span>
                 </div>
               </div>

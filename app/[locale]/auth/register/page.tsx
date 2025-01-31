@@ -5,7 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 
 interface FormData {
-  name: string;
+  nameEn: string;
+  nameJa: string;
   email: string;
   password: string;
   address: string;
@@ -15,7 +16,8 @@ interface FormData {
 
 const Register = () => {
   const [formData, setFormData] = useState<FormData>({
-    name: "",
+    nameEn: "",
+    nameJa: "",
     email: "",
     password: "",
     address: "",
@@ -44,7 +46,7 @@ const Register = () => {
               Username:
             </label>
             <input
-              type="email"
+              type="text"
               name="email"
               placeholder="Enter your email"
               value={formData.email}
@@ -72,8 +74,8 @@ const Register = () => {
             </label>
             <input
               type="text"
-              name="name"
-              value={formData.name}
+              name="nameEn"
+              value={formData.nameEn}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 border rounded-lg focus:ring-2  focus:outline-none"
@@ -85,8 +87,8 @@ const Register = () => {
             </label>
             <input
               type="text"
-              name="name"
-              value={formData.name}
+              name="nameJa"
+              value={formData.nameJa}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 border rounded-lg focus:ring-2  focus:outline-none"
