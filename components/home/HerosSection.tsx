@@ -12,6 +12,12 @@ type SearchType = {
   models: string[];
 };
 
+const bgImages = [
+  "bg-hero-image",
+  "bg-hero-image2",
+  "bg-hero-image3",
+]
+
 function HeroSection() {
   const [searchData, setSearchData] = useState<SearchType>();
   const [currentSelectedPrice, setCurrentSelectedPrice] = useState({
@@ -26,6 +32,18 @@ function HeroSection() {
   const locale = useLocale();
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [clicked, setClicked] = useState(false)
+    const [bg, setBg] = useState({bg: bgImages[0], index: 0})
+  
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setBg((prev) => {
+          const newIndex = (prev.index + 1) % bgImages.length;
+          return { bg: bgImages[newIndex], index: newIndex };
+        });
+      }, 4000); 
+  
+      return () => clearInterval(interval); 
+    }, []);
 
   // Function to toggle price dropdown visibility
   const displayPriceRangers = () => {
@@ -102,9 +120,10 @@ function HeroSection() {
   useEffect(() => {
     fetchSearchData();
   }, []);
+  
 
   return (
-    <div className="relative w-full min-h-[80vh] flex flex-col md:px-12 xl:px-56 mx-auto bg-hero-image pb-10 bg-cover object-center bg-center max-h-[768px]">
+    <div className={`relative w-full min-h-[80vh] flex flex-col md:px-12 xl:px-56 mx-auto pb-10 bg-cover object-center bg-center max-h-[768px] transition-all duration-1000 ${bg.bg}`}>
       <Navbar />
       <div className="flex flex-col justify-start py-14  items-center px-4">
         <h1 className="font-bold text-3xl sm:text-5xl lg:text-6xl md:text-6xl text-white text-center mb-10 lg:mb-20">
