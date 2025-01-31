@@ -1,77 +1,109 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs/promises";
-import path from "path";
 import { prisma } from "@/prisma/prisma";
 import { headers } from "next/headers";
 import { Autherize } from "@/helpers/auth";
 import { JsonWebTokenError } from "jsonwebtoken";
+import { v2 as cloudinary } from 'cloudinary';
+
+cloudinary.config({
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true
+})
+
+// Helper function to delete Cloudinary assets
+const deleteFromCloudinary = async (url: string) => {
+  try {
+    const publicId = url.split('/').slice(-2).join('/').split('.')[0];
+    if (publicId) {
+      await cloudinary.uploader.destroy(publicId);
+    }
+  } catch (error) {
+    console.error(`Error deleting Cloudinary asset ${url}:`, error);
+    throw error;
+  }
+};
 
 export async function DELETE(req: NextRequest) {
   const url = new URL(req.url);
-  const searchParams = url.searchParams;
-  const vehicleId = Number(searchParams.get("id"));
-
+  const vehicleId = Number(url.searchParams.get("id"));
   const headerList = await headers();
-  const token = headerList.get("authorization")?.split(" ")[1];
+  const token = headerList.get("authorization")?.split(" ")[1] || "";
 
   try {
-    const auth = await Autherize(token || "");
+    // Authorization check
+    const auth = await Autherize(token);
     if (!auth) {
-      return NextResponse.json({
-        success: false,
-        error: "Unauthorized access",
-      }, { status: 401 });
+      return NextResponse.json(
+        { success: false, error: "Unauthorized access" },
+        { status: 401 }
+      );
     }
-  } catch (err) {
-    if (err instanceof JsonWebTokenError) {
-      return NextResponse.json({
-        success: false,
-        error: err.name === "TOKEN_EXPIRED" ? "Token expired" : err.name,
-      }, { status: 401 });
+
+    if (!vehicleId || isNaN(vehicleId)) {
+      return NextResponse.json(
+        { success: false, error: "Invalid vehicle ID" },
+        { status: 400 }
+      );
     }
-    console.error("Authorization error:", err);
-    return NextResponse.json({
-      success: false,
-      error: "Internal server error during authorization",
-    }, { status: 500 });
-  }
 
-  try {
-    const existingImages = await prisma.vehicleImages.findMany({
-      where: { vehicleId },
-    });
+    // Fetch existing images and vehicle data
+    const [existingVehicle, existingImages] = await Promise.all([
+      prisma.vehicle.findUnique({ where: { id: vehicleId } }),
+      prisma.vehicleImages.findMany({ where: { vehicleId } })
+    ]);
 
+    if (!existingVehicle) {
+      return NextResponse.json(
+        { success: false, error: "Vehicle not found" },
+        { status: 404 }
+      );
+    }
+
+    // Delete all associated images from Cloudinary
     const deletePromises = existingImages.map(async (img) => {
       try {
-        const imagePath = path.join(process.cwd(), "public", img.url);
-        await fs.unlink(imagePath);
-      } catch (err) {
-        console.warn(`Failed to delete image file: ${img.url}`, err);
+        await deleteFromCloudinary(img.url);
+      } catch (error) {
+        console.warn(`Failed to delete image: ${img.url}`, error);
       }
     });
+
+    // Add primary image deletion if exists
+    if (existingVehicle.previewUrl) {
+      deletePromises.push(deleteFromCloudinary(existingVehicle.previewUrl));
+    }
+
     await Promise.all(deletePromises);
 
-    const rootPath = path.join(process.cwd(), 'public', 'uploads', `${vehicleId}`)
-
-    await fs.rmdir(rootPath, {recursive: true})
-
-    await prisma.vehicleImages.deleteMany({
-      where: { vehicleId },
-    });
-
-    await prisma.vehicle.delete({
-      where: { id: vehicleId },
-    });
+    // Delete database records in transaction
+    await prisma.$transaction([
+      prisma.vehicleImages.deleteMany({ where: { vehicleId } }),
+      prisma.vehicle.delete({ where: { id: vehicleId } })
+    ]);
 
     return NextResponse.json({
       success: true,
-      message: `Vehicle with ID ${vehicleId} and its images have been deleted successfully.`,
+      message: `Vehicle ${vehicleId} and associated images deleted successfully`
     });
+
   } catch (error) {
-    console.error("Server error during vehicle deletion:", error);
-    return NextResponse.json({
-      success: false,
-      error: "An error occurred while deleting the vehicle.",
-    }, { status: 500 });
+    console.error("Vehicle deletion error:", error);
+    
+    if (error instanceof JsonWebTokenError) {
+      return NextResponse.json(
+        { success: false, error: "Invalid authentication token" },
+        { status: 401 }
+      );
+    }
+
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: error instanceof Error ? error.message : "Failed to delete vehicle" 
+      },
+      { status: 500 }
+    );
   }
 }

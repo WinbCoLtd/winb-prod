@@ -1,27 +1,55 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Autherize } from "@/helpers/auth";
 import { prisma } from "@/prisma/prisma";
-import fs from "fs";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
-import path from "path";
-import { Ifields } from "../add/route";
+import { v2 as cloudinary } from 'cloudinary';
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true
+})
+
+// Helper function for Cloudinary uploads
+const uploadToCloudinary = async (file: File, folder: string) => {
+  const arrayBuffer = await file.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+  
+  return new Promise<any>((resolve, reject) => {
+    cloudinary.uploader.upload_stream(
+      { folder, resource_type: 'auto' },
+      (error, result) => {
+        if (error) reject(error);
+        if (result) resolve(result);
+      }
+    ).end(buffer);
+  });
+};
+
+// Helper function to delete Cloudinary assets
+const deleteFromCloudinary = async (url: string) => {
+  const publicId = url.split('/').slice(-2).join('/').split('.')[0];
+  if (publicId) {
+    await cloudinary.uploader.destroy(publicId);
+  }
+};
 
 export async function PUT(req: NextRequest) {
   const headerList = await headers();
-  const token = headerList.get("authorization")?.split(" ")[1];
-
-  // Authorization check
-  const auth = await Autherize(token || "");
-  if (!auth) {
-    return redirect("/auth");
-  }
+  const token = headerList.get("authorization")?.split(" ")[1] || "";
 
   try {
+    // Authorization check
+    const auth = await Autherize(token);
+    if (!auth) return redirect("/auth");
+
     const formdata = await req.formData();
     const vehicleId = Number(formdata.get("id"));
 
-    // Ensure vehicleId is provided
     if (!vehicleId) {
       return NextResponse.json({
         success: false,
@@ -29,8 +57,12 @@ export async function PUT(req: NextRequest) {
       });
     }
 
-    // Fetch existing vehicle details
-    const existingVehicle = await prisma.vehicle.findUnique({ where: { id: vehicleId } });
+    // Fetch existing data
+    const [existingVehicle, existingImages] = await Promise.all([
+      prisma.vehicle.findUnique({ where: { id: vehicleId } }),
+      prisma.vehicleImages.findMany({ where: { vehicleId } })
+    ]);
+
     if (!existingVehicle) {
       return NextResponse.json({
         success: false,
@@ -38,121 +70,107 @@ export async function PUT(req: NextRequest) {
       });
     }
 
-    // Handle retained image URLs
+    // Handle image updates
     const retainedUrls = JSON.parse(
       formdata.get("retainedUrls")?.toString() || "[]"
     ) as string[];
 
-    const existingImages = await prisma.vehicleImages.findMany({ where: { vehicleId } });
+    // Identify images to remove
     const imagesToDelete = existingImages.filter(
-      (img) => !retainedUrls.includes(img.url) && img.url !== existingVehicle.previewUrl
+      img => !retainedUrls.includes(img.url) && img.url !== existingVehicle.previewUrl
     );
 
-    // Delete unused images from filesystem and database
-    for (const img of imagesToDelete) {
-      const imgPath = path.join(process.cwd(), "public", img.url);
-      if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
-    }
+    // Clean up deleted images
+    await Promise.all([
+      ...imagesToDelete.map(img => deleteFromCloudinary(img.url)),
+      prisma.vehicleImages.deleteMany({
+        where: { id: { in: imagesToDelete.map(img => img.id) } }
+      })
+    ]);
 
-    await prisma.vehicleImages.deleteMany({
-      where: {
-        vehicleId,
-        url: { notIn: retainedUrls },
-      },
-    });
-
-    // Handle the new primary image (preview image)
+    // Handle primary image update
     const previewImageFile = formdata.get("screenShot") as File | null;
     let previewUrl = existingVehicle.previewUrl;
 
     if (previewImageFile) {
-      const previewPath = path.join(process.cwd(), "public", "uploads", `${vehicleId}`);
-      if (!fs.existsSync(previewPath)) fs.mkdirSync(previewPath, { recursive: true });
+      // Upload new primary image
+      const screenShotResult = await uploadToCloudinary(
+        previewImageFile,
+        `vehicles/${vehicleId}`
+      );
+      previewUrl = screenShotResult.secure_url;
 
-      const oldPreviewPath = path.join(process.cwd(), "public", previewUrl);
-      if (fs.existsSync(oldPreviewPath)) fs.unlinkSync(oldPreviewPath);
-
-      const previewFilePath = path.join(previewPath, previewImageFile.name);
-      fs.writeFileSync(previewFilePath, Buffer.from(await previewImageFile.arrayBuffer()));
-
-      previewUrl = `/uploads/${vehicleId}/${previewImageFile.name}`;
+      // Delete old primary image if it changed
+      if (existingVehicle.previewUrl !== previewUrl) {
+        await deleteFromCloudinary(existingVehicle.previewUrl);
+      }
     }
 
     // Handle new carousel images
     const files = formdata.getAll("file") as File[];
-    const uploadPath = path.join(process.cwd(), "public", "uploads", `${vehicleId}`, "carouselImg");
-    if (!fs.existsSync(uploadPath)) fs.mkdirSync(uploadPath, { recursive: true });
+    const newFileUrls = await Promise.all(
+      files.map(file => 
+        uploadToCloudinary(file, `vehicles/${vehicleId}/carousel`)
+          .then(res => res.secure_url)
+      )
+    );
 
-    const newFileUrls: string[] = [];
-    for (const file of files) {
-      const filePath = path.join(uploadPath, file.name);
-      fs.writeFileSync(filePath, Buffer.from(await file.arrayBuffer()));
-      newFileUrls.push(`/uploads/${vehicleId}/carouselImg/${file.name}`);
-    }
+    // Prepare updated vehicle data
+    const formFields = [
+      'title', 'description', 'price', 'model', 'vehicleType',
+      'maker', 'fuel', 'drive', 'condition', 'color', 'grade',
+      'chassieNumber', 'Shaken', 'manufactureYear', 'mileage', 'maxPassengers'
+    ];
+    
+    const updatedData = formFields.reduce((acc: Record<string, any>, field) => {
+      const value = formdata.get(field);
+      if (value !== null) {
+        acc[field] = field === 'manufactureYear' && value 
+          ? new Date(value.toString())
+          : Number(value) || value.toString();
+      }
+      return acc;
+    }, {});
 
-    // Save new image URLs to the database
-    for (const fileUrl of newFileUrls) {
-      await prisma.vehicleImages.create({ data: { url: fileUrl, vehicleId } });
-    }
-
-    // Update or create primary image record
-    const primaryImageRecord = existingImages.find((img) => img.url === existingVehicle.previewUrl);
-    if (primaryImageRecord) {
-      await prisma.vehicleImages.update({
-        where: { id: primaryImageRecord.id },
-        data: { url: previewUrl },
-      });
-    } else if (previewUrl !== existingVehicle.previewUrl) {
-      await prisma.vehicleImages.create({
-        data: { url: previewUrl, vehicleId },
-      });
-    }
-
-    // Combine all image URLs
-    const finalImageUrls = [...retainedUrls, ...newFileUrls, previewUrl];
-
-    // Extract updated data from form
-    const updatedData: Partial<Ifields> = {
-      title: formdata.get("title")?.toString() || existingVehicle.title,
-      description: formdata.get("description")?.toString() || existingVehicle.description,
-      price: Number(formdata.get("price")) || existingVehicle.price,
-      model: formdata.get("model")?.toString() || existingVehicle.model,
-      vehicleType: formdata.get("vehicleType")?.toString() || existingVehicle.vehicleType,
-      maker: formdata.get("maker")?.toString() || existingVehicle.maker,
-      fuel: formdata.get("fuel")?.toString() || existingVehicle.fuel,
-      drive: formdata.get("drive")?.toString() || existingVehicle.drive,
-      condition: formdata.get("condition")?.toString() || existingVehicle.condition,
-      color: formdata.get("color")?.toString() || existingVehicle.color,
-      grade: formdata.get("grade")?.toString() || existingVehicle.grade,
-      chassieNumber: formdata.get("chassieNumber")?.toString() || existingVehicle.chassieNumber,
-      Shaken: formdata.get("Shaken")?.toString() || existingVehicle.Shaken,
-      manufactureYear: formdata.get("manufactureYear")
-        ? new Date(formdata.get("manufactureYear")!.toString())
-        : existingVehicle.manufactureYear,
-      mileage: Number(formdata.get("mileage")) || existingVehicle.mileage,
-      maxPassengers: Number(formdata.get("maxPassengers")) || existingVehicle.maxPassengers,
-    };
-
-    // Update vehicle record in the database
-    const updatedVehicle = await prisma.vehicle.update({
-      where: { id: vehicleId },
-      data: {
-        ...updatedData,
-        previewUrl,
-        imageCount: finalImageUrls.length,
-      },
-    });
+    // Database transaction
+    const [updatedVehicle] = await prisma.$transaction([
+      prisma.vehicle.update({
+        where: { id: vehicleId },
+        data: {
+          ...updatedData,
+          previewUrl,
+          imageCount: retainedUrls.length + newFileUrls.length + 1
+        },
+      }),
+      ...(previewUrl !== existingVehicle.previewUrl ? [
+        prisma.vehicleImages.updateMany({
+          where: { vehicleId, isPrimary: true },
+          data: { url: previewUrl }
+        })
+      ] : []),
+      prisma.vehicleImages.createMany({
+        data: newFileUrls.map(url => ({
+          url,
+          vehicleId,
+          isPrimary: false
+        }))
+      })
+    ]);
 
     return NextResponse.json({
       success: true,
       vehicle: updatedVehicle,
-      files: finalImageUrls,
+      images: {
+        primary: previewUrl,
+        carousel: [...retainedUrls, ...newFileUrls]
+      }
     });
+
   } catch (error) {
     console.error("Update vehicle error:", error);
     return NextResponse.json({
       success: false,
-      error: "An error occurred while updating the vehicle.",
+      error: error instanceof Error ? error.message : "An unexpected error occurred",
     });
   }
 }
