@@ -110,6 +110,7 @@ export async function POST(req: NextRequest) {
     );
     const additionalImageUrls = additionalImagesResults.map(res => res.secure_url);
 
+    if(!additionalImageUrls || !screenShotUrl)return NextResponse.json({ success: false, error: "Error in URLs" });
     // Start a transaction
     const transaction = await prisma.$transaction(async (prismaTransaction) => {
       const insertVehicle = await prismaTransaction.vehicle.create({
