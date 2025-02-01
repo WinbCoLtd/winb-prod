@@ -290,7 +290,7 @@ const MoreDetails = () => {
               href={`/contact?id=${vehicle.id}&title=${
                 vehicle.title.split("/")[0]
               }`}
-              className="bg-winb-yellow text-[20px] lg:text-[18px] md:text-[20px] text-black font-medium px-4 lg:py-4 sm:py-6 rounded-[25px] hover:bg-yellow-300 transition duration-300 w-full sm:w-auto text-center"
+              className="bg-winb-yellow text-[20px] lg:text-[18px] md:text-[20px] text-black font-medium px-4 py-4 rounded-[25px] hover:bg-yellow-300 transition duration-300 w-full sm:w-auto text-center"
             >
                {locale === "en" ? "Request More Information" : "詳細情報をリクエスト"}  
             </Link>
