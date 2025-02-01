@@ -9,11 +9,14 @@ import { useState, useEffect } from "react";
 import { useLocale } from "next-intl";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 interface FormData {
   name: string;
   email: string;
   phone: string;
+  countryCode?: string;
   message: string;
   vehicleId?: number;
   title?: string;
@@ -24,12 +27,22 @@ export default function Inquiry() {
     name: "",
     email: "winb.coltd@gmail.com",
     phone: "",
+    countryCode: "+94",
     message: "",
   });
 
   const [loading, setLoading] = useState(false);
   const searchParam = useSearchParams();
   const locale = useLocale();
+
+  const handlePhoneChange = (value: string, country: any) => {
+    setFormData((prev) => ({
+      ...prev,
+      phone: value, // The full phone number with country code
+      countryCode: `+${country.dialCode}`, // Extract country code
+    }));
+  };
+  
 
   useEffect(() => {
     const id = searchParam.get("id");
@@ -131,6 +144,7 @@ export default function Inquiry() {
                   type="email"
                   id="email"
                   name="email"
+                  readOnly
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -138,7 +152,7 @@ export default function Inquiry() {
                 />
               </div>
 
-              <div className="flex flex-col w-full md:w-1/2">
+              {/* <div className="flex flex-col w-full md:w-1/2">
                 <label className="lg:text-[18px] text-black font-semibold mb-2" htmlFor="phone">
                   {locale === "en" ? "Phone Number" : "電話番号"}
                 </label>
@@ -150,6 +164,19 @@ export default function Inquiry() {
                   onChange={handleChange}
                   required
                   className="p-3 border border-gray-300 rounded-[15px] focus:outline-none focus:ring-2"
+                />
+              </div> */}
+                <div>
+                <label className="lg:text-[18px] text-black font-semibold mb-2">
+                  {locale === "en" ? "Phone Number" : "電話番号"}
+                </label>
+                <PhoneInput
+                  country={"lk"} // Default country (Sri Lanka)
+                  value={formData.phone}
+                  onChange={handlePhoneChange}
+                  inputClass="p-3 border border-gray-300 rounded-[15px] w-full focus:outline-none focus:ring-2"
+                  containerClass="w-full"
+                  enableSearch={true} // Enable search for countries
                 />
               </div>
             </div>
