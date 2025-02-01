@@ -25,7 +25,7 @@ export interface Ifields {
   color: string;
   grade: string;
   chassieNumber: string;
-  Shaken: string;
+  Shaken: Date;
   manufactureYear: Date;
   mileage: number;
   maxPassengers: number;
@@ -61,7 +61,8 @@ export async function POST(req: NextRequest) {
       color: formdata.get("color")?.toString() || "",
       grade: formdata.get("grade")?.toString() || "",
       chassieNumber: formdata.get("chassieNumber")?.toString() || "",
-      Shaken: formdata.get("Shaken")?.toString() || "",
+      Shaken: formdata.get("Shaken") ? new Date(formdata.get("Shaken")!.toString()) : new Date(),
+
       manufactureYear: formdata.get("manufactureYear")
         ? new Date(formdata.get("manufactureYear")!.toString())
         : new Date(),
@@ -125,7 +126,7 @@ export async function POST(req: NextRequest) {
           color: formDataObject.color as string,
           grade: formDataObject.grade as string,
           chassieNumber: formDataObject.chassieNumber as string,
-          Shaken: formDataObject.Shaken as string,
+          Shaken: formDataObject.Shaken as Date,
           manufactureYear: formDataObject.manufactureYear as Date,
           mileage: formDataObject.mileage as number,
           maxPassengers: formDataObject.maxPassengers as number,

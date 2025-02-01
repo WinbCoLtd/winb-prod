@@ -132,7 +132,7 @@ export default function Navbar() {
       <div className="flex items-center">
         <button
           onClick={() => handleLocaleChange(locale === "en" ? "ja" : "en")}
-          className="bg-yellow-200 hover:bg-yellow-400 text-black font-bold py-2 px-4 rounded"
+          className="bg-yellow-200 hover:bg-yellow-400 text-black font-bold py-2 px-2 rounded"
         >
           {localeToggleText}
         </button>

@@ -60,7 +60,7 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
               <div className="flex items-center space-x-2">
                 <Fuel size={20} className="text-gray-600" />
                 <div className="text-sm">
-                  <p className="text-gray-500">Fuel Type</p>
+                  <p className="text-gray-500">  {locale === "en" ? "Fuel Type" : "燃料の種類"}</p>
                   <span className="text-gray-800 font-medium">
                     {locale === "en"
                       ? vehicle.fuel.split("/")[0]
@@ -73,7 +73,7 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
               <div className="flex items-center space-x-2">
                 <LifeBuoy size={20} className="text-gray-600" />
                 <div className="text-sm">
-                  <p className="text-gray-500">Drive Type</p>
+                  <p className="text-gray-500">{locale === "en" ? "Drive Type" : "ドライブタイプ"}</p>
                   <span className="text-gray-800 font-medium">
                     {locale === "en"
                       ? vehicle.drive.split("/")[0]
@@ -86,7 +86,7 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
               <div className="flex items-center space-x-2">
                 <Gem size={20} className="text-gray-600" />
                 <div className="text-sm">
-                  <p className="text-gray-500">Distance</p>
+                  <p className="text-gray-500">{locale === "en" ? "Distance" : "距離"}</p>
                   <span className="text-gray-800 font-medium">
                     {vehicle.mileage} km
                   </span>
@@ -99,7 +99,7 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
               <div className="flex items-center space-x-2">
                 <FaRegSnowflake size={20} className="text-gray-600" />
                 <div className="text-sm">
-                  <p className="text-gray-500">Condition</p>
+                  <p className="text-gray-500">{locale === "en" ? "Condition" : "状態"}</p>
                   <span className="text-gray-800 font-medium">
                     {locale === "en"
                       ? vehicle.condition.split("/")[0]
@@ -116,7 +116,7 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
                   type="button"
                   className="bg-yellow-400 hover:bg-yellow-500 text-black font-medium text-sm py-2 px-4 rounded-full flex items-center space-x-2 ml-auto md:ml-0"
                 >
-                  <span>More info</span>
+                  <span>{locale === "en" ? "More info" : "詳細情報"}</span>
                   <ChevronRight size={15} />
                 </button>
               </Link>

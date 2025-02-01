@@ -40,7 +40,7 @@ const Profile = () => {
           <p>
             {locale === "en"
               ? `Welcome to WIN-B! Founded in 2025, WIN-B has become known as a platform that enables easy and efficient vehicle buying and selling. As a trusted name in the automotive industry, we provide a seamless experience for both sellers and buyers, ensuring the best service and satisfaction.`
-              : `WIN-Bへようこそ![Year]に設立されたWIN-Bは、簡単かつ効率的に車両を売買できるプラットフォームとして知られるようになりました。自動車業界で信頼される名前として、私たちは売り手と買い手の両方にシームレスな体験を提供し、最高のサービスと満足を保証します。`}
+              : `WIN-Bへようこそ!2025 に設立されたWIN-Bは、簡単かつ効率的に車両を売買できるプラットフォームとして知られるようになりました。自動車業界で信頼される名前として、私たちは売り手と買い手の両方にシームレスな体験を提供し、最高のサービスと満足を保証します。`}
           </p>
           <p>
             {locale === "en"

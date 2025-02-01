@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
 import Navbar from "@/components/Navbar";
@@ -25,7 +27,7 @@ interface FormData {
 export default function Inquiry() {
   const [formData, setFormData] = useState<FormData>({
     name: "",
-    email: "winb.coltd@gmail.com",
+    email: "",
     phone: "",
     countryCode: "+94",
     message: "",
@@ -144,7 +146,6 @@ export default function Inquiry() {
                   type="email"
                   id="email"
                   name="email"
-                  readOnly
                   value={formData.email}
                   onChange={handleChange}
                   required

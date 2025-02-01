@@ -165,96 +165,96 @@ const MoreDetails = () => {
         <div className="mt-20 md:mt-0 md:ml-8 flex flex-col justify-start w-full md:w-[500px]">
           <h2 className="text-[40px] lg:text-[40px] md:text-[20px] text-black font-bold mb-4 text-center">
             {locale === "en"
-              ? vehicle.title[0] // English: Show the first part
-              : vehicle.title[1]?.length > 0 // Non-English: Show the second part if it's non-empty
-              ? vehicle.title[1]
-              : vehicle.title[0]}
+              ? vehicle.title.split('/')[0] // English: Show the first part
+              : vehicle.title.split('/')[1]?.length > 0 // Non-English: Show the second part if it's non-empty
+              ? vehicle.title.split('/')[1]
+              : vehicle.title.split('/')[0]}
           </h2>
-          <p className="text-[24px] lg:text-[30px] md:text-[24px] text-black font-medium mb-4">
+          <p className="text-[18px] lg:text-[22px] md:text-[20px] text-black font-medium mb-4">
             {locale === "en"
-              ? vehicle.description[0]
-              : vehicle.description[1]?.length > 0
-              ? vehicle.description[1]
-              : vehicle.description[0]}
+              ? vehicle.description.split('/')[0]
+              : vehicle.description.split('/')[1]?.length > 0
+              ? vehicle.description.split('/')[1]
+              : vehicle.description.split('/')[0]}
           </p>
 
           <div className="text-[30px] lg:text-[30px] md:text-[24px] mt-[26px] grid lg:grid-cols-2 md:grid-cols-3 gap-4 items-center">
             {[
-              { label: "Price", value: `¥ ${vehicle.price}` },
+              { label: "Price/価格", value: `¥ ${vehicle.price}` },
               {
-                label: "Model",
+                label: "Model/モデル",
                 value:
                   locale === "en"
-                    ? vehicle.model[0]
-                    : vehicle.model[1]?.length > 0
-                    ? vehicle.model[1]
-                    : vehicle.model[0],
+                    ? vehicle.model.split('/')[0]
+                    : vehicle.model.split('/')[1]?.length > 0
+                    ? vehicle.model.split('/')[1]
+                    : vehicle.model.split('/')[0],
               },
               {
-                label: "Maker",
+                label: "Maker/メーカー",
                 value:
                   locale === "en"
-                    ? vehicle.maker[0]
-                    : vehicle.maker[1]?.length > 0
-                    ? vehicle.maker[1]
-                    : vehicle.maker[0],
+                    ? vehicle.maker.split('/')[0]
+                    : vehicle.maker.split('/')[1]?.length > 0
+                    ? vehicle.maker.split('/')[1]
+                    : vehicle.maker.split('/')[0],
               },
               {
-                label: "Vehicle Type",
+                label: "Vehicle Type/車両タイプ",
                 value:
                   locale === "en"
-                    ? vehicle.vehicleType[0]
-                    : vehicle.vehicleType[1]?.length > 0
-                    ? vehicle.vehicleType[1]
-                    : vehicle.vehicleType[0],
+                    ? vehicle.vehicleType.split('/')[0]
+                    : vehicle.vehicleType.split('/')[1]?.length > 0
+                    ? vehicle.vehicleType.split('/')[1]
+                    : vehicle.vehicleType.split('/')[0],
               },
               {
-                label: "Fuel Type",
+                label: "Fuel Type/燃料の種類",
                 value:
                   locale === "en"
-                    ? vehicle.fuel[0]
-                    : vehicle.fuel[1]?.length > 0
-                    ? vehicle.fuel[1]
-                    : vehicle.fuel[0],
+                    ? vehicle.fuel.split('/')[0]
+                    : vehicle.fuel.split('/')[1]?.length > 0
+                    ? vehicle.fuel.split('/')[1]
+                    : vehicle.fuel.split('/')[0],
               },
               {
-                label: "Drive Type",
+                label: "Drive Type/ドライブタイプ",
                 value:
                   locale === "en"
-                    ? vehicle.drive[0]
-                    : vehicle.drive[1]?.length > 0
-                    ? vehicle.drive[1]
-                    : vehicle.drive[0],
+                    ? vehicle.drive.split('/')[0]
+                    : vehicle.drive.split('/')[1]?.length > 0
+                    ? vehicle.drive.split('/')[1]
+                    : vehicle.drive.split('/')[0],
               },
               {
-                label: "Color",
+                label: "Color/色",
                 value:
                   locale === "en"
-                    ? vehicle.color[0]
-                    : vehicle.color[1]?.length > 0
-                    ? vehicle.color[1]
-                    : vehicle.color[0],
+                    ? vehicle.color.split('/')[0]
+                    : vehicle.color.split('/')[1]?.length > 0
+                    ? vehicle.color.split('/')[1]
+                    : vehicle.color.split('/')[0],
               },
               {
-                label: "Grade",
+                label: "Grade/グレード",
                 value:
                   locale === "en"
-                    ? vehicle.grade[0]
-                    : vehicle.grade[1]?.length > 0
-                    ? vehicle.grade[1]
-                    : vehicle.grade[0],
+                    ? vehicle.grade.split('/')[0]
+                    : vehicle.grade.split('/')[1]?.length > 0
+                    ? vehicle.grade.split('/')[1]
+                    : vehicle.grade.split('/')[0],
               },
               {
-                label: "Chassi Number",
+                label: "Chassi Number/車台番号",
                 value:
                   locale === "en"
-                    ? vehicle.chassieNumber[0]
-                    : vehicle.chassieNumber[1]?.length > 0
-                    ? vehicle.chassieNumber[1]
-                    : vehicle.chassieNumber[0],
+                    ? vehicle.chassieNumber.split('/')[0]
+                    : vehicle.chassieNumber.split('/')[1]?.length > 0
+                    ? vehicle.chassieNumber.split('/')[1]
+                    : vehicle.chassieNumber.split('/')[0],
               },
               {
-                label: "Shaken",
+                label: "Shaken/車検",
                 value:
                   locale === "en"
                     ? vehicle.Shaken[0]
@@ -263,23 +263,23 @@ const MoreDetails = () => {
                     : vehicle.Shaken[0],
               },
               {
-                label: "Manufacture Year",
+                label: "Manufacture Year/年式",
                 value: new Date(vehicle.manufactureYear).getFullYear(),
               },
-              { label: "Milage", value: vehicle.mileage },
+              { label: "Milage/走行距離", value: vehicle.mileage },
               {
-                label: "Condition",
+                label: "Condition/状態",
                 value:
                   locale === "en"
-                    ? vehicle.condition[0]
-                    : vehicle.condition[1]?.length > 0
-                    ? vehicle.condition[1]
-                    : vehicle.condition[0],
+                    ? vehicle.condition.split('/')[0]
+                    : vehicle.condition.split('/')[1]?.length > 0
+                    ? vehicle.condition.split('/')[1]
+                    : vehicle.condition.split('/')[0],
               },
             ].map(({ label, value }, index) => (
               <div key={index} className="flex items-center">
                 <p className="text-[20px] lg:text-[18px] md:text-[20px] text-black font-semibold">
-                  {label}: {value}
+                  {locale === "en" ? label.split('/')[0]:label.split('/')[1]}: {value}
                 </p>
               </div>
             ))}
@@ -292,7 +292,7 @@ const MoreDetails = () => {
               }`}
               className="bg-winb-yellow text-[20px] lg:text-[18px] md:text-[20px] text-black font-medium px-4 lg:py-4 sm:py-6 rounded-[25px] hover:bg-yellow-300 transition duration-300 w-full sm:w-auto text-center"
             >
-              Request More Information
+               {locale === "en" ? "Request More Information" : "詳細情報をリクエスト"}  
             </Link>
           </div>
         </div>
@@ -302,3 +302,6 @@ const MoreDetails = () => {
 };
 
 export default MoreDetails;
+
+
+

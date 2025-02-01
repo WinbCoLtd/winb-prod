@@ -154,11 +154,12 @@ export async function PUT(req: NextRequest) {
       if (value !== null) {
         // Handle numeric fields explicitly
         const numericFields = ['price', 'mileage', 'maxPassengers'];
+        const dateFields = ['manufactureYear', 'Shaken'];
         if (numericFields.includes(field)) {
           acc[field] = Number(value) || 0;
         }
         // Handle date field
-        else if (field === 'manufactureYear') {
+        else if (dateFields.includes(field)) {
           acc[field] = new Date(value.toString());
         }
         // All other fields

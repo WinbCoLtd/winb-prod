@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
 import Navbar from "@/components/Navbar";
@@ -22,7 +24,7 @@ interface FormData {
 export default function OtherInquiry() {
   const [formData, setFormData] = useState<FormData>({
     name: "",
-    email: "winb.coltd@gmail.com",
+    email: "",
     phone: "",
     countryCode: "+94",
     message: "Vehicle breakdown / 車両故障",
@@ -32,10 +34,6 @@ export default function OtherInquiry() {
   const [loading, setLoading] = useState(false);
   const locale = useLocale();
   // Define a custom type for form data
-  interface FormState {
-    phone: string;
-    countryCode: string;
-  }
   const handlePhoneChange = (value: string, country: any) => {
     setFormData((prev) => ({
       ...prev,
@@ -149,7 +147,6 @@ export default function OtherInquiry() {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  readOnly
                   required
                   className="p-3 border border-gray-300 rounded-[15px] focus:outline-none focus:ring-2"
                 />

@@ -191,7 +191,7 @@ function HeroSection() {
               <option value="">
                 {locale == "en"
                   ? "All Models"
-                  : "利用可能なメーカーはありません"}
+                  : "全てのモデル"}
               </option>
               {searchData && searchData.models.length > 0 ? (
                 searchData.models.map((model, index) => {
