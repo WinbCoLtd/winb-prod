@@ -20,7 +20,73 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "株式会社WIN-B | Japan's Premier Vehicle Selling Platform",
   description:
-    "Discover a wide range of vehicles with 株式会社WIN-B, Japan's leading platform for buying and selling cars. Connect with trusted sellers and find your perfect vehicle today.",
+    "Discover vehicles with 株式会社WIN-B, Japan's top car sales platform. Connect with trusted sellers and find your perfect car today.",
+  keywords: [
+    "Japan car sales",
+    "Buy cars Japan",
+    "Used cars Japan",
+    "New cars Japan",
+    "Japanese car marketplace",
+    "Vehicle sales Japan",
+    "Car dealership Japan",
+    "Car export Japan",
+    "Best cars in Japan",
+    "Japan auto trading",
+    "株式会社WIN-B",
+    "WIN-B Japan",
+    "WIN-B car sales",
+    "WIN-B vehicle marketplace",
+    "Used cars Tokyo",
+    "JDM cars for sale",
+    "Japanese luxury cars",
+    "Kei cars Japan",
+    "Hybrid cars Japan",
+    "Electric cars Japan",
+    "Buy used cars Japan",
+    "Sell your car Japan",
+    "Japanese car auctions",
+    "Japan car export service",
+    "Car financing Japan",
+    "Online car sales Japan",
+    "Japanese used cars for sale",
+    "Buy cars online Japan",
+    "Japan car dealership",
+    "Japan car shop",
+    "Car sale websites Japan",
+    "Used Japanese cars",
+    "New Japanese cars",
+    "JDM cars Japan",
+    "Japanese sports cars",
+    "Japan luxury cars",
+    "Japan SUV sales",
+    "Kei cars for sale",
+    "Family cars Japan",
+    "Japanese electric vehicles",
+    "Hybrid vehicles Japan",
+    "Toyota cars Japan",
+    "Nissan cars Japan",
+    "Honda cars Japan",
+    "Subaru cars Japan",
+    "Mitsubishi cars Japan",
+    "Lexus cars Japan",
+    "Suzuki cars Japan",
+    "Mazda cars Japan",
+    "Daihatsu cars Japan",
+    "Buy and sell cars Japan",
+    "Sell my car Japan",
+    "Car auction Japan",
+    "Japan car export services",
+    "Affordable cars Japan",
+    "Best car deals Japan",
+    "Car leasing Japan",
+    "Buy cars in Tokyo",
+    "Used cars Osaka",
+    "Car sales Yokohama",
+    "Sapporo car market",
+    "Fukuoka used cars",
+    "Nagoya car dealership",
+    "Kyoto car sales",
+  ],
 };
 
 export default async function RootLayout({
@@ -31,6 +97,7 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
+
   const messages = await getMessages();
   return (
     <html lang={locale}>
@@ -61,6 +128,7 @@ export default async function RootLayout({
           name="twitter:image"
           content="https://www.win-b.jp/twitter-image.jpg"
         />
+        
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

@@ -1,0 +1,12 @@
+User-agent: *
+Disallow: /admin/
+
+Allow: /$
+Allow: /en/
+Allow: /ja/
+Allow: /companyPrifile/
+Allow: /vehicleList/
+Allow: /otherService/
+Allow: /contact/
+
+Sitemap: https://www.win-b.jp/sitemap.xml

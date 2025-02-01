@@ -1,0 +1,25 @@
+import { NextResponse } from "next/server";
+
+export async function GET() {
+  const robotsTxt = `
+User-agent: *
+Disallow: /admin/
+
+
+Allow: /$
+Allow: /en/
+Allow: /ja/
+Allow: /companyPrifile/
+Allow: /vehicleList/
+Allow: /otherService/
+Allow: /contact/
+
+Sitemap: https://www.win-b.jp/sitemap.xml
+  `.trim();
+
+  return new NextResponse(robotsTxt, {
+    headers: {
+      "Content-Type": "text/plain",
+    },
+  });
+}

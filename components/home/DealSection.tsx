@@ -20,11 +20,11 @@ const DealSection = () => {
 
         {/* Content Section */}
         <div className="flex flex-col items-start md:pl-8">
-          <h3 className="text-[24px] sm:text-[28px] md:text-[40px] font-bold text-black max-w-[531px]">
+          <h2 className="text-[24px] sm:text-[28px] md:text-[40px] font-bold text-black max-w-[531px]">
             {locale === "en"
               ? "Get the Best Deal for Your Vehicle Today"
               : "今すぐあなたの車に最適な取引を手に入れましょう"} {/* Fallback to Japanese if available */}
-          </h3>
+          </h2>
           <p className="mt-4 font-medium text-[18px] sm:text-[20px] text-[#000000]">
             {locale === "en"
               ? "Join thousands of satisfied customers who found their perfect car with us. We offer exclusive benefits and 24/7 support."

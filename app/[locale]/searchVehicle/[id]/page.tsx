@@ -163,22 +163,22 @@ const MoreDetails = () => {
 
         {/* Vehicle Details */}
         <div className="mt-20 md:mt-0 md:ml-8 flex flex-col justify-start w-full md:w-[500px]">
-          <h2 className="text-[40px] lg:text-[40px] md:text-[20px] text-black font-bold mb-4 text-center">
+          <h1 className="text-[40px] lg:text-[40px] md:text-[20px] text-black font-bold mb-4 text-left">
             {locale === "en"
               ? vehicle.title.split('/')[0] // English: Show the first part
               : vehicle.title.split('/')[1]?.length > 0 // Non-English: Show the second part if it's non-empty
               ? vehicle.title.split('/')[1]
               : vehicle.title.split('/')[0]}
-          </h2>
-          <p className="text-[18px] lg:text-[22px] md:text-[20px] text-black font-medium mb-4">
+          </h1>
+          <h2 className="text-[18px] lg:text-[20px] md:text-[20px] text-slate-600 font-medium mt-4 mb-4">
             {locale === "en"
               ? vehicle.description.split('/')[0]
               : vehicle.description.split('/')[1]?.length > 0
               ? vehicle.description.split('/')[1]
               : vehicle.description.split('/')[0]}
-          </p>
+          </h2>
 
-          <div className="text-[30px] lg:text-[30px] md:text-[24px] mt-[26px] grid lg:grid-cols-2 md:grid-cols-3 gap-4 items-center">
+          <div className="text-[20px] lg:text-[20px] md:text-[24px] mt-[26px] grid lg:grid-cols-2 md:grid-cols-3 gap-4 items-center">
             {[
               { label: "Price/価格", value: `¥ ${vehicle.price}` },
               {
@@ -278,7 +278,7 @@ const MoreDetails = () => {
               },
             ].map(({ label, value }, index) => (
               <div key={index} className="flex items-center">
-                <p className="text-[20px] lg:text-[18px] md:text-[20px] text-black font-semibold">
+                <p className="text-[18px] lg:text-[16px] md:text-[18px] text-black font-semibold">
                   {locale === "en" ? label.split('/')[0]:label.split('/')[1]}: {value}
                 </p>
               </div>

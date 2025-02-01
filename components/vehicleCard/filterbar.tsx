@@ -101,9 +101,9 @@ const Filterbar = ({
         {" "}
         <X size={30} />{" "}
       </button>
-      <h2 className="text-xl font-semibold mb-4 text-gray-800">
+      <h1 className="text-xl font-semibold mb-4 text-gray-800">
         {locale === "en" ? "Filter Vehicles" : "車両をフィルタリング"}
-      </h2>
+      </h1>
       <button
         type="button"
         className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium mb-4 hover:bg-blue-700 transition"

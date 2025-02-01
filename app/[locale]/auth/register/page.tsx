@@ -33,13 +33,13 @@ const Register = () => {
     <div className="flex justify-center items-center min-h-screen bg-white">
       <div className="mt-12 mb-12 w-full max-w-md p-6 bg-white shadow-md border-2 border-[#c3d173]  rounded-lg text-center">
         <Image
-          src="/home/logo.png"
+          src="/home/log.png"
           alt="Logo"
           width={96}
           height={96}
           className="w-24 h-auto mx-auto mb-6"
         />
-        <h2 className="mb-6 text-2xl font-bold text-gray-800">Register</h2>
+        <h1 className="mb-6 text-2xl font-bold text-gray-800">Register</h1>
         <form className="flex flex-col">
           <div className="mb-4 text-left">
             <label className="block mb-2 font-semibold text-gray-700">

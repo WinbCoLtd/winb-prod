@@ -157,12 +157,15 @@ export default function Inquiry() {
                   {locale === "en" ? "Phone Number" : "電話番号"}
                 </label>
                 <PhoneInput
-                  country={"lk"} // Default country (Sri Lanka)
+                  country={"jp"} // Default country (Sri Lanka)
                   value={formData.phone}
                   onChange={handlePhoneChange}
-                  inputClass="p-3 border border-gray-300 rounded-[15px] w-full focus:outline-none focus:ring-2"
+                  inputClass="p-7 border border-gray-300 rounded-[15px]"
                   containerClass="w-full"
+                  inputStyle={{borderRadius:'15px', width:'400px'}}
+                  buttonStyle={{borderTopLeftRadius: '15px', borderBottomLeftRadius: '15px'}}
                   enableSearch={true} // Enable search for countries
+                
                 />
               </div>
             </div>

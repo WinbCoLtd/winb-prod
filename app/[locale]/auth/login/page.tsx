@@ -55,13 +55,13 @@ const Login = () => {
       <Toaster position="top-center" reverseOrder={false} />
       <div className="w-full max-w-md p-6 bg-white border border-yellow-400 rounded-lg shadow-md text-center">
         <Image
-          src="/home/logo.png"
+          src="/home/log.png"
           alt="Logo"
           width={96}
           height={96}
           className="w-24 h-auto mx-auto mb-6"
         />
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">Login</h2>
+        <h1 className="text-2xl font-bold mb-6 text-gray-800">Login</h1>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col">

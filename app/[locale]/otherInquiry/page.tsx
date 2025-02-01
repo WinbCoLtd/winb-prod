@@ -83,9 +83,9 @@ export default function OtherInquiry() {
         <Navbar />
       </div>
 
-      <h2 className="text-3xl flex items-center text-black font-bold mt-[36px] mb-[36px] gap-2">
+      <h1 className="text-3xl flex items-center text-black font-bold mt-[36px] mb-[36px] gap-2">
         {locale === "en" ? "Inquiry" : "お問い合わせ"} <Mail size={40} />
-      </h2>
+      </h1>
 
       <div className="max-w-full p-[1px] bg-gradient-to-b from-[#1119B4] to-[#58056B] rounded-2xl mb-10">
         <div className="w-full bg-[#fefefe] border rounded-2xl flex justify-between items-center p-5">
@@ -151,17 +151,20 @@ export default function OtherInquiry() {
                   className="p-3 border border-gray-300 rounded-[15px] focus:outline-none focus:ring-2"
                 />
               </div>
-              <div>
+              <div className="flex flex-col w-full md:w-1/2">
                 <label className="lg:text-[18px] text-black font-semibold mb-2">
                   {locale === "en" ? "Phone Number" : "電話番号"}
                 </label>
                 <PhoneInput
-                  country={"lk"} // Default country (Sri Lanka)
+                  country={"jp"} // Default country (Sri Lanka)
                   value={formData.phone}
                   onChange={handlePhoneChange}
-                  inputClass="p-3 border border-gray-300 rounded-[15px] w-full focus:outline-none focus:ring-2"
+                  inputClass="p-7 border border-gray-300 rounded-[15px]"
                   containerClass="w-full"
+                  inputStyle={{borderRadius:'15px', width:'400px'}}
+                  buttonStyle={{borderTopLeftRadius: '15px', borderBottomLeftRadius: '15px'}}
                   enableSearch={true} // Enable search for countries
+                  
                 />
               </div>
             </div>

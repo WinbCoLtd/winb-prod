@@ -72,19 +72,19 @@ export default function Navbar() {
         className="font-extrabold text-2xl flex flex-col items-center"
       >
         <Image
-          src="/home/logo1.jpg"
-          alt="Logo"
+          src="/home/logo.jpg"
+          alt="winb_company_logo"
           width={60}
           height={60}
           className="w-24 h-auto mx-auto mb-2"
         />
 
-        <span>
+        <p>
         <span className="text-white text-[20px]">株式会社 </span>
           <span className="text-[#FCDB02] text-[20px]">W</span>
           <span className="text-white text-[20px]">IN-</span>
           <span className="text-[#FCDB02] text-[20px]">B</span>
-        </span>
+        </p>
       </Link>
 
       {!isMobile && (

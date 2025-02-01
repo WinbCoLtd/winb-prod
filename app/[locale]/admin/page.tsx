@@ -374,7 +374,7 @@ const Admin = () => {
                         : vehicle.title.split("/")[1]}
                     </td>
                     <td className="border border-gray-300 p-2">
-                      ${vehicle.price}
+                    ¥{vehicle.price}
                     </td>
                     <td className="border border-gray-300 p-2">
                       {locale === "en"
@@ -645,6 +645,7 @@ const Admin = () => {
                   <input
                     name="Shaken"
                     value={formData.Shaken}
+                    type="date"
                     onChange={handleInputChange}
                     className="border border-gray-300 p-2 rounded-md w-full"
                   />

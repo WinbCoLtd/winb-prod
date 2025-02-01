@@ -45,13 +45,13 @@ const OtherService = () => {
         />
 
         <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-between px-4 text-white bg-black bg-opacity-60">
-          <div className="text-[30px] lg:text-[60px] font-bold text-center mt-10 transition-transform duration-300 ease-in-out hover:scale-105">
+          <h1 className="text-[30px] lg:text-[60px] font-bold text-center mt-10 transition-transform duration-300 ease-in-out hover:scale-105">
             Stranded? We&rsquo;re Just a Call Away!
-          </div>
+          </h1>
 
-          <p className="text-[22px] lg:text-[40px] mt-4 mb-3 font-bold text-center">
+          <h2 className="text-[22px] lg:text-[40px] mt-4 mb-3 font-bold text-center">
             助けが必要ですか?私たちがお手伝いできます!
-          </p>
+          </h2>
 
           <p className="text-[18px] lg:text-[28px] mt-5 font-semibold text-center max-w-[900px] mx-auto transition-transform duration-300 ease-in-out hover:scale-105">
             {locale === "en"

@@ -46,11 +46,11 @@ export default function Card({ vehicle }: { vehicle: Ifields }) {
       />
 
       {/* Title: Split by comma */}
-      <h4 className="mt-7 text-xl font-semibold ">
+      <h3 className="mt-7 text-xl font-semibold ">
         {locale === 'en'
           ? getLocalizedValue(vehicle.title, 0) // English title (first part before comma)
           : getLocalizedValue(vehicle.title, 1)}  {/* Japanese title (second part) or fallback to English */}
-      </h4>
+      </h3>
 
       {/* Description (maxPassengers, fuel, drive): Split by ',' */}
       <p className="text-[16px] mt-4 text-[#00000056] font-medium">
