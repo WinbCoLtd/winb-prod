@@ -4,15 +4,17 @@ import Navbar from "@/components/Navbar";
 import axios from "axios";
 import { Mail } from "lucide-react";
 import Image from "next/image";
-import { useState} from "react";
+import { useState } from "react";
 import { useLocale } from "next-intl";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 interface FormData {
   name: string;
   email: string;
   phone: string;
+  countryCode?: string;
   message: string;
   title: string;
 }
@@ -22,13 +24,25 @@ export default function OtherInquiry() {
     name: "",
     email: "winb.coltd@gmail.com",
     phone: "",
+    countryCode: "+94",
     message: "Vehicle breakdown / 車両故障",
     title: "",
   });
 
   const [loading, setLoading] = useState(false);
   const locale = useLocale();
-
+  // Define a custom type for form data
+  interface FormState {
+    phone: string;
+    countryCode: string;
+  }
+  const handlePhoneChange = (value: string, country: any) => {
+    setFormData((prev) => ({
+      ...prev,
+      phone: value, // The full phone number with country code
+      countryCode: `+${country.dialCode}`, // Extract country code
+    }));
+  };
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -44,12 +58,20 @@ export default function OtherInquiry() {
       const res = await axios.post("/api/contact", formData);
 
       if (res.status === 200) {
-        toast.success(locale === "en" ? "Inquiry submitted successfully!" : "お問い合わせが正常に送信されました。");
+        toast.success(
+          locale === "en"
+            ? "Inquiry submitted successfully!"
+            : "お問い合わせが正常に送信されました。"
+        );
         setFormData({ name: "", email: "", phone: "", message: "", title: "" });
       }
     } catch (err) {
       console.error(err);
-      toast.error(locale === "en" ? "Failed to submit the inquiry. Please try again later." : "お問い合わせの送信に失敗しました。後でもう一度お試しください。");
+      toast.error(
+        locale === "en"
+          ? "Failed to submit the inquiry. Please try again later."
+          : "お問い合わせの送信に失敗しました。後でもう一度お試しください。"
+      );
     } finally {
       setLoading(false);
     }
@@ -78,7 +100,10 @@ export default function OtherInquiry() {
           />
           <form onSubmit={handleSubmit} className="w-full lg:w-2/3 space-y-6">
             <div className="flex flex-col">
-              <label className="lg:text-[18px] text-black font-semibold mb-2" htmlFor="name">
+              <label
+                className="lg:text-[18px] text-black font-semibold mb-2"
+                htmlFor="name"
+              >
                 {locale === "en" ? "Name" : "名前"}
               </label>
               <input
@@ -93,7 +118,10 @@ export default function OtherInquiry() {
             </div>
 
             <div className="flex flex-col">
-              <label className="lg:text-[18px] text-black font-semibold mb-2" htmlFor="title">
+              <label
+                className="lg:text-[18px] text-black font-semibold mb-2"
+                htmlFor="title"
+              >
                 {locale === "en" ? "Vehicle Number" : "車両番号"}
               </label>
               <input
@@ -109,7 +137,10 @@ export default function OtherInquiry() {
 
             <div className="flex flex-col md:flex-row md:space-x-6">
               <div className="flex flex-col w-full md:w-1/2">
-                <label className="lg:text-[18px] text-black font-semibold mb-2" htmlFor="email">
+                <label
+                  className="lg:text-[18px] text-black font-semibold mb-2"
+                  htmlFor="email"
+                >
                   {locale === "en" ? "Email Address" : "電子メールアドレス"}
                 </label>
                 <input
@@ -118,29 +149,31 @@ export default function OtherInquiry() {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
+                  readOnly
                   required
                   className="p-3 border border-gray-300 rounded-[15px] focus:outline-none focus:ring-2"
                 />
               </div>
-
-              <div className="flex flex-col w-full md:w-1/2">
-                <label className="lg:text-[18px] text-black font-semibold mb-2" htmlFor="phone">
+              <div>
+                <label className="lg:text-[18px] text-black font-semibold mb-2">
                   {locale === "en" ? "Phone Number" : "電話番号"}
                 </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
+                <PhoneInput
+                  country={"lk"} // Default country (Sri Lanka)
                   value={formData.phone}
-                  onChange={handleChange}
-                  required
-                  className="p-3 border border-gray-300 rounded-[15px] focus:outline-none focus:ring-2"
+                  onChange={handlePhoneChange}
+                  inputClass="p-3 border border-gray-300 rounded-[15px] w-full focus:outline-none focus:ring-2"
+                  containerClass="w-full"
+                  enableSearch={true} // Enable search for countries
                 />
               </div>
             </div>
 
             <div className="flex flex-col">
-              <label className="lg:text-[18px] text-black font-semibold mb-2" htmlFor="message">
+              <label
+                className="lg:text-[18px] text-black font-semibold mb-2"
+                htmlFor="message"
+              >
                 {locale === "en" ? "Message" : "メッセージ"}
               </label>
               <textarea

@@ -472,7 +472,7 @@ const Admin = () => {
                 <div className="flex flex-col">
                   <label
                     className="text-slate-600 font-semibold mb-5"
-                    htmlFor="title"
+                    htmlFor="description"
                   >
                     {locale === "en" ? "Description" : "タイトル"}
                   </label>
