@@ -90,7 +90,6 @@ const Admin = () => {
   const [loading, setLoading] = useState(false);
   const [clicked, setClicked] = useState(false);
   console.log(role, loading);
-  
 
   useEffect(() => {
     setIsLoading(true);
@@ -168,7 +167,7 @@ const Admin = () => {
     }
 
     const formDataObj = new FormData();
-    
+
     // Append all fields except ID
     Object.entries(formData).forEach(([key, value]) => {
       if (key !== "id" && value !== null && value !== undefined) {
@@ -383,7 +382,8 @@ const Admin = () => {
                     </td>
                     <td className="border border-gray-300 p-2 flex flex-col sm:flex-row gap-2">
                       <button
-                        onClick={() => {handleEdit(vehicle)
+                        onClick={() => {
+                          handleEdit(vehicle);
                           formData.id = vehicle.id;
                         }}
                         disabled={clicked}
@@ -395,9 +395,7 @@ const Admin = () => {
                       </button>
                       <button
                         disabled={clicked}
-                        onClick={() => handleDelete(vehicle.id)
-                          
-                        }
+                        onClick={() => handleDelete(vehicle.id)}
                         className={`px-3 py-1 bg-red-500 text-white rounded-md flex items-center justify-center ${
                           clicked ? "bg-red-300" : "rotate-0"
                         }`}
@@ -450,24 +448,25 @@ const Admin = () => {
                   />
                 </div>
                 {/* test */}
-                <div className="flex flex-col">
+                <div className="hidden">
                   <label
                     className="text-slate-600 font-semibold mb-5"
-                    htmlFor="title"
+                    htmlFor="id"
                   >
                     {locale === "en" ? "id" : "タイトル"}
                   </label>
                   <input
-                    name="title"
+                    name="id"
                     value={formData.id}
                     onChange={handleInputChange}
                     className="border border-gray-300 p-2 rounded-md w-full"
                   />
                 </div>
+
                 <div className="flex flex-col">
                   <label
                     className="text-slate-600 font-semibold mb-5"
-                    htmlFor="title"
+                    htmlFor="description"
                   >
                     {locale === "en" ? "Description" : "タイトル"}
                   </label>
@@ -811,8 +810,9 @@ const Admin = () => {
               </div>
               <div className="flex justify-end mt-6">
                 <button
-                  onClick={() => {setShowVehicleForm(false) 
-                    setRetainedUrls([])
+                  onClick={() => {
+                    setShowVehicleForm(false);
+                    setRetainedUrls([]);
                   }}
                   className="px-4 py-2 bg-gray-500 text-white rounded-md mr-2"
                 >
@@ -845,6 +845,3 @@ const Admin = () => {
 };
 
 export default Admin;
-
-
-
