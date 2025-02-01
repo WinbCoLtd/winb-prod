@@ -151,21 +151,6 @@ export default function Inquiry() {
                   className="p-3 border border-gray-300 rounded-[15px] focus:outline-none focus:ring-2"
                 />
               </div>
-
-              {/* <div className="flex flex-col w-full md:w-1/2">
-                <label className="lg:text-[18px] text-black font-semibold mb-2" htmlFor="phone">
-                  {locale === "en" ? "Phone Number" : "電話番号"}
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required
-                  className="p-3 border border-gray-300 rounded-[15px] focus:outline-none focus:ring-2"
-                />
-              </div> */}
                 <div>
                 <label className="lg:text-[18px] text-black font-semibold mb-2">
                   {locale === "en" ? "Phone Number" : "電話番号"}
