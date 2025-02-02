@@ -46,7 +46,7 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
                 ? vehicle.title.split("@/@")[1]
                 : vehicle.title.split("@/@")[0]}
             </h2>
-            <p className="text-gray-600 text-sm leading-relaxed">
+            <p className="text-gray-600 text-[18px] leading-relaxed">
               {locale === "en"
                 ? vehicle.description.split("@/@")[0] // English: Show the first part
                 : vehicle.description.split("@/@")[1]?.length > 0 // Non-English: Show the second part if it's non-empty
@@ -102,8 +102,8 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
                   <p className="text-gray-500">{locale === "en" ? "Condition" : "状態"}</p>
                   <span className="text-gray-800 font-medium">
                     {locale === "en"
-                      ? vehicle.condition.split("/")[0]
-                      : vehicle.condition.split("/")[0]}
+                      ? vehicle.condition.split("@/@")[0]
+                      : vehicle.condition.split("@/@")[0]}
                   </span>
                 </div>
               </div>
