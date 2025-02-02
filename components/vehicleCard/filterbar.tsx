@@ -131,7 +131,7 @@ const Filterbar = ({
                 }
 
                 if (splitValue.includes(",")) {
-                  const conditions = Array.from(new Set(splitValue.split(",")));
+                  const conditions = Array.from(new Set(splitValue.split(",").map(cond => cond.trim())));
                   return conditions.map((cond: any) => (
                     // <label
                     //   className="flex items-center cursor-pointer bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 hover:bg-gray-200 transition"

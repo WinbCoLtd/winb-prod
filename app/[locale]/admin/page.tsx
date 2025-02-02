@@ -90,7 +90,6 @@ const Admin = () => {
   const [loading, setLoading] = useState(false);
   const [clicked, setClicked] = useState(false);
   console.log(role, loading);
-  
 
   useEffect(() => {
     setIsLoading(true);
@@ -125,17 +124,6 @@ const Admin = () => {
     }
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value, type } = e.target;
-    setFormData({
-      ...formData,
-      [name]:
-        type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
-    });
-  };
-
   const onDrop = (acceptedFiles: File[]) => {
     setFiles([...files, ...acceptedFiles]);
   };
@@ -168,7 +156,7 @@ const Admin = () => {
     }
 
     const formDataObj = new FormData();
-    
+
     // Append all fields except ID
     Object.entries(formData).forEach(([key, value]) => {
       if (key !== "id" && value !== null && value !== undefined) {
@@ -287,6 +275,15 @@ const Admin = () => {
   if (isLoading) {
     return <h1>Loading.....</h1>;
   }
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   return (
     <div className="px-5 py-5 min-h-screen bg-gray-100">
@@ -374,7 +371,8 @@ const Admin = () => {
                         : vehicle.title.split("@/@")[1]}
                     </td>
                     <td className="border border-gray-300 p-2">
-                    ¥{vehicle.price}
+                    ¥ {new Intl.NumberFormat("en-US", { style: "decimal" }).format(Number(vehicle.price))}
+
                     </td>
                     <td className="border border-gray-300 p-2">
                       {locale === "en"
@@ -383,7 +381,8 @@ const Admin = () => {
                     </td>
                     <td className="border border-gray-300 p-2 flex flex-col sm:flex-row gap-2">
                       <button
-                        onClick={() => {handleEdit(vehicle)
+                        onClick={() => {
+                          handleEdit(vehicle);
                           formData.id = vehicle.id;
                         }}
                         disabled={clicked}
@@ -395,9 +394,7 @@ const Admin = () => {
                       </button>
                       <button
                         disabled={clicked}
-                        onClick={() => handleDelete(vehicle.id)
-                          
-                        }
+                        onClick={() => handleDelete(vehicle.id)}
                         className={`px-3 py-1 bg-red-500 text-white rounded-md flex items-center justify-center ${
                           clicked ? "bg-red-300" : "rotate-0"
                         }`}
@@ -434,25 +431,24 @@ const Admin = () => {
                   {error}
                 </p>
               )}
-              <div className="grid grid-cols-2 gap-4">
+
+              <div className="flex flex-col">
+                <label
+                  className="text-slate-600 font-semibold mb-5"
+                  htmlFor="title"
+                >
+                  {locale === "en" ? "Title" : "タイトル"}
+                </label>
+                <input
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  className="border border-gray-300 p-2 rounded-md w-full"
+                />
+              </div>
+              {/* test */}
+              {isEditing && (
                 <div className="flex flex-col">
-                  <label
-                    className="text-slate-600 font-semibold mb-5"
-                    htmlFor="title"
-                  >
-                    {locale === "en" ? "Title" : "タイトル"}
-                  </label>
-                  <input
-                    name="title"
-                    value={formData.title}
-                    onChange={handleInputChange}
-                    className="border border-gray-300 p-2 rounded-md w-full"
-                  />
-                </div>
-                {/* test */}
-                {
-                  isEditing && (
-                    <div className="flex flex-col">
                   <label
                     className="text-slate-600 font-semibold mb-5"
                     htmlFor="id"
@@ -467,26 +463,25 @@ const Admin = () => {
                     className="border border-gray-300 p-2 rounded-md w-full"
                   />
                 </div>
-                  )
-                }
-                <div className="flex flex-col">
-                  <label
-                    className="text-slate-600 font-semibold mb-5"
-                    htmlFor="description"
-                  >
-                    {locale === "en" ? "Description" : "タイトル"}
-                  </label>
-                  <input
-                    name="description"
-                    value={formData.description}
-                    onChange={handleInputChange}
-                    className="border border-gray-300 p-2 rounded-md w-full"
-                  />
-                </div>
+              )}
+
+              <div className="flex flex-col">
+                <label
+                  className="mt-3 text-slate-600 font-semibold mb-5"
+                  htmlFor="description"
+                >
+                  {locale === "en" ? "Description" : "タイトル"}
+                </label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  className="border border-gray-300 p-2 rounded-md w-full h-32 resize-none"
+                />
 
                 <div className="flex flex-col">
                   <label
-                    className="text-slate-600 font-semibold mb-5"
+                    className="mt-3 text-slate-600 font-semibold mb-5"
                     htmlFor="price"
                   >
                     {locale === "en" ? "Price" : "価格"}
@@ -502,7 +497,7 @@ const Admin = () => {
 
                 <div className="flex flex-col">
                   <label
-                    className="text-slate-600 font-semibold mb-5"
+                    className="mt-3 text-slate-600 font-semibold mb-5"
                     htmlFor="model"
                   >
                     {locale === "en" ? "Model" : "モデル"}
@@ -517,7 +512,7 @@ const Admin = () => {
 
                 <div className="flex flex-col">
                   <label
-                    className="text-slate-600 font-semibold mb-5"
+                    className="mt-3 text-slate-600 font-semibold mb-5"
                     htmlFor="maker"
                   >
                     {locale === "en" ? "Maker" : "作成者"}
@@ -532,7 +527,7 @@ const Admin = () => {
 
                 <div className="flex flex-col">
                   <label
-                    className="text-slate-600 font-semibold mb-5"
+                    className="mt-3 text-slate-600 font-semibold mb-5"
                     htmlFor="vehicleType"
                   >
                     {locale === "en" ? "Vehicle Type" : "車両タイプ"}
@@ -547,7 +542,7 @@ const Admin = () => {
 
                 <div className="flex flex-col">
                   <label
-                    className="text-slate-600 font-semibold mb-5"
+                    className="mt-3 text-slate-600 font-semibold mb-5"
                     htmlFor="fuel"
                   >
                     {locale === "en" ? "Fuel Type" : "燃料タイプ"}
@@ -562,7 +557,7 @@ const Admin = () => {
 
                 <div className="flex flex-col">
                   <label
-                    className="text-slate-600 font-semibold mb-5"
+                    className="mt-3 text-slate-600 font-semibold mb-5"
                     htmlFor="drive"
                   >
                     {locale === "en" ? "Drive Type" : "ドライブタイプ"}
@@ -577,7 +572,7 @@ const Admin = () => {
 
                 <div className="flex flex-col">
                   <label
-                    className="text-slate-600 font-semibold mb-5"
+                    className="mt-3 text-slate-600 font-semibold mb-5"
                     htmlFor="condition"
                   >
                     {locale === "en" ? "Condition" : "状態"}
@@ -592,7 +587,7 @@ const Admin = () => {
 
                 <div className="flex flex-col">
                   <label
-                    className="text-slate-600 font-semibold mb-5"
+                    className="mt-3 text-slate-600 font-semibold mb-5"
                     htmlFor="color"
                   >
                     {locale === "en" ? "Color" : "色"}
@@ -607,7 +602,7 @@ const Admin = () => {
 
                 <div className="flex flex-col">
                   <label
-                    className="text-slate-600 font-semibold mb-5"
+                    className="mt-3 text-slate-600 font-semibold mb-5"
                     htmlFor="grade"
                   >
                     {locale === "en" ? "Grade" : "成績"}
@@ -622,7 +617,7 @@ const Admin = () => {
 
                 <div className="flex flex-col">
                   <label
-                    className="text-slate-600font-semibold mb-5"
+                    className="mt-3 text-slate-600 font-semibold mb-5"
                     htmlFor="chassieNumber"
                   >
                     {locale === "en" ? "Chassie Number" : "シャーシ番号"}
@@ -637,7 +632,7 @@ const Admin = () => {
 
                 <div className="flex flex-col">
                   <label
-                    className="text-slate-600 font-semibold mb-5"
+                    className="mt-3 text-slate-600 font-semibold mb-5"
                     htmlFor="Shaken"
                   >
                     {locale === "en" ? "Shaken" : "シェーケン"}
@@ -653,7 +648,7 @@ const Admin = () => {
 
                 <div className="flex flex-col">
                   <label
-                    className="text-slate-600 font-semibold mb-5"
+                    className="mt-3 text-slate-600 font-semibold mb-5"
                     htmlFor="manufactureYear"
                   >
                     {locale === "en" ? "Manufacture Year" : "製造年"}
@@ -669,7 +664,7 @@ const Admin = () => {
 
                 <div className="flex flex-col">
                   <label
-                    className="text-slate-600 font-semibold mb-5"
+                    className="mt-3 text-slate-600 font-semibold mb-5"
                     htmlFor="mileage"
                   >
                     {locale === "en" ? "Mileage" : "走行距離"}
@@ -685,7 +680,7 @@ const Admin = () => {
 
                 <div className="flex flex-col">
                   <label
-                    className="text-slate-600 font-semibold mb-5"
+                    className="mt-3 text-slate-600 font-semibold mb-5"
                     htmlFor="maxPassengers"
                   >
                     {locale === "en" ? "Max Passengers" : "最大乗客数"}
@@ -758,7 +753,7 @@ const Admin = () => {
                     isDragActive ? "border-blue-500" : "border-gray-300"
                   }`}
                 >
-                  <input {...getInputProps()}  accept="image/*, .pdf, .doc" />
+                  <input {...getInputProps()} accept="image/*, .pdf, .doc" />
                   {isDragActive ? (
                     <p>
                       {locale === "en"
@@ -818,8 +813,9 @@ const Admin = () => {
               </div>
               <div className="flex justify-end mt-6">
                 <button
-                  onClick={() => {setShowVehicleForm(false) 
-                    setRetainedUrls([])
+                  onClick={() => {
+                    setShowVehicleForm(false);
+                    setRetainedUrls([]);
                   }}
                   className="px-4 py-2 bg-gray-500 text-white rounded-md mr-2"
                 >
@@ -852,6 +848,3 @@ const Admin = () => {
 };
 
 export default Admin;
-
-
-
