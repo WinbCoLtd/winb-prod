@@ -122,7 +122,7 @@ const Filterbar = ({
             <div className="w-full grid grid-cols-3 gap-2">
               {Array.from(new Set(filters[filterKey])).map((item) => {
                 let splitValue: string | undefined;
-                const parts = item.toString().split("/");
+                const parts = item.toString().split("@/@");
 
                 if (locale === "en") {
                   splitValue = parts[0];

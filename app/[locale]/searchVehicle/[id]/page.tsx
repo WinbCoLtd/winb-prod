@@ -180,9 +180,9 @@ const MoreDetails = () => {
 
           <div className="text-[20px] lg:text-[20px] md:text-[24px] mt-[26px] grid lg:grid-cols-2 md:grid-cols-3 gap-4 items-center">
             {[
-              { label: "Price/価格", value: `¥ ${vehicle.price}` },
+              { label: "Price@/@価格", value: `¥ ${vehicle.price}` },
               {
-                label: "Model/モデル",
+                label: "Model@/@モデル",
                 value:
                   locale === "en"
                     ? vehicle.model.split('@/@')[0]
@@ -191,7 +191,7 @@ const MoreDetails = () => {
                     : vehicle.model.split('@/@')[0],
               },
               {
-                label: "Maker/メーカー",
+                label: "Maker@/@メーカー",
                 value:
                   locale === "en"
                     ? vehicle.maker.split('@/@')[0]
@@ -200,7 +200,7 @@ const MoreDetails = () => {
                     : vehicle.maker.split('@/@')[0],
               },
               {
-                label: "Vehicle Type/車両タイプ",
+                label: "Vehicle Type@/@車両タイプ",
                 value:
                   locale === "en"
                     ? vehicle.vehicleType.split('@/@')[0]
@@ -209,7 +209,7 @@ const MoreDetails = () => {
                     : vehicle.vehicleType.split('@/@')[0],
               },
               {
-                label: "Fuel Type/燃料の種類",
+                label: "Fuel Type@/@燃料の種類",
                 value:
                   locale === "en"
                     ? vehicle.fuel.split('@/@')[0]
@@ -218,7 +218,7 @@ const MoreDetails = () => {
                     : vehicle.fuel.split('@/@')[0],
               },
               {
-                label: "Drive Type/ドライブタイプ",
+                label: "Drive Type@/@ドライブタイプ",
                 value:
                   locale === "en"
                     ? vehicle.drive.split('@/@')[0]
@@ -227,7 +227,7 @@ const MoreDetails = () => {
                     : vehicle.drive.split('@/@')[0],
               },
               {
-                label: "Color/色",
+                label: "Color@/@色",
                 value:
                   locale === "en"
                     ? vehicle.color.split('@/@')[0]
@@ -236,7 +236,7 @@ const MoreDetails = () => {
                     : vehicle.color.split('@/@')[0],
               },
               {
-                label: "Grade/グレード",
+                label: "Grade@/@グレード",
                 value:
                   locale === "en"
                     ? vehicle.grade.split('@/@')[0]
@@ -245,7 +245,7 @@ const MoreDetails = () => {
                     : vehicle.grade.split('@/@')[0],
               },
               {
-                label: "Chassi Number/車台番号",
+                label: "Chassi Number@/@車台番号",
                 value:
                   locale === "en"
                     ? vehicle.chassieNumber.split('@/@')[0]
@@ -254,7 +254,7 @@ const MoreDetails = () => {
                     : vehicle.chassieNumber.split('@/@')[0],
               },
               {
-                label: "Shaken/車検",
+                label: "Shaken@/@車検",
                 value:
                   locale === "en"
                     ? vehicle.Shaken[0]
@@ -263,18 +263,18 @@ const MoreDetails = () => {
                     : vehicle.Shaken[0],
               },
               {
-                label: "Manufacture Year/年式",
+                label: "Manufacture Year@/@年式",
                 value: new Date(vehicle.manufactureYear).getFullYear(),
               },
-              { label: "Milage/走行距離", value: vehicle.mileage },
+              { label: "Milage@/@走行距離", value: vehicle.mileage },
               {
-                label: "Condition/状態",
+                label: "Condition@/@状態",
                 value:
                   locale === "en"
-                    ? vehicle.condition.split('/')[0]
-                    : vehicle.condition.split('/')[1]?.length > 0
-                    ? vehicle.condition.split('/')[1]
-                    : vehicle.condition.split('/')[0],
+                    ? vehicle.condition.split('@/@')[0]
+                    : vehicle.condition.split('@/@')[1]?.length > 0
+                    ? vehicle.condition.split('@/@')[1]
+                    : vehicle.condition.split('@/@')[0],
               },
             ].map(({ label, value }, index) => (
               <div key={index} className="flex items-center">
