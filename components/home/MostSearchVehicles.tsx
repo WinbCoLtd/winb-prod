@@ -68,7 +68,7 @@ function MostHeroSection() {
         </button>
         {types.length > 0 ? (
           types.map((type, index) => {
-            const typeParts = type.vehicleType.split("/"); // Split once and store the parts
+            const typeParts = type.vehicleType.split("@/@"); // Split once and store the parts
             const displayText =
               locale === "en"
                 ? typeParts[0] // English: Show the first part

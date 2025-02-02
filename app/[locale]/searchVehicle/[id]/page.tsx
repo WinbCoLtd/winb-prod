@@ -165,17 +165,17 @@ const MoreDetails = () => {
         <div className="mt-20 md:mt-0 md:ml-8 flex flex-col justify-start w-full md:w-[500px]">
           <h1 className="text-[40px] lg:text-[40px] md:text-[20px] text-black font-bold mb-4 text-left">
             {locale === "en"
-              ? vehicle.title.split('/')[0] // English: Show the first part
-              : vehicle.title.split('/')[1]?.length > 0 // Non-English: Show the second part if it's non-empty
-              ? vehicle.title.split('/')[1]
-              : vehicle.title.split('/')[0]}
+              ? vehicle.title.split('@/@')[0] // English: Show the first part
+              : vehicle.title.split('@/@')[1]?.length > 0 // Non-English: Show the second part if it's non-empty
+              ? vehicle.title.split('@/@')[1]
+              : vehicle.title.split('@/@')[0]}
           </h1>
           <h2 className="text-[18px] lg:text-[20px] md:text-[20px] text-slate-600 font-medium mt-4 mb-4">
             {locale === "en"
-              ? vehicle.description.split('/')[0]
-              : vehicle.description.split('/')[1]?.length > 0
-              ? vehicle.description.split('/')[1]
-              : vehicle.description.split('/')[0]}
+              ? vehicle.description.split('@/@')[0]
+              : vehicle.description.split('@/@')[1]?.length > 0
+              ? vehicle.description.split('@/@')[1]
+              : vehicle.description.split('@/@')[0]}
           </h2>
 
           <div className="text-[20px] lg:text-[20px] md:text-[24px] mt-[26px] grid lg:grid-cols-2 md:grid-cols-3 gap-4 items-center">
@@ -185,73 +185,73 @@ const MoreDetails = () => {
                 label: "Model/モデル",
                 value:
                   locale === "en"
-                    ? vehicle.model.split('/')[0]
-                    : vehicle.model.split('/')[1]?.length > 0
-                    ? vehicle.model.split('/')[1]
-                    : vehicle.model.split('/')[0],
+                    ? vehicle.model.split('@/@')[0]
+                    : vehicle.model.split('@/@')[1]?.length > 0
+                    ? vehicle.model.split('@/@')[1]
+                    : vehicle.model.split('@/@')[0],
               },
               {
                 label: "Maker/メーカー",
                 value:
                   locale === "en"
-                    ? vehicle.maker.split('/')[0]
-                    : vehicle.maker.split('/')[1]?.length > 0
-                    ? vehicle.maker.split('/')[1]
-                    : vehicle.maker.split('/')[0],
+                    ? vehicle.maker.split('@/@')[0]
+                    : vehicle.maker.split('@/@')[1]?.length > 0
+                    ? vehicle.maker.split('@/@')[1]
+                    : vehicle.maker.split('@/@')[0],
               },
               {
                 label: "Vehicle Type/車両タイプ",
                 value:
                   locale === "en"
-                    ? vehicle.vehicleType.split('/')[0]
-                    : vehicle.vehicleType.split('/')[1]?.length > 0
-                    ? vehicle.vehicleType.split('/')[1]
-                    : vehicle.vehicleType.split('/')[0],
+                    ? vehicle.vehicleType.split('@/@')[0]
+                    : vehicle.vehicleType.split('@/@')[1]?.length > 0
+                    ? vehicle.vehicleType.split('@/@')[1]
+                    : vehicle.vehicleType.split('@/@')[0],
               },
               {
                 label: "Fuel Type/燃料の種類",
                 value:
                   locale === "en"
-                    ? vehicle.fuel.split('/')[0]
-                    : vehicle.fuel.split('/')[1]?.length > 0
-                    ? vehicle.fuel.split('/')[1]
-                    : vehicle.fuel.split('/')[0],
+                    ? vehicle.fuel.split('@/@')[0]
+                    : vehicle.fuel.split('@/@')[1]?.length > 0
+                    ? vehicle.fuel.split('@/@')[1]
+                    : vehicle.fuel.split('@/@')[0],
               },
               {
                 label: "Drive Type/ドライブタイプ",
                 value:
                   locale === "en"
-                    ? vehicle.drive.split('/')[0]
-                    : vehicle.drive.split('/')[1]?.length > 0
-                    ? vehicle.drive.split('/')[1]
-                    : vehicle.drive.split('/')[0],
+                    ? vehicle.drive.split('@/@')[0]
+                    : vehicle.drive.split('@/@')[1]?.length > 0
+                    ? vehicle.drive.split('@/@')[1]
+                    : vehicle.drive.split('@/@')[0],
               },
               {
                 label: "Color/色",
                 value:
                   locale === "en"
-                    ? vehicle.color.split('/')[0]
-                    : vehicle.color.split('/')[1]?.length > 0
-                    ? vehicle.color.split('/')[1]
-                    : vehicle.color.split('/')[0],
+                    ? vehicle.color.split('@/@')[0]
+                    : vehicle.color.split('@/@')[1]?.length > 0
+                    ? vehicle.color.split('@/@')[1]
+                    : vehicle.color.split('@/@')[0],
               },
               {
                 label: "Grade/グレード",
                 value:
                   locale === "en"
-                    ? vehicle.grade.split('/')[0]
-                    : vehicle.grade.split('/')[1]?.length > 0
-                    ? vehicle.grade.split('/')[1]
-                    : vehicle.grade.split('/')[0],
+                    ? vehicle.grade.split('@/@')[0]
+                    : vehicle.grade.split('@/@')[1]?.length > 0
+                    ? vehicle.grade.split('@/@')[1]
+                    : vehicle.grade.split('@/@')[0],
               },
               {
                 label: "Chassi Number/車台番号",
                 value:
                   locale === "en"
-                    ? vehicle.chassieNumber.split('/')[0]
-                    : vehicle.chassieNumber.split('/')[1]?.length > 0
-                    ? vehicle.chassieNumber.split('/')[1]
-                    : vehicle.chassieNumber.split('/')[0],
+                    ? vehicle.chassieNumber.split('@/@')[0]
+                    : vehicle.chassieNumber.split('@/@')[1]?.length > 0
+                    ? vehicle.chassieNumber.split('@/@')[1]
+                    : vehicle.chassieNumber.split('@/@')[0],
               },
               {
                 label: "Shaken/車検",
@@ -279,7 +279,7 @@ const MoreDetails = () => {
             ].map(({ label, value }, index) => (
               <div key={index} className="flex items-center">
                 <p className="text-[18px] lg:text-[16px] md:text-[18px] text-black font-semibold">
-                  {locale === "en" ? label.split('/')[0]:label.split('/')[1]}: {value}
+                  {locale === "en" ? label.split('@/@')[0]:label.split('@/@')[1]}: {value}
                 </p>
               </div>
             ))}
@@ -288,7 +288,7 @@ const MoreDetails = () => {
           <div className="mt-[55px] flex justify-center w-full">
             <Link
               href={`/contact?id=${vehicle.id}&title=${
-                vehicle.title.split("/")[0]
+                vehicle.title.split("@/@")[0]
               }`}
               className="bg-winb-yellow text-[20px] lg:text-[18px] md:text-[20px] text-black font-medium px-4 py-3 rounded-[25px] hover:bg-yellow-300 transition duration-300 w-full sm:w-auto text-center"
             >

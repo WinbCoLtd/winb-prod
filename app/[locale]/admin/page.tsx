@@ -370,16 +370,16 @@ const Admin = () => {
                   <tr key={vehicle.id} className="hover:bg-gray-100">
                     <td className="border border-gray-300 p-2">
                       {locale === "en"
-                        ? vehicle.title.split("/")[0]
-                        : vehicle.title.split("/")[1]}
+                        ? vehicle.title.split("@/@")[0]
+                        : vehicle.title.split("@/@")[1]}
                     </td>
                     <td className="border border-gray-300 p-2">
                     ¥{vehicle.price}
                     </td>
                     <td className="border border-gray-300 p-2">
                       {locale === "en"
-                        ? vehicle.model.split("/")[0]
-                        : vehicle.model.split("/")[1]}
+                        ? vehicle.model.split("@/@")[0]
+                        : vehicle.model.split("@/@")[1]}
                     </td>
                     <td className="border border-gray-300 p-2 flex flex-col sm:flex-row gap-2">
                       <button
@@ -743,6 +743,7 @@ const Admin = () => {
                 )}
                 <input
                   type="file"
+                  accept="image/*, .pdf, .doc"
                   onChange={handleScreenShotChange}
                   className="mt-2"
                 />
@@ -757,7 +758,7 @@ const Admin = () => {
                     isDragActive ? "border-blue-500" : "border-gray-300"
                   }`}
                 >
-                  <input {...getInputProps()} />
+                  <input {...getInputProps()}  accept="image/*, .pdf, .doc" />
                   {isDragActive ? (
                     <p>
                       {locale === "en"

@@ -41,17 +41,17 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
           <div className="flex flex-col flex-grow space-y-4">
             <h2 className="font-bold text-2xl text-gray-800">
               {locale === "en"
-                ? vehicle.title.split("/")[0] // English: Show the first part
-                : vehicle.title.split("/")[1]?.length > 0 // Non-English: Show the second part if it's non-empty
-                ? vehicle.title.split("/")[1]
-                : vehicle.title.split("/")[0]}
+                ? vehicle.title.split("@/@")[0] // English: Show the first part
+                : vehicle.title.split("@/@")[1]?.length > 0 // Non-English: Show the second part if it's non-empty
+                ? vehicle.title.split("@/@")[1]
+                : vehicle.title.split("@/@")[0]}
             </h2>
             <p className="text-gray-600 text-sm leading-relaxed">
               {locale === "en"
-                ? vehicle.description.split("/")[0] // English: Show the first part
-                : vehicle.description.split("/")[1]?.length > 0 // Non-English: Show the second part if it's non-empty
-                ? vehicle.description.split("/")[1]
-                : vehicle.description.split("/")[0]}
+                ? vehicle.description.split("@/@")[0] // English: Show the first part
+                : vehicle.description.split("@/@")[1]?.length > 0 // Non-English: Show the second part if it's non-empty
+                ? vehicle.description.split("@/@")[1]
+                : vehicle.description.split("@/@")[0]}
             </p>
 
             {/* Vehicle Info */}
@@ -63,8 +63,8 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
                   <p className="text-gray-500">  {locale === "en" ? "Fuel Type" : "燃料の種類"}</p>
                   <span className="text-gray-800 font-medium">
                     {locale === "en"
-                      ? vehicle.fuel.split("/")[0]
-                      : vehicle.fuel.split("/")[1]}
+                      ? vehicle.fuel.split("@/@")[0]
+                      : vehicle.fuel.split("@/@")[1]}
                   </span>
                 </div>
               </div>
@@ -76,8 +76,8 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
                   <p className="text-gray-500">{locale === "en" ? "Drive Type" : "ドライブタイプ"}</p>
                   <span className="text-gray-800 font-medium">
                     {locale === "en"
-                      ? vehicle.drive.split("/")[0]
-                      : vehicle.drive.split("/")[1]}
+                      ? vehicle.drive.split("@/@")[0]
+                      : vehicle.drive.split("@/@")[1]}
                   </span>
                 </div>
               </div>

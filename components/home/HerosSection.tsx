@@ -156,7 +156,7 @@ function HeroSection() {
               </option>
               {searchData && searchData.makers.length > 0 ? (
                 searchData.makers.map((maker, index) => {
-                  const makerParts = maker.split("/");
+                  const makerParts = maker.split("@/@");
                   return (
                     <option value={maker} key={index}>
                       {locale === "en"
@@ -195,7 +195,7 @@ function HeroSection() {
               </option>
               {searchData && searchData.models.length > 0 ? (
                 searchData.models.map((model, index) => {
-                  const modelParts = model.split("/");
+                  const modelParts = model.split("@/@");
                   return (
                     <option value={model} key={index}>
                       {locale === "en"

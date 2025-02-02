@@ -62,8 +62,8 @@ export default function Card({ vehicle }: { vehicle: Ifields }) {
       {/* New description: Split by '/' */}
       <p className="text-[16px] mt-4 text-[#00000056] font-medium">
         {locale === 'en'
-          ? vehicle.description.split('/')[0]  // English description (first part before '/')
-          : vehicle.description.split('/')[1] || vehicle.description.split('/')[0]}  {/* Japanese description (second part after '/') or fallback */}
+          ? vehicle.description.split('@/@')[0].slice(0,5)  // English description (first part before '/')
+          : vehicle.description.split('@/@')[1] || vehicle.description.split('/')[0]}  {/* Japanese description (second part after '/') or fallback */}
       </p>
 
       {/* Price */}
@@ -72,7 +72,7 @@ export default function Card({ vehicle }: { vehicle: Ifields }) {
       </p>
 
       <button type="button" className="absolute bottom-2 right-2 bg-transparent p-2">
-        <Link href={`/searchVehicle/${vehicle.id}`}>
+      <Link href={`/${locale}/searchVehicle/${vehicle.id}`}>
           <ChevronRight size={24} />
         </Link>
       </button>

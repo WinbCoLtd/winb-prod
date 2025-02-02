@@ -61,7 +61,7 @@ export default function Navbar() {
 
   const handleLocaleChange = (newLocale: string) => {
     const path = pathname.split("/").slice(2).join("/");
-    router.push(`/${newLocale}/${path}`);
+    router.push(`/${newLocale}/${path || ''}`);
   };
 
   return (

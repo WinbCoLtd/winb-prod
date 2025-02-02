@@ -79,15 +79,15 @@ const WhyToChooseUs = () => {
             <h3 className="min-h-[56px] text-xl font-semibold">
               {/* Split by comma (',') for title */}
               {local === "en"
-                ? card.title.split("/")[0] // English title (first part)
-                : card.title.split("/")[1] || card.title.split("/")[0]}{" "}
+                ? card.title.split("@/@")[0] // English title (first part)
+                : card.title.split("@/@")[1] || card.title.split("/")[0]}{" "}
               {/* Fallback to first part (English) if Japanese is missing */}
             </h3>
             <p className="text-[16px] font-medium text-justify mt-4">
               {/* Split by '/' for description */}
               {local === "en"
-                ? card.description.split("/")[0] // English description (first part)
-                : card.description.split("/")[1] || card.description.split("/")[0]}{" "}
+                ? card.description.split("@/@")[0] // English description (first part)
+                : card.description.split("@/@")[1] || card.description.split("/")[0]}{" "}
               {/* Fallback to English if Japanese is missing */}
             </p>
           </div>
