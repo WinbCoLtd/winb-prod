@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 import axios from "axios";
 import { Mail } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocale } from "next-intl";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -33,7 +33,27 @@ export default function OtherInquiry() {
 
   const [loading, setLoading] = useState(false);
   const locale = useLocale();
-  // Define a custom type for form data
+  const [inputWidth, setInputWidth] = useState<string>("400px");
+  useEffect(() => {
+    const updateWidth = (): void => {
+      if (window.innerWidth <= 480) {
+        setInputWidth("100%"); // Full width on mobile
+      } else if (window.innerWidth <= 768) {
+        setInputWidth("300px"); // Tablet width
+      } else {
+        setInputWidth("400px"); // Desktop width
+      }
+    };
+
+    updateWidth(); // Set initial width on mount
+
+    window.addEventListener("resize", updateWidth); // Listen for window resize
+
+    return () => {
+      window.removeEventListener("resize", updateWidth); // Cleanup on unmount
+    };
+  }, []);
+
   const handlePhoneChange = (value: string, country: any) => {
     setFormData((prev) => ({
       ...prev,
@@ -151,20 +171,22 @@ export default function OtherInquiry() {
                   className="p-3 border border-gray-300 rounded-[15px] focus:outline-none focus:ring-2"
                 />
               </div>
-              <div className="flex flex-col w-full md:w-1/2">
+              <div>
                 <label className="lg:text-[18px] text-black font-semibold mb-2">
                   {locale === "en" ? "Phone Number" : "電話番号"}
                 </label>
                 <PhoneInput
-                  country={"jp"} // Default country (Sri Lanka)
+                  country={"jp"}
                   value={formData.phone}
                   onChange={handlePhoneChange}
                   inputClass="p-7 border border-gray-300 rounded-[15px]"
                   containerClass="w-full"
-                  inputStyle={{borderRadius:'15px', width:'400px'}}
-                  buttonStyle={{borderTopLeftRadius: '15px', borderBottomLeftRadius: '15px'}}
-                  enableSearch={true} // Enable search for countries
-                  
+                  inputStyle={{ borderRadius: "15px", width: inputWidth }}
+                  buttonStyle={{
+                    borderTopLeftRadius: "15px",
+                    borderBottomLeftRadius: "15px",
+                  }}
+                  enableSearch={true}
                 />
               </div>
             </div>
