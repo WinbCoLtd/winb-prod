@@ -31,7 +31,7 @@ export default function Card({ vehicle }: { vehicle: Ifields }) {
 
   // Helper function to handle fallback logic
   const getLocalizedValue = (value: string, index: number) => {
-    const parts = value.split('/');
+    const parts = value.split('@/@');
     return parts[index] && parts[index].length > 0 ? parts[index] : parts[0];
   };
 
@@ -63,7 +63,7 @@ export default function Card({ vehicle }: { vehicle: Ifields }) {
       <p className="text-[16px] mt-4 text-[#00000056] font-medium">
         {locale === 'en'
           ? vehicle.description.split('@/@')[0].slice(0,5)  // English description (first part before '/')
-          : vehicle.description.split('@/@')[1] || vehicle.description.split('/')[0]}  {/* Japanese description (second part after '/') or fallback */}
+          : vehicle.description.split('@/@')[1] || vehicle.description.split('@/@')[0]}  {/* Japanese description (second part after '/') or fallback */}
       </p>
 
       {/* Price */}
