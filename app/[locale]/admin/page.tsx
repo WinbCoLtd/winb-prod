@@ -470,7 +470,7 @@ const Admin = () => {
                   className="mt-3 text-slate-600 font-semibold mb-5"
                   htmlFor="description"
                 >
-                  {locale === "en" ? "Description" : "タイトル"}
+                  {locale === "en" ? "Description" : "内容"}
                 </label>
                 <textarea
                   name="description"
@@ -515,7 +515,7 @@ const Admin = () => {
                     className="mt-3 text-slate-600 font-semibold mb-5"
                     htmlFor="maker"
                   >
-                    {locale === "en" ? "Maker" : "作成者"}
+                    {locale === "en" ? "Maker" : "メーカー"}
                   </label>
                   <input
                     name="maker"
@@ -605,7 +605,7 @@ const Admin = () => {
                     className="mt-3 text-slate-600 font-semibold mb-5"
                     htmlFor="grade"
                   >
-                    {locale === "en" ? "Grade" : "成績"}
+                    {locale === "en" ? "Grade" : "グレード"}
                   </label>
                   <input
                     name="grade"
@@ -620,7 +620,7 @@ const Admin = () => {
                     className="mt-3 text-slate-600 font-semibold mb-5"
                     htmlFor="chassieNumber"
                   >
-                    {locale === "en" ? "Chassie Number" : "シャーシ番号"}
+                    {locale === "en" ? "Chassie Number" : "車体番号"}
                   </label>
                   <input
                     name="chassieNumber"
@@ -635,7 +635,7 @@ const Admin = () => {
                     className="mt-3 text-slate-600 font-semibold mb-5"
                     htmlFor="Shaken"
                   >
-                    {locale === "en" ? "Shaken" : "シェーケン"}
+                    {locale === "en" ? "Shaken" : "車検"}
                   </label>
                   <input
                     name="Shaken"
