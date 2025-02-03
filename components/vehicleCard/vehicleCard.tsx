@@ -76,7 +76,7 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
                 <div className="text-sm">
                   <p className="text-gray-500">{locale === "en" ? "Distance" : "距離"}</p>
                   <span className="text-gray-800 font-medium">
-                    {vehicle.mileage} km
+                    {new Intl.NumberFormat("en-US").format(vehicle.mileage)} km
                   </span>
                 </div>
               </div>
