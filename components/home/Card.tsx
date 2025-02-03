@@ -93,7 +93,7 @@ export default function Card({ vehicle }: { vehicle: Ifields }) {
 
       {/* Price */}
       <p className="mt-9 text-3xl font-semibold text-black">
-        ¥{vehicle.price}
+      ¥ {new Intl.NumberFormat("en-US", { style: "decimal" }).format(Number(vehicle.price))}
       </p>
 
       <button type="button" className="absolute bottom-2 right-2 bg-transparent p-2">
