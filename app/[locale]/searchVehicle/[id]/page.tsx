@@ -265,9 +265,9 @@ const MoreDetails = () => {
                   },
                   {
                     label: "Milage@/@走行距離",
-                    value: new Intl.NumberFormat("en-US").format(
+                    value: `${new Intl.NumberFormat("en-US").format(
                       vehicle.mileage
-                    ),
+                    )} km`,
                   },
                   {
                     label: "Color@/@色",
@@ -319,13 +319,13 @@ const MoreDetails = () => {
             </table>
           </div>
 
-          <h2 className="mt-5 text-[20px] lg:text-[18px] md:text-[20px] text-slate-600 font-medium mb-4">
+          <p className="mt-5 text-[20px] lg:text-[18px] md:text-[20px] text-slate-600 font-medium mb-4 leading-relaxed whitespace-normal break-words">
             {locale === "en"
               ? vehicle.description.split("@/@")[0]
               : vehicle.description.split("@/@")[1]?.length > 0
               ? vehicle.description.split("@/@")[1]
               : vehicle.description.split("@/@")[0]}
-          </h2>
+          </p>
 
           <div className="mt-[55px] flex justify-center w-full">
             <Link

@@ -1,4 +1,5 @@
-import { ChevronRight } from "lucide-react";
+import React, { useState } from "react";
+import { ChevronRight, ChevronUp, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useLocale } from "next-intl";
@@ -35,6 +36,16 @@ export default function Card({ vehicle }: { vehicle: Ifields }) {
     return parts[index] && parts[index].length > 0 ? parts[index] : parts[0];
   };
 
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+
+  const toggleDescription = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const getDescription = (desc: string): string => {
+    return isExpanded ? desc : `${desc.slice(0, 40)}`; // Show full description or a short version
+  };
+
   return (
     <div key={vehicle.id} className="mx-auto md:mx-0 relative border border-[#00000032] p-5 rounded-lg shadow-sm max-w-[400px] w-full">
       <Image
@@ -60,11 +71,25 @@ export default function Card({ vehicle }: { vehicle: Ifields }) {
       </p>
 
       {/* New description: Split by '/' */}
-      <p className="text-[16px] mt-4 text-[#00000056] font-medium">
+      <p className="text-[16px] mt-4 text-[#00000056] font-medium whitespace-normal break-words">
         {locale === 'en'
-          ? vehicle.description.split('@/@')[0].slice(0,5)  // English description (first part before '/')
-          : vehicle.description.split('@/@')[1] || vehicle.description.split('@/@')[0]}  {/* Japanese description (second part after '/') or fallback */}
+          ? getDescription(vehicle.description.split('@/@')[0])  // English description (first part before '/')
+          : getDescription(vehicle.description.split('@/@')[1] || vehicle.description.split('@/@')[0])}  {/* Japanese description (second part after '/') or fallback */}
       </p>
+
+      <span
+        className="text-blue-950 cursor-pointer"
+        onClick={toggleDescription}
+      >
+        {isExpanded ? (
+          <ChevronUp size={18} className="inline-block ml-2" />
+        ) : (
+          <>
+            <span>...</span>
+            <ChevronDown size={18} className="inline-block ml-2" />
+          </>
+        )}
+      </span>
 
       {/* Price */}
       <p className="mt-9 text-3xl font-semibold text-black">
@@ -72,7 +97,7 @@ export default function Card({ vehicle }: { vehicle: Ifields }) {
       </p>
 
       <button type="button" className="absolute bottom-2 right-2 bg-transparent p-2">
-      <Link href={`/${locale}/searchVehicle/${vehicle.id}`}>
+        <Link href={`/${locale}/searchVehicle/${vehicle.id}`}>
           <ChevronRight size={24} />
         </Link>
       </button>

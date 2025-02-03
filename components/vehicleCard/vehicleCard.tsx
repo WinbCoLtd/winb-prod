@@ -39,18 +39,20 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
           <div className="flex flex-col flex-grow space-y-4">
             <h2 className="font-bold text-2xl text-gray-800">
               {locale === "en"
-                ? vehicle.title.split("@/@")[0] 
-                : vehicle.title.split("@/@")[1]?.length > 0 
+                ? vehicle.title.split("@/@")[0]
+                : vehicle.title.split("@/@")[1]?.length > 0
                 ? vehicle.title.split("@/@")[1]
                 : vehicle.title.split("@/@")[0]}
             </h2>
-           
 
             <div className="grid grid-cols-3 gap-4 ">
               <div className="flex items-center space-x-2 mt-5">
                 <Fuel size={20} className="text-gray-600" />
                 <div className="text-sm">
-                  <p className="text-gray-500">  {locale === "en" ? "Fuel Type" : "燃料の種類"}</p>
+                  <p className="text-gray-500">
+                    {" "}
+                    {locale === "en" ? "Fuel Type" : "燃料の種類"}
+                  </p>
                   <span className="text-gray-800 font-medium">
                     {locale === "en"
                       ? vehicle.fuel.split("@/@")[0]
@@ -62,7 +64,9 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
               <div className="flex items-center space-x-2 mt-5">
                 <LifeBuoy size={20} className="text-gray-600" />
                 <div className="text-sm">
-                  <p className="text-gray-500">{locale === "en" ? "Drive Type" : "ドライブタイプ"}</p>
+                  <p className="text-gray-500">
+                    {locale === "en" ? "Drive Type" : "ドライブタイプ"}
+                  </p>
                   <span className="text-gray-800 font-medium">
                     {locale === "en"
                       ? vehicle.drive.split("@/@")[0]
@@ -74,7 +78,9 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
               <div className="flex items-center space-x-2 mt-5">
                 <Gem size={20} className="text-gray-600" />
                 <div className="text-sm">
-                  <p className="text-gray-500">{locale === "en" ? "Distance" : "距離"}</p>
+                  <p className="text-gray-500">
+                    {locale === "en" ? "Distance" : "距離"}
+                  </p>
                   <span className="text-gray-800 font-medium">
                     {new Intl.NumberFormat("en-US").format(vehicle.mileage)} km
                   </span>
@@ -82,12 +88,13 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
               </div>
             </div>
 
-
             <div className="grid grid-cols-1 gap-4">
               <div className="flex items-center space-x-2 mt-5">
                 <FaRegSnowflake size={20} className="text-gray-600" />
                 <div className="text-sm">
-                  <p className="text-gray-500">{locale === "en" ? "Condition" : "状態"}</p>
+                  <p className="text-gray-500">
+                    {locale === "en" ? "Condition" : "状態"}
+                  </p>
                   <span className="text-gray-800 font-medium">
                     {locale === "en"
                       ? vehicle.condition.split("@/@")[0]
@@ -97,14 +104,13 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
               </div>
             </div>
 
-            <p className="text-gray-600 text-[16px] leading-relaxed">
+            <p className=" w-[550px] text-gray-600 text-[16px] leading-relaxed whitespace-normal break-words ">
               {locale === "en"
-                ? vehicle.description.split("@/@")[0] 
-                : vehicle.description.split("@/@")[1]?.length > 0 
+                ? vehicle.description.split("@/@")[0]
+                : vehicle.description.split("@/@")[1]?.length > 0
                 ? vehicle.description.split("@/@")[1]
                 : vehicle.description.split("@/@")[0]}
             </p>
-
             <div className="flex justify-start">
               <Link href={`/searchVehicle/${vehicle.id}`}>
                 <button
